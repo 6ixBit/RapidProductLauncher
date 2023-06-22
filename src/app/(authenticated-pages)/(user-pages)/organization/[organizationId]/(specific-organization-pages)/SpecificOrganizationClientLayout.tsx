@@ -10,12 +10,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { VscSettings } from 'react-icons/vsc';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
-import {
-  OrganizationContextProvider,
-  useOrganizationContext,
-} from '@/contexts/OrganizationContext';
-import { Badge } from '@/components/ui/Badge';
+import { useOrganizationContext } from '@/contexts/OrganizationContext';
 import { T } from '@/components/ui/Typography';
 import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscription';
 import {
