@@ -74,7 +74,16 @@ const features = [
     description:
       'Team members can modify settings of organizations they are part of. Organizations also come with Row Level Security (RLS) built in.',
   },
-
+  {
+    name: 'Application Admin Panel',
+    description:
+      'Besides the Supabase Admin Dashboard, Nextbase also comes with its own Admin Panel. You can use this panel to manage your users, organizations, projects and even to debug your application.',
+  },
+  {
+    name: 'Maintenance Mode',
+    description:
+      'Nextbase comes with a built-in maintenance mode that allows you to put your application in maintenance mode. The application becomes read-only (which can be configured selectively on different tables) and you can debug your app in peace.',
+  },
   {
     name: 'Impersonate User',
     description:
