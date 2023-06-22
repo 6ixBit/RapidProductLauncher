@@ -8,20 +8,16 @@ import ReactNoSSR from 'react-no-ssr';
 import Confetti from 'react-confetti';
 import { Table } from '@/types';
 import { UserSidebar } from './Sidebar/UserSidebar';
-import { useSelectedLayoutSegments } from 'next/navigation';
 
 export function ClientLayout({
   children,
-  isUserAppAdmin,
   userProfile: initialUserProfile,
 }: {
   children: React.ReactNode;
-  isUserAppAdmin: boolean;
   userProfile: Table<'user_profiles'>;
 }) {
   const { data } = useUserProfile(initialUserProfile);
   const userProfile = data ?? initialUserProfile;
-  const segments = useSelectedLayoutSegments();
   const { innerHeight: _innerHeight, innerWidth: _innerWidth } =
     useWindowSize();
   const innerHeight = _innerHeight ?? 0;
@@ -43,10 +39,7 @@ export function ClientLayout({
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex h-full">
-        <UserSidebar
-          isUserAppAdmin={isUserAppAdmin}
-          userProfile={userProfile}
-        />
+        <UserSidebar userProfile={userProfile} />
         <div className=" flex-1 h-auto overflow-auto">
           <div className=" px-12 py-8 space-y-10">{children}</div>
         </div>

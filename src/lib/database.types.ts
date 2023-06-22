@@ -9,46 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      app_admins: {
-        Row: {
-          role: Database["public"]["Enums"]["app_admin_role"] | null
-          user_id: string
-        }
-        Insert: {
-          role?: Database["public"]["Enums"]["app_admin_role"] | null
-          user_id: string
-        }
-        Update: {
-          role?: Database["public"]["Enums"]["app_admin_role"] | null
-          user_id?: string
-        }
-      }
-      app_settings: {
-        Row: {
-          id: number
-          maintenance_message: string | null
-          maintenance_status:
-            | Database["public"]["Enums"]["maintenance_status"]
-            | null
-          scheduled_maintenance_ends_at: string | null
-        }
-        Insert: {
-          id?: number
-          maintenance_message?: string | null
-          maintenance_status?:
-            | Database["public"]["Enums"]["maintenance_status"]
-            | null
-          scheduled_maintenance_ends_at?: string | null
-        }
-        Update: {
-          id?: number
-          maintenance_message?: string | null
-          maintenance_status?:
-            | Database["public"]["Enums"]["maintenance_status"]
-            | null
-          scheduled_maintenance_ends_at?: string | null
-        }
-      }
       customers: {
         Row: {
           organization_id: string
@@ -62,20 +22,14 @@ export interface Database {
           organization_id?: string
           stripe_customer_id?: string
         }
-      }
-      organization_credits: {
-        Row: {
-          credits: number
-          organization_id: string
-        }
-        Insert: {
-          credits?: number
-          organization_id: string
-        }
-        Update: {
-          credits?: number
-          organization_id?: string
-        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       organization_join_invitations: {
         Row: {
@@ -108,6 +62,26 @@ export interface Database {
           organization_id?: string
           status?: Database["public"]["Enums"]["organization_join_invitation_link_status"]
         }
+        Relationships: [
+          {
+            foreignKeyName: "organization_join_invitations_invitee_user_id_fkey"
+            columns: ["invitee_user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_join_invitations_inviter_user_id_fkey"
+            columns: ["inviter_user_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_join_invitations_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       organization_members: {
         Row: {
@@ -131,6 +105,20 @@ export interface Database {
           member_role?: Database["public"]["Enums"]["organization_member_role"]
           organization_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_member_id_fkey"
+            columns: ["member_id"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       organizations: {
         Row: {
@@ -151,6 +139,14 @@ export interface Database {
           id?: string
           title?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "organizations_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       organizations_private_info: {
         Row: {
@@ -168,6 +164,14 @@ export interface Database {
           id?: string
           payment_method?: Json | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "organizations_private_info_id_fkey"
+            columns: ["id"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       prices: {
         Row: {
@@ -209,6 +213,14 @@ export interface Database {
           type?: Database["public"]["Enums"]["pricing_type"] | null
           unit_amount?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "prices_product_id_fkey"
+            columns: ["product_id"]
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       products: {
         Row: {
@@ -235,35 +247,7 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
         }
-      }
-      projects: {
-        Row: {
-          created_at: string
-          id: string
-          name: string
-          organization_id: string
-          project_status: Database["public"]["Enums"]["project_status"]
-          team_id: number
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          name: string
-          organization_id: string
-          project_status?: Database["public"]["Enums"]["project_status"]
-          team_id: number
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          name?: string
-          organization_id?: string
-          project_status?: Database["public"]["Enums"]["project_status"]
-          team_id?: number
-          updated_at?: string
-        }
+        Relationships: []
       }
       subscriptions: {
         Row: {
@@ -317,49 +301,20 @@ export interface Database {
           trial_end?: string | null
           trial_start?: string | null
         }
-      }
-      team_members: {
-        Row: {
-          created_at: string | null
-          id: number
-          role: Database["public"]["Enums"]["project_team_member_role"]
-          team_id: number
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          role?: Database["public"]["Enums"]["project_team_member_role"]
-          team_id: number
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          role?: Database["public"]["Enums"]["project_team_member_role"]
-          team_id?: number
-          user_id?: string
-        }
-      }
-      teams: {
-        Row: {
-          created_at: string | null
-          id: number
-          name: string
-          organization_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          name: string
-          organization_id: string
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          name?: string
-          organization_id?: string
-        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_price_id_fkey"
+            columns: ["price_id"]
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       user_private_info: {
         Row: {
@@ -374,6 +329,14 @@ export interface Database {
           created_at?: string | null
           id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "user_private_info_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       user_profiles: {
         Row: {
@@ -394,123 +357,25 @@ export interface Database {
           full_name?: string | null
           id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
-      app_admin_all_users: {
-        Row: {
-          avatar_url: string | null
-          confirmed_at: string | null
-          created_at: string | null
-          email: string | null
-          full_name: string | null
-          id: string | null
-          is_app_admin: boolean | null
-          is_confirmed: boolean | null
-          last_sign_in_at: string | null
-          updated_at: string | null
-        }
-      }
+      [_ in never]: never
     }
     Functions: {
-      app_admin_get_all_organizations: {
-        Args: {
-          search_query?: string
-          page?: number
-          page_size?: number
-        }
-        Returns: {
-          id: string
-          created_at: string
-          title: string
-          team_members_count: number
-          owner_full_name: string
-          owner_email: string
-          credits: number
-        }[]
-      }
-      app_admin_get_all_users: {
-        Args: {
-          search_query?: string
-          page?: number
-          page_size?: number
-        }
-        Returns: {
-          id: string
-          email: string
-          created_at: string
-          updated_at: string
-          full_name: string
-          avatar_url: string
-          is_app_admin: boolean
-          confirmed_at: string
-          is_confirmed: boolean
-          last_sign_in_at: string
-        }[]
-      }
-      app_admin_get_organizations_created_per_month: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          month: string
-          number_of_organizations: number
-        }[]
-      }
-      app_admin_get_projects_created_per_month: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          month: string
-          number_of_projects: number
-        }[]
-      }
-      app_admin_get_recent_30_day_signin_count: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      app_admin_get_total_organization_count: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      app_admin_get_total_project_count: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      app_admin_get_total_user_count: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      app_admin_get_users_created_per_month: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          month: string
-          number_of_users: number
-        }[]
-      }
       check_if_authenticated_user_owns_email: {
         Args: {
           email: string
         }
         Returns: boolean
-      }
-      check_if_user_is_app_admin: {
-        Args: {
-          user_id: string
-        }
-        Returns: boolean
-      }
-      decrement_credits: {
-        Args: {
-          org_id: string
-          amount: number
-        }
-        Returns: undefined
-      }
-      disable_maintenance_mode: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      enable_maintenance_mode: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       get_invited_organizations_for_user_v2: {
         Args: {
@@ -529,25 +394,6 @@ export interface Database {
           member_id: string
         }[]
       }
-      get_organization_id_by_team_id:
-        | {
-            Args: {
-              p_id: number
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              p_id: number
-            }
-            Returns: string
-          }
-      get_organization_id_for_project_id: {
-        Args: {
-          project_id: string
-        }
-        Returns: string
-      }
       get_organization_member_ids: {
         Args: {
           organization_id: string
@@ -564,59 +410,8 @@ export interface Database {
           organization_id: string
         }[]
       }
-      get_team_admins_by_team_id: {
-        Args: {
-          team_id: number
-        }
-        Returns: {
-          user_id: string
-        }[]
-      }
-      get_team_id_for_project_id: {
-        Args: {
-          project_id: string
-        }
-        Returns: number
-      }
-      get_team_members_team_id: {
-        Args: {
-          team_id: number
-        }
-        Returns: {
-          user_id: string
-        }[]
-      }
-      increment_credits: {
-        Args: {
-          org_id: string
-          amount: number
-        }
-        Returns: undefined
-      }
-      is_app_in_maintenance_mode: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_app_not_in_maintenance_mode: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      make_user_app_admin: {
-        Args: {
-          user_id: string
-        }
-        Returns: undefined
-      }
-      remove_app_admin_privilege_for_user: {
-        Args: {
-          user_id: string
-        }
-        Returns: undefined
-      }
     }
     Enums: {
-      app_admin_role: "moderator" | "admin" | "super_admin"
-      maintenance_status: "inactive" | "active" | "scheduled"
       organization_join_invitation_link_status:
         | "active"
         | "finished_accepted"
@@ -630,8 +425,6 @@ export interface Database {
       organization_member_role: "owner" | "admin" | "member" | "readonly"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
-      project_status: "draft" | "pending_approval" | "approved" | "completed"
-      project_team_member_role: "admin" | "member" | "readonly"
       subscription_status:
         | "trialing"
         | "active"

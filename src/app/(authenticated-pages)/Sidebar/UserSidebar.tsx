@@ -12,10 +12,8 @@ import { getUserAvatarUrl } from '@/utils/helpers';
 import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
 
 export function UserSidebar({
-  isUserAppAdmin,
   userProfile: initialUserProfile,
 }: {
-  isUserAppAdmin: boolean;
   userProfile: Table<'user_profiles'>;
 }) {
   const { data: _userProfile } = useUserProfile(initialUserProfile);
@@ -46,11 +44,7 @@ export function UserSidebar({
           ) : null}
         </Anchor>
       </div>
-      <AppSidebar
-        isUserAppAdmin={isUserAppAdmin}
-        isExpanded={isExpanded}
-        toggleIsExpanded={toggleIsExpanded}
-      />
+      <AppSidebar isExpanded={isExpanded} toggleIsExpanded={toggleIsExpanded} />
       <div />
       <SidebarBottom
         avatarUrl={avatarUrl}

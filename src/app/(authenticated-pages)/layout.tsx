@@ -2,7 +2,7 @@ import { ClientLayout } from './ClientLayout';
 import createClient from '@/utils/supabase-server';
 import { AppSupabaseClient } from '@/types';
 import { User } from '@supabase/supabase-js';
-import { getIsAppAdmin, getUserProfile } from '@/utils/supabase-queries';
+import { getUserProfile } from '@/utils/supabase-queries';
 import { errors } from '@/utils/errors';
 import { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
@@ -12,12 +12,11 @@ export const dynamic = 'force-dynamic';
 export const fetchCache = 'only-no-store';
 
 async function fetchData(supabaseClient: AppSupabaseClient, authUser: User) {
-  const [isUserAppAdmin, userProfile] = await Promise.all([
-    getIsAppAdmin(supabaseClient, authUser),
+  const [userProfile] = await Promise.all([
     getUserProfile(supabaseClient, authUser.id),
   ]);
 
-  return { isUserAppAdmin, userProfile };
+  return { userProfile };
 }
 
 export default async function Layout({ children }: { children: ReactNode }) {
@@ -33,16 +32,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
   }
 
   try {
-    const { isUserAppAdmin, userProfile } = await fetchData(
-      supabase,
-      data.user
-    );
+    const { userProfile } = await fetchData(supabase, data.user);
 
-    return (
-      <ClientLayout isUserAppAdmin={isUserAppAdmin} userProfile={userProfile}>
-        {children}
-      </ClientLayout>
-    );
+    return <ClientLayout userProfile={userProfile}>{children}</ClientLayout>;
   } catch (fetchDataError) {
     errors.add(fetchDataError);
     return <p>Error: An error occurred.</p>;

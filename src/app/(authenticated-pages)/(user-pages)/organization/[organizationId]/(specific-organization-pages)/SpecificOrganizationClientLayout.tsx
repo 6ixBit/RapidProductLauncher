@@ -2,7 +2,6 @@
 import { Anchor } from '@/components/Anchor';
 import { PageHeading } from '@/components/presentational/tailwind/PageHeading/PageHeading';
 import Overline from '@/components/presentational/tailwind/Text/Overline';
-import { useCreateTeamMutation } from '@/utils/react-query-hooks';
 import moment from 'moment';
 import { usePathname } from 'next/navigation';
 import { match } from 'path-to-regexp';
@@ -10,7 +9,6 @@ import { ReactNode } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { VscSettings } from 'react-icons/vsc';
 import { Button } from '@/components/ui/Button';
-import { CreateTeamDialog } from '@/components/presentational/tailwind/CreateTeamDialog';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import {
@@ -81,22 +79,6 @@ export function SpecificOrganizationClientLayout({
   const isSettingsPath = pathname ? matchSettingsPath(pathname) : false;
   const { organizationByIdData, organizationId } = useOrganizationContext();
   const router = useRouter();
-  const { mutate, isLoading: isCreatingTeam } = useCreateTeamMutation({
-    onSuccess: (team) => {
-      router.push(`/organization/${organizationId}/team/${team.id}`);
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-    organizationId: organizationId,
-  });
-
-  const onConfirm = (teamName: string) => {
-    mutate({
-      name: teamName,
-      organizationId,
-    });
-  };
 
   return (
     <div className="space-y-8">
@@ -122,10 +104,6 @@ export function SpecificOrganizationClientLayout({
           actions={
             <div className="flex items-start space-y-1 space-x-2">
               <SubscriptionDetails />
-              <CreateTeamDialog
-                isLoading={isCreatingTeam}
-                onConfirm={onConfirm}
-              />
 
               <div className="flex flex-col space-y-1 items-end">
                 <Anchor href={`/organization/${organizationId}/settings`}>
