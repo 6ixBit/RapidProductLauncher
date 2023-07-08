@@ -34,6 +34,9 @@ export const useGetUserOrganizationRole = (
 
 export const useGetMembersInOrganization = (organizationId: string) => {
   return useQuery(['getMembersInOrganization', organizationId], async () => {
-    return getMembersInOrganization(supabaseClient, organizationId);
+    return getMembersInOrganization(
+      supabaseUserClientComponentClient,
+      organizationId
+    );
   });
 };
