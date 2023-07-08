@@ -5,7 +5,7 @@ import {
 } from '@/utils/supabase/organizations';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { useQuery } from '@tanstack/react-query';
-import supabaseClient from '@/utils/supabase-browser';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 
 export const useGetUserOrganizationRole = (
   organizationId: string,
@@ -20,7 +20,7 @@ export const useGetUserOrganizationRole = (
     ['userGetUserOrganizationRole', organizationId, user.id],
     async () => {
       const organizationRole = await getUserOrganizationRole(
-        supabaseClient,
+        supabaseUserClientComponentClient,
         user.id,
         organizationId
       );

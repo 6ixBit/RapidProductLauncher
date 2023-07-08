@@ -4,8 +4,8 @@ import {
   getUserPendingInvitationsById,
 } from '../supabase/invitations';
 import { useQuery } from '@tanstack/react-query';
-import supabaseClient from '@/utils/supabase-browser';
 import { UnwrapPromise } from 'next/dist/lib/coalesced-function';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 
 export const useGetUserPendingInvitations = (
   initialInvitations?: UnwrapPromise<
@@ -17,9 +17,15 @@ export const useGetUserPendingInvitations = (
     ['user-pending-invitations', user.email, user.id],
     async () => {
       if (user.email) {
-        return getUserPendingInvitationsByEmail(supabaseClient, user.email);
+        return getUserPendingInvitationsByEmail(
+          supabaseUserClientComponentClient,
+          user.email
+        );
       } else {
-        return getUserPendingInvitationsById(supabaseClient, user.id);
+        return getUserPendingInvitationsById(
+          supabaseUserClientComponentClient,
+          user.id
+        );
       }
     },
     {

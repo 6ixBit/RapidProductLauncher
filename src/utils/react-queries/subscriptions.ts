@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getNormalizedSubscription } from '../supabase/subscriptions';
-import supabaseClient from '@/utils/supabase-browser';
 import { UnwrapPromise } from '@/types';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 
 export const useGetNormalizedSubscription = (
   organizationId: string,
@@ -9,7 +9,11 @@ export const useGetNormalizedSubscription = (
 ) => {
   const query = useQuery(
     ['normalized-subscription', organizationId],
-    () => getNormalizedSubscription(supabaseClient, organizationId),
+    () =>
+      getNormalizedSubscription(
+        supabaseUserClientComponentClient,
+        organizationId
+      ),
     {
       enabled: !!organizationId,
       initialData,

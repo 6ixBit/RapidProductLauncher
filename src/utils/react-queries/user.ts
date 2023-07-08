@@ -1,12 +1,12 @@
 import { getUserProfile } from '../supabase/user';
-import supabaseClient from '@/utils/supabase-browser';
 import { useQuery } from '@tanstack/react-query';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { Table } from '@/types';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 
 export const useGetUserPublicProfile = (userId: string) => {
   return useQuery(['user', userId], () =>
-    getUserProfile(supabaseClient, userId)
+    getUserProfile(supabaseUserClientComponentClient, userId)
   );
 };
 
@@ -15,7 +15,7 @@ export const useUserProfile = (initialData?: Table<'user_profiles'>) => {
   return useQuery<Table<'user_profiles'>>(
     ['user-profile', user.id],
     async () => {
-      return getUserProfile(supabaseClient, user.id);
+      return getUserProfile(supabaseUserClientComponentClient, user.id);
     },
     {
       initialData,

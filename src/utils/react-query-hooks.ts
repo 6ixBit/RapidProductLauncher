@@ -19,7 +19,6 @@ import {
   updateUserProfileNameAndAvatar,
   createTeam,
 } from './supabase-queries';
-import supabaseClient from './supabase-browser';
 import { AuthProvider, Table, Enum, UnwrapPromise } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -28,6 +27,7 @@ import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { uploadPublicUserAvatar } from './supabase-storage-queries';
 import { useRef } from 'react';
 import { getPossibleAxiosErrorMessage } from './getAxiosErrorMessage';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 
 // update organization title mutation
 
@@ -44,7 +44,11 @@ export const useUpdateOrganizationTitleMutation = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ title }: { title: string }) => {
-      return updateOrganizationTitle(supabaseClient, organizationId, title);
+      return updateOrganizationTitle(
+        supabaseUserClientComponentClient,
+        organizationId,
+        title
+      );
     },
     {
       onMutate: () => {
@@ -79,7 +83,7 @@ export const useUserProfile = (initialData?: Table<'user_profiles'>) => {
   return useQuery<Table<'user_profiles'>>(
     ['user-profile', user.id],
     async () => {
-      return getUserProfile(supabaseClient, user.id);
+      return getUserProfile(supabaseUserClientComponentClient, user.id);
     },
     {
       initialData,
@@ -102,7 +106,11 @@ export const useUpdateUserFullnameAndAvatarMutation = ({
 
   return useMutation(
     async (data: { avatarUrl?: string; fullName?: string }) => {
-      return updateUserProfileNameAndAvatar(supabaseClient, user.id, data);
+      return updateUserProfileNameAndAvatar(
+        supabaseUserClientComponentClient,
+        user.id,
+        data
+      );
     },
 
     {
@@ -138,9 +146,15 @@ export const useUploadUserAvatarMutation = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async (file: File) =>
-      await uploadPublicUserAvatar(supabaseClient, user.id, file, file.name, {
-        upsert: true,
-      }),
+      await uploadPublicUserAvatar(
+        supabaseUserClientComponentClient,
+        user.id,
+        file,
+        file.name,
+        {
+          upsert: true,
+        }
+      ),
     {
       onMutate: () => {
         toastRef.current = toast.loading('Uploading avatar...');
@@ -176,7 +190,10 @@ export const useOrganizationsList = (
   return useQuery<InitialOrganizationListType>(
     ['organization-list', user.id],
     async () => {
-      return getAllOrganizationsForUser(supabaseClient, user.id);
+      return getAllOrganizationsForUser(
+        supabaseUserClientComponentClient,
+        user.id
+      );
     },
     {
       initialData: initialOrganizationList,
@@ -198,7 +215,7 @@ export const useCreateOrganizationMutation = ({
   const toastRef = useRef<string>();
   return useMutation(
     async (name: string) => {
-      return createOrganization(supabaseClient, user, name);
+      return createOrganization(supabaseUserClientComponentClient, user, name);
     },
     {
       onMutate: async (name) => {
@@ -242,7 +259,10 @@ export const useGetOrganizationById = (
   return useQuery(
     ['organization', organizationId],
     async () => {
-      return getOrganizationById(supabaseClient, organizationId);
+      return getOrganizationById(
+        supabaseUserClientComponentClient,
+        organizationId
+      );
     },
     {
       initialData: initialOrganizationData,
@@ -252,14 +272,17 @@ export const useGetOrganizationById = (
 
 export const useGetTeamMembersInOrganization = (organizationId: string) => {
   return useQuery(['team-members', organizationId], async () => {
-    return getTeamMembersInOrganization(supabaseClient, organizationId);
+    return getTeamMembersInOrganization(
+      supabaseUserClientComponentClient,
+      organizationId
+    );
   });
 };
 
 export const useGetTeamInvitationsInOrganization = (organizationId: string) => {
   return useQuery(['team-invitations', organizationId], async () => {
     return getPendingTeamInvitationsInOrganization(
-      supabaseClient,
+      supabaseUserClientComponentClient,
       organizationId
     );
   });
@@ -319,7 +342,10 @@ export const useGetOrganizationSubscription = (organizationId: string) => {
   return useQuery(
     ['organization-subscription', organizationId],
     async () => {
-      return getOrganizationSubscription(supabaseClient, organizationId);
+      return getOrganizationSubscription(
+        supabaseUserClientComponentClient,
+        organizationId
+      );
     },
     {
       retry: false,
@@ -333,7 +359,7 @@ export const useGetAllActiveProducts = () => {
   return useQuery(
     ['all-active-products'],
     async () => {
-      return getActiveProductsWithPrices(supabaseClient);
+      return getActiveProductsWithPrices(supabaseUserClientComponentClient);
     },
     {
       refetchOnWindowFocus: false,
@@ -421,7 +447,7 @@ export const useGetIsOrganizationAdmin = (organizationId: string) => {
   const user = useLoggedInUser();
   return useQuery(['isOrganizationAdmin', user.id], async () => {
     const memberInfo = await getUserOrganizationRole(
-      supabaseClient,
+      supabaseUserClientComponentClient,
       user.id,
       organizationId
     );
@@ -440,7 +466,7 @@ export function useUpdateUserEmailMutation() {
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ newEmail }: { newEmail: string }) => {
-      const { data } = await supabaseClient.auth.updateUser({
+      const { data } = await supabaseUserClientComponentClient.auth.updateUser({
         email: newEmail,
       });
       return data;
@@ -483,7 +509,7 @@ export const useSignInWithMagicLink = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ email }: { email: string }) => {
-      return signInWithMagicLink(supabaseClient, email);
+      return signInWithMagicLink(supabaseUserClientComponentClient, email);
     },
     {
       onMutate: () => {
@@ -521,7 +547,11 @@ export const useSignInWithPassword = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ email, password }: { email: string; password: string }) => {
-      return signInWithPassword(supabaseClient, email, password);
+      return signInWithPassword(
+        supabaseUserClientComponentClient,
+        email,
+        password
+      );
     },
     {
       onMutate: () => {
@@ -559,7 +589,7 @@ export const useResetPassword = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ email }: { email: string }) => {
-      return resetPassword(supabaseClient, email);
+      return resetPassword(supabaseUserClientComponentClient, email);
     },
     {
       onMutate: () => {
@@ -597,7 +627,7 @@ export const useUpdatePassword = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ password }: { password: string }) => {
-      return updatePassword(supabaseClient, password);
+      return updatePassword(supabaseUserClientComponentClient, password);
     },
     {
       onMutate: () => {
@@ -627,7 +657,7 @@ export const useSignInWithProvider = () => {
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ provider }: { provider: AuthProvider }) => {
-      return signInWithProvider(supabaseClient, provider);
+      return signInWithProvider(supabaseUserClientComponentClient, provider);
     },
     {
       onMutate: ({ provider }) => {
@@ -649,7 +679,7 @@ export const useSignUp = ({
   const toastRef = useRef<string | null>(null);
   return useMutation(
     async ({ email, password }: { email: string; password: string }) => {
-      return signUp(supabaseClient, email, password);
+      return signUp(supabaseUserClientComponentClient, email, password);
     },
     {
       onMutate: () => {
