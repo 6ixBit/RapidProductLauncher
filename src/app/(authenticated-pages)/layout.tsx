@@ -1,11 +1,11 @@
 import { ClientLayout } from './ClientLayout';
-import createClient from '@/utils/supabase-server';
 import { AppSupabaseClient } from '@/types';
 import { User } from '@supabase/supabase-js';
 import { getUserProfile } from '@/utils/supabase-queries';
 import { errors } from '@/utils/errors';
 import { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
+import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
 
 // do not cache this layout
 export const dynamic = 'force-dynamic';
@@ -20,8 +20,8 @@ async function fetchData(supabaseClient: AppSupabaseClient, authUser: User) {
 }
 
 export default async function Layout({ children }: { children: ReactNode }) {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
+  const { data, error } =
+    await supabaseUserServerComponentClient.auth.getUser();
 
   if (!data.user) {
     // This is unreachable because the user is authenticated
@@ -32,7 +32,10 @@ export default async function Layout({ children }: { children: ReactNode }) {
   }
 
   try {
-    const { userProfile } = await fetchData(supabase, data.user);
+    const { userProfile } = await fetchData(
+      supabaseUserServerComponentClient,
+      data.user
+    );
 
     return <ClientLayout userProfile={userProfile}>{children}</ClientLayout>;
   } catch (fetchDataError) {

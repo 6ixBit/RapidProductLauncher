@@ -1,5 +1,4 @@
 import { getOrganizationById } from '@/utils/supabase-queries';
-import createClient from '@/utils/supabase-server';
 import { ReactNode } from 'react';
 import { z } from 'zod';
 import { AppSupabaseClient } from '@/types';
@@ -7,6 +6,7 @@ import { getUserOrganizationRole } from '@/utils/supabase/organizations';
 import { notFound } from 'next/navigation';
 import { getNormalizedSubscription } from '@/utils/supabase/subscriptions';
 import { OrganizationContextProvider } from '@/contexts/OrganizationContext';
+import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
 
 const paramsSchema = z.object({
   organizationId: z.string(),
@@ -49,9 +49,8 @@ export default async function Layout({
 }) {
   try {
     const { organizationId } = paramsSchema.parse(params);
-    const supabase = createClient();
     const { organizationByIdData, organizationRole, normalizedSubscription } =
-      await fetchData(supabase, organizationId);
+      await fetchData(supabaseUserServerComponentClient, organizationId);
     return (
       <OrganizationContextProvider
         normalizedSubscription={normalizedSubscription}

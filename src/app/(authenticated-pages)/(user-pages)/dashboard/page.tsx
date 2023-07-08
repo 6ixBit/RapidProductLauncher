@@ -1,9 +1,9 @@
 import { getAllOrganizationsForUser } from '@/utils/supabase-queries';
 import { OrganizationList } from './OrganizationList';
-import createClient from '@/utils/supabase-server';
 import { AppSupabaseClient } from '@/types';
 import { getUserPendingInvitationsByEmail } from '@/utils/supabase/invitations';
 import { PendingInvitationsList } from './PendingInvitationsList';
+import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
 
 const fetchData = async (supabaseClient: AppSupabaseClient) => {
   const session = await supabaseClient.auth.getSession();
@@ -19,10 +19,8 @@ const fetchData = async (supabaseClient: AppSupabaseClient) => {
 };
 
 export default async function DashboardPage() {
-  const supabase = createClient();
-
   const { initialOrganizationsList, pendingInvitations } = await fetchData(
-    supabase
+    supabaseUserServerComponentClient
   );
   return (
     <div className="max-w-7xl py-8 px-8 space-y-8">
