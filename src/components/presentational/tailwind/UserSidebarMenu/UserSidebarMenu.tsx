@@ -48,7 +48,7 @@ export function UserSidebarMenu() {
           <Menu.Item>
             {({ active }) => (
               <Anchor
-                href="/api/logout"
+                href="/logout"
                 prefetch={false}
                 className={cn(
                   active ? 'bg-slate-100 text-slate-900' : 'text-slate-700',

@@ -1,6 +1,5 @@
 import { Anchor } from '@/components/Anchor';
 import { PRODUCT_NAME } from '@/constants';
-import { FiCheck, FiLock } from 'react-icons/fi';
 
 const features = [
   {
