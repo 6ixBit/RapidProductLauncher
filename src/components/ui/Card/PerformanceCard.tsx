@@ -1,5 +1,5 @@
 import { Button } from '../Button';
-import { BsPlusLg } from 'react-icons/bs';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 
 export default function PerformanceCard() {
   return (
@@ -13,7 +13,7 @@ export default function PerformanceCard() {
           color="blue"
           className="mt-4 space-x-5"
         >
-          <BsPlusLg /> Add More Credits
+          <Plus /> Add More Credits
         </Button>
       </div>
     </div>

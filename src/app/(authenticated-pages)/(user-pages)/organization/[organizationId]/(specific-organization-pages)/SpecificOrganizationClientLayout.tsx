@@ -6,8 +6,8 @@ import moment from 'moment';
 import { usePathname } from 'next/navigation';
 import { match } from 'path-to-regexp';
 import { ReactNode } from 'react';
-import { FiArrowLeft } from 'react-icons/fi';
-import { VscSettings } from 'react-icons/vsc';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import SettingsIcon from 'lucide-react/dist/esm/icons/settings';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useOrganizationContext } from '@/contexts/OrganizationContext';
@@ -84,7 +84,7 @@ export function SpecificOrganizationClientLayout({
               href={`/organization/${organizationId}`}
               className="text-blue-800 space-x-2 flex items-center"
             >
-              <FiArrowLeft className="relative -top-0.5" />
+              <ArrowLeft className="relative -top-0.5" />
               <Overline className="text-blue-800">
                 Back to Organization
               </Overline>
@@ -103,7 +103,7 @@ export function SpecificOrganizationClientLayout({
               <div className="flex flex-col space-y-1 items-end">
                 <Anchor href={`/organization/${organizationId}/settings`}>
                   <Button variant="outline">
-                    <VscSettings />
+                    <SettingsIcon />
                     <span className="text-sm">View Organization Settings</span>
                   </Button>
                 </Anchor>

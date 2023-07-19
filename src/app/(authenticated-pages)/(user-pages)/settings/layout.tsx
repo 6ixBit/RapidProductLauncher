@@ -2,7 +2,8 @@
 import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
 import { TabsNavigation } from '@/components/presentational/tailwind/TabsNavigation';
 import { useMemo } from 'react';
-import { FiLock, FiUser } from 'react-icons/fi';
+import LockIcon from 'lucide-react/dist/esm/icons/lock';
+import UserIcon from 'lucide-react/dist/esm/icons/user';
 
 export default function UserSettingsClientLayout({
   children,
@@ -14,12 +15,12 @@ export default function UserSettingsClientLayout({
       {
         label: 'Account Settings',
         href: `/settings`,
-        icon: <FiUser />,
+        icon: <UserIcon />,
       },
       {
         label: 'Security',
         href: `/settings/security`,
-        icon: <FiLock />,
+        icon: <LockIcon />,
       },
     ];
   }, []);

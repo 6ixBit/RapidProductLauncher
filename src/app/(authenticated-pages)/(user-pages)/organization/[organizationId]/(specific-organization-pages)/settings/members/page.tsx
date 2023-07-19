@@ -7,7 +7,7 @@ import { TeamMembersTable } from '@/components/presentational/tailwind/TeamMembe
 import { TeamMembersTableProps } from '@/components/presentational/tailwind/TeamMembersTable/types';
 import { TeamInvitationsTable } from '@/components/presentational/tailwind/TeamInvitationsTable';
 import { TeamInvitationsTableProps } from '@/components/presentational/tailwind/TeamInvitationsTable/types';
-import { FiPlus } from 'react-icons/fi';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 import { toast } from 'react-hot-toast';
 import {
   useGetIsOrganizationAdmin,

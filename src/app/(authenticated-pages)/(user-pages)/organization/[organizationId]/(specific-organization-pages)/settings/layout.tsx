@@ -2,7 +2,9 @@
 
 import { TabsNavigation } from '@/components/presentational/tailwind/TabsNavigation';
 import { useMemo } from 'react';
-import { FiUsers, FiDollarSign, FiEdit } from 'react-icons/fi';
+import UsersIcon from 'lucide-react/dist/esm/icons/users';
+import DollarSignIcon from 'lucide-react/dist/esm/icons/dollar-sign';
+import EditIcon from 'lucide-react/dist/esm/icons/edit';
 import { useOrganizationContext } from '@/contexts/OrganizationContext';
 
 export default function OrganizationSettingsLayout({
@@ -16,17 +18,17 @@ export default function OrganizationSettingsLayout({
       {
         label: 'General',
         href: `/organization/${organizationId}/settings`,
-        icon: <FiEdit />,
+        icon: <EditIcon />,
       },
       {
         label: 'Organization Members',
         href: `/organization/${organizationId}/settings/members`,
-        icon: <FiUsers />,
+        icon: <UsersIcon />,
       },
       {
         label: 'Billing',
         href: `/organization/${organizationId}/settings/billing`,
-        icon: <FiDollarSign />,
+        icon: <DollarSignIcon />,
       },
     ];
   }, [organizationId]);

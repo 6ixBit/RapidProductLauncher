@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import Image from 'next/image';
 import { UserSidebarMenu } from '../UserSidebarMenu';
-import { BiChevronRight } from 'react-icons/bi';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 import { cn } from '@/utils/cn';
 
 export const SidebarBottom = ({
@@ -36,7 +36,7 @@ export const SidebarBottom = ({
             <div className="flex flex-col w-full">
               <div className="flex justify-between w-full items-center">
                 <p className="text-sm text-white font-[500]">{userFullname}</p>
-                <BiChevronRight className="text-2xl text-white opacity-0 group-hover:opacity-100" />
+                <ChevronRight className="text-2xl text-white opacity-0 group-hover:opacity-100" />
               </div>
               <p className="text-sm text-slate-400">{userEmail}</p>
             </div>

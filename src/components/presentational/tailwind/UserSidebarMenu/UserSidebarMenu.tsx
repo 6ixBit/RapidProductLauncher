@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Anchor } from '@/components/Anchor';
-import { MdManageAccounts } from 'react-icons/md';
-import { GrShieldSecurity } from 'react-icons/gr';
-import { HiLogout } from 'react-icons/hi';
+import AccountsIcon from 'lucide-react/dist/esm/icons/users';
+import SecurityIcon from 'lucide-react/dist/esm/icons/shield';
+import LogoutIcon from 'lucide-react/dist/esm/icons/log-out';
 import { cn } from '@/utils/cn';
 
 export function UserSidebarMenu() {
@@ -28,7 +28,7 @@ export function UserSidebarMenu() {
                   'flex px-3 gap-2 items-center py-2 text-sm'
                 )}
               >
-                <MdManageAccounts className="text-lg" /> Account settings
+                <AccountsIcon className="text-lg" /> Account settings
               </Anchor>
             )}
           </Menu.Item>
@@ -41,7 +41,7 @@ export function UserSidebarMenu() {
                   'flex px-3 gap-2 items-center py-2 text-sm'
                 )}
               >
-                <GrShieldSecurity className="text-lg" /> Security Settings
+                <SecurityIcon className="text-lg" /> Security Settings
               </Anchor>
             )}
           </Menu.Item>
@@ -55,7 +55,7 @@ export function UserSidebarMenu() {
                   'flex px-3 gap-2 items-center py-2 text-sm'
                 )}
               >
-                <HiLogout className="text-lg" />
+                <LogoutIcon className="text-lg" />
                 Sign out
               </Anchor>
             )}

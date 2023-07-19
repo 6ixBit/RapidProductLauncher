@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { BsPlusLg } from 'react-icons/bs';
+import PlusIcon from 'lucide-react/dist/esm/icons/plus';
 
 type CreateOrganizationDialogProps = {
   onConfirm: (organizationTitle: string) => void;
@@ -38,7 +38,7 @@ export function CreateOrganizationDialog({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button>
-            <BsPlusLg className="text-white mr-2" />
+            <PlusIcon className="text-white mr-2" />
             Create Organisation
           </Button>
         </DialogTrigger>
