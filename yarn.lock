@@ -1301,11 +1301,6 @@
   dependencies:
     react "18.2.0"
 
-"@react-icons/all-files@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@react-icons/all-files/-/all-files-4.1.0.tgz#477284873a0821928224b6fc84c62d2534d6650b"
-  integrity sha512-hxBI2UOuVaI3O/BhQfhtb4kcGn9ft12RWAFVMUeNjqqhLsHvFtzIkFaptBJpFDANTKoDfdVoHTKZDlwKCACbMQ==
-
 "@selderee/plugin-htmlparser2@^0.10.0":
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/@selderee/plugin-htmlparser2/-/plugin-htmlparser2-0.10.0.tgz#8a304d18df907e086f3cfc71ea0ced52d6524430"
@@ -6065,11 +6060,6 @@ react-hot-toast@^2.4.0:
   integrity sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==
   dependencies:
     goober "^2.1.10"
-
-react-icons@^4.7.1:
-  version "4.10.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.0.tgz#387f8ba8edb75dcf3b7d640ecdb7e9f616e22c48"
-  integrity sha512-SoBQp5sP2NgJgnzIoW/0foYRzuB/dlbfaFaFv7N5c7Mk+WvzAIKwvld7LTPLhRo+UQA5oCzdtm9h6oBKTbuKCA==
 
 react-is@^16.10.2, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

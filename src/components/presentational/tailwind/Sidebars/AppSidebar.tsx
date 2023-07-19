@@ -4,10 +4,11 @@ import { classNames } from '@/utils/classNames';
 import { useUser } from '@supabase/auth-helpers-react';
 import { usePathname } from 'next/navigation';
 import { match } from 'path-to-regexp';
-import { FiHome, FiServer } from 'react-icons/fi';
-import { AiFillHome } from 'react-icons/ai';
+import HomeIcon from 'lucide-react/dist/esm/icons/home';
+import ServerIcon from 'lucide-react/dist/esm/icons/server';
 import { cn } from '@/utils/cn';
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import ChevronLeftIcon from 'lucide-react/dist/esm/icons/chevron-left';
+import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
 
 type LinksProps = {
   isExpanded: boolean;
@@ -31,7 +32,7 @@ function Links({ isExpanded, toggleIsExpanded }: LinksProps) {
         <>
           <SidebarLink
             href="/dashboard"
-            icon={<FiHome />}
+            icon={<HomeIcon />}
             label="Dashboard"
             isExpanded={isExpanded}
           />
@@ -41,7 +42,7 @@ function Links({ isExpanded, toggleIsExpanded }: LinksProps) {
             className={chevronClassName}
             onClick={() => toggleIsExpanded(!isExpanded)}
           >
-            {isExpanded ? <BiChevronLeft /> : <BiChevronRight />}
+            {isExpanded ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </div>
         </>
       ) : (
