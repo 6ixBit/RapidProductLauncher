@@ -27,6 +27,15 @@ async function fetchSession(supabaseClient: AppSupabaseClient) {
   return session;
 }
 
+
+export const metadata = {
+  icons: {
+    icon: '/images/logo-black-main.ico',
+  },
+  title:'Nextbase Essential',
+  description:'Nextbase Essential',
+}
+
 export default async function RootLayout({
   children,
 }: {
