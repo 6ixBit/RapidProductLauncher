@@ -1,4 +1,10 @@
 import { T } from '@/components/ui/Typography';
+import { withBaseDescription, withBaseTitle } from '@/utils/seo';
+
+export const metadata = {
+  title: withBaseTitle('Organization'),
+  description: withBaseDescription('organization page of Nextbase Essentail version'),
+}
 
 export default async function OrganizationPage() {
   return (

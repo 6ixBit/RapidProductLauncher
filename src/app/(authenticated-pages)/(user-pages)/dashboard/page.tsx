@@ -5,6 +5,15 @@ import { getUserPendingInvitationsByEmail } from '@/utils/supabase/invitations';
 import { PendingInvitationsList } from './PendingInvitationsList';
 import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
 
+import { withBaseTitle, withBaseDescription } from '@/utils/seo';
+
+export const metadata = {
+  title: withBaseTitle('Dashboard'),
+  description: withBaseDescription('dahsboard of Nextbase Essentail version'),
+  
+}
+
+
 const fetchData = async (supabaseClient: AppSupabaseClient) => {
   const session = await supabaseClient.auth.getSession();
   const user = session?.data.session?.user;

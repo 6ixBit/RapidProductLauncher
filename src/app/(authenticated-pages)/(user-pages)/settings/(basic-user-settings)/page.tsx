@@ -1,9 +1,16 @@
 import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
 import { AccountSettings } from './AccountSettings';
+import { withBaseTitle, withBaseDescription } from '@/utils/seo';
 
 import { errors } from '@/utils/errors';
 
 import { getUserProfile } from '@/utils/supabase-queries';
+
+export const metadata = {
+  title: withBaseTitle('Account Settings'),
+  description: withBaseDescription('user account settings of Nextbase Essentail version'),
+  
+}
 
 export default async function AccountSettingsPage() {
   const { data, error } =

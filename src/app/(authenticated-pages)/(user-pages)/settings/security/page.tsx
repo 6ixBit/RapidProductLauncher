@@ -3,10 +3,17 @@ import { Email } from '@/components/presentational/tailwind/Auth/Email';
 import { Password } from '@/components/presentational/tailwind/Auth/Password';
 import H3 from '@/components/presentational/tailwind/Text/H3';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { withBaseDescription, withBaseTitle } from '@/utils/seo';
 import {
   useUpdatePassword,
   useUpdateUserEmailMutation,
 } from '@/utils/react-query-hooks';
+
+export const metadata = {
+  title: withBaseTitle('Security Settings'),
+  description: withBaseDescription('User security settings of Nextbase Essentail version'),
+  
+}
 
 export default function SecuritySettings() {
   const updateEmailMutation = useUpdateUserEmailMutation();
