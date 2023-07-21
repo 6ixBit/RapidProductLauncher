@@ -7,7 +7,7 @@ const outlineColorClasses = (color: string) => `
 `;
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center font-[600] transition-colors focus-visible:outline-none shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
+  'inline-flex items-center justify-center font-[600] transition-colors focus-visible:outline-none shadow-[0_10px_8px_-12px_rgba(0,0,0,0.3)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
   {
     variants: {
       variant: {
@@ -16,7 +16,7 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive  text-base  text-destructive-foreground rounded-lg hover:bg-destructive/90',
         outline:
-          'border-2 border-slate-400  text-base  text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900',
+          'border-2 border-slate-300  text-base  text-slate-700 rounded-lg hover:bg-gray-100 hover:text-slate-900',
         outlineColor: outlineColorClasses('{color}'),
         secondary:
           'bg-secondary text-secondary-foreground  text-base rounded-lg hover:bg-secondary/80',
@@ -24,7 +24,16 @@ const buttonVariants = cva(
           'hover:bg-accent  text-base rounded-lg hover:text-accent-foreground',
         success:
           'bg-green-600   text-base  text-white rounded-lg hover:bg-green-500',
+        warning:
+          'bg-yellow-500 text-base text-white rounded-lg hover:bg-yellow-400',
+        info: 'bg-blue-500 text-base text-white rounded-lg hover:bg-blue-400',
         link: 'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-blue-500',
+        primaryLink:
+          'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-primary',
+        secondaryLink:
+          'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-secondary',
+        infoLink:
+          'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-blue-500',
       },
       size: {
         default: 'h-10 py-2 px-4',
