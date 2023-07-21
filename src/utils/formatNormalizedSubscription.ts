@@ -18,8 +18,7 @@ export function formatNormalizedSubscription(
       return {
         title: '',
         sidenote: 'Start free trial',
-        description:
-          'You currently do not have a subscription. Start a free trial now to enjoy all our features!',
+        description: 'Activate your free trial now and enjoy all our features!',
       };
     case 'trialing':
       description = `Your ${

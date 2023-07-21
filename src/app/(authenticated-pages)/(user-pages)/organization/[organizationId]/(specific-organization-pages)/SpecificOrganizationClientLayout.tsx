@@ -35,10 +35,10 @@ function SubscriptionDetails() {
             href={`/organization/${organizationId}/settings/billing`}
             className="underline rounded"
           >
-            <T.Small>
+            <T.P>
               {title}{' '}
               {sidenote ? <span className="ml-1">{sidenote}</span> : null}
-            </T.Small>
+            </T.P>
           </Anchor>
         </HoverCardTrigger>
         <HoverCardContent className="w-80">
@@ -51,14 +51,18 @@ function SubscriptionDetails() {
       <HoverCard>
         <HoverCardTrigger asChild>
           <Anchor
-            className="underline"
+            className="flex mr-2 p-2"
             href={`/organization/${organizationId}/settings/billing`}
           >
-            <T.Subtle>{sidenote}</T.Subtle>
+            <T.P className="font-medium text-blue-600 hover:text-blue-500 underline underline-offset-4">
+              {sidenote}
+            </T.P>
           </Anchor>
         </HoverCardTrigger>
-        <HoverCardContent className="w-80">
-          <T.P className="text-blue-500">{description}</T.P>
+        <HoverCardContent className="w-60">
+          <T.P className="text-gray-700 leading-6 font-[550]">
+            {description}
+          </T.P>
         </HoverCardContent>
       </HoverCard>
     );
