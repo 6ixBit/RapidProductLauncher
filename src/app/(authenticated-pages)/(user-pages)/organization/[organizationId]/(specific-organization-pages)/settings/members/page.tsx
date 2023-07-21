@@ -15,16 +15,13 @@ import {
   useGetTeamMembersInOrganization,
   useInviteUserMutation,
 } from '@/utils/react-query-hooks';
-import { withBaseDescription, withBaseTitle } from '@/utils/seo';
+
 import { Button } from '@/components/presentational/tailwind/Button';
 import { classNames } from '@/utils/classNames';
 import { InviteOrganizationMemberDialog } from '@/components/presentational/tailwind/InviteOrganizationMemberDialog';
 import { useOrganizationContext } from '@/contexts/OrganizationContext';
 
-export const metadata = {
-  title: withBaseTitle('Team members'),
-  description: withBaseDescription('Team members page of Nextbase Essentail version'),
-}
+
 
 function InviteUser() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

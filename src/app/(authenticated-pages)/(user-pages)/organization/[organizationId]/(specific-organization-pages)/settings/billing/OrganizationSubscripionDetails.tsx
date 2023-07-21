@@ -1,3 +1,4 @@
+"use client";
 import { LoadingSpinner } from '@/components/presentational/tailwind/LoadingSpinner';
 import { PricingModeToggle } from '@/components/presentational/tailwind/PricingModeToggle';
 import H3 from '@/components/presentational/tailwind/Text/H3';
