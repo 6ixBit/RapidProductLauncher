@@ -32,7 +32,7 @@ export const metadata = {
   icons: {
     icon: '/images/logo-black-main.ico',
   },
-  title:'Nextbase Essential',
+  title:'NextBase | Premium Next.js 13, Supabase, Typescript SAAS boilerplate. | Essential',
   description:'Nextbase Essential',
 }
 
