@@ -39,7 +39,6 @@ function ChoosePricingTable() {
       },
     });
 
-  console.log(activeProducts);
   // supabase cannot sort by foreign table, so we do it here
   const productsSortedByPrice = useMemo(() => {
     if (!activeProducts) return [];
