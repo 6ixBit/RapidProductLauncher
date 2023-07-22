@@ -9,11 +9,13 @@ export const SidebarBottom = ({
   userFullname,
   isExpanded,
   userEmail,
+  toggleIsExpanded,
 }: {
   avatarUrl: string;
   userFullname: string;
   userEmail: string;
   isExpanded: boolean;
+  toggleIsExpanded: (isExpanded: boolean) => void;
 }) => {
   const userClassName = cn(
     `flex w-full gap-3 mb-2 items-center py-3 text-white h-[80px] border-t border-slate-600`,
@@ -31,6 +33,7 @@ export const SidebarBottom = ({
             src={avatarUrl}
             className="w-8 h-8 rounded-full object-cover"
             alt="User avatar"
+            onClick={() => toggleIsExpanded(!isExpanded)}
           />
           {isExpanded ? (
             <div className="flex flex-col w-full">

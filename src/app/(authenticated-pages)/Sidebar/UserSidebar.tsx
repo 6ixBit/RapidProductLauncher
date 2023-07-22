@@ -51,6 +51,7 @@ export function UserSidebar({
         userFullname={userProfile.full_name ?? 'User'}
         isExpanded={isExpanded}
         userEmail={userEmail}
+        toggleIsExpanded={toggleIsExpanded}
       />
     </div>
   );
