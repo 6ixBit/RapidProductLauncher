@@ -1,14 +1,15 @@
 import { AppSupabaseClient } from '@/types';
 import { getOrganizationById } from '@/utils/supabase-queries';
 import { EditOrganizationForm } from './EditOrganizationForm';
-import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
-import {withBaseDescription, withBaseTitle} from '@/utils/seo';
-
+import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
+import { withBaseDescription, withBaseTitle } from '@/utils/seo';
 
 export const metadata = {
   title: withBaseTitle('Edit Organization'),
-  description: withBaseDescription('edit organization page of Nextbase Essentail version'),
-}
+  description: withBaseDescription(
+    'edit organization page of Nextbase Essentail version'
+  ),
+};
 
 async function fetchData(
   supabaseClient: AppSupabaseClient,
@@ -24,10 +25,8 @@ export default async function EditOrganizationPage({
     organizationId: string;
   };
 }) {
+  const supabaseClient = createSupabaseUserServerComponentClient();
   const { organizationId } = params;
-  const organization = await fetchData(
-    supabaseUserServerComponentClient,
-    organizationId
-  );
+  const organization = await fetchData(supabaseClient, organizationId);
   return <EditOrganizationForm initialTitle={organization.title} />;
 }

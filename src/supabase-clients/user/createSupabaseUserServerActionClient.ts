@@ -1,10 +1,10 @@
 import 'server-only';
 import { Database } from '@/lib/database.types';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
-export const createSupabaseUserServerComponentClient = () =>
-  createServerComponentClient<Database>(
+export const createSupabaseUserServerActionClient = () =>
+  createServerActionClient<Database>(
     {
       cookies,
     },

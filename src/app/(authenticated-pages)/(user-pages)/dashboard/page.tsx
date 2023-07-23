@@ -3,16 +3,14 @@ import { OrganizationList } from './OrganizationList';
 import { AppSupabaseClient } from '@/types';
 import { getUserPendingInvitationsByEmail } from '@/utils/supabase/invitations';
 import { PendingInvitationsList } from './PendingInvitationsList';
-import { supabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
+import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
 
 import { withBaseTitle, withBaseDescription } from '@/utils/seo';
 
 export const metadata = {
   title: withBaseTitle('Dashboard'),
   description: withBaseDescription('dahsboard of Nextbase Essentail version'),
-  
-}
-
+};
 
 const fetchData = async (supabaseClient: AppSupabaseClient) => {
   const session = await supabaseClient.auth.getSession();
@@ -28,8 +26,9 @@ const fetchData = async (supabaseClient: AppSupabaseClient) => {
 };
 
 export default async function DashboardPage() {
+  const supabaseClient = createSupabaseUserServerComponentClient();
   const { initialOrganizationsList, pendingInvitations } = await fetchData(
-    supabaseUserServerComponentClient
+    supabaseClient
   );
   return (
     <div className="max-w-7xl py-8 px-8 space-y-8">
