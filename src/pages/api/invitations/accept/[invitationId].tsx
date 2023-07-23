@@ -1,18 +1,26 @@
-// nextjs api handler to accept a team invitation
-
-import { withUserLoggedInApi } from '@/utils/api-routes/wrappers/withUserLoggedInApi';
-import { AppSupabaseClient } from '@/types';
-import { Session, User } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { errors } from '@/utils/errors';
+import { createSupabaseUserServerPagesClient } from '@/supabase-clients/user/createSupabaseUserServerPagesClient';
 
 async function AcceptInvitationHandler(
   req: NextApiRequest,
-  res: NextApiResponse,
-  supabaseClient: AppSupabaseClient,
-  session: Session,
-  user: User
+  res: NextApiResponse
 ) {
+  const supabaseClient = createSupabaseUserServerPagesClient({
+    req,
+    res,
+  });
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+  const user = data?.session?.user;
+
+  if (!user) {
+    res.status(401).send('Please login to accept organization invitation.');
+    return;
+  }
+
   const { invitationId } = req.query;
 
   if (typeof invitationId === 'string') {
@@ -39,4 +47,4 @@ async function AcceptInvitationHandler(
   }
 }
 
-export default withUserLoggedInApi(AcceptInvitationHandler);
+export default AcceptInvitationHandler;
