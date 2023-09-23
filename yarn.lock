@@ -1191,10 +1191,10 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
-"@react-email/button@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@react-email/button/-/button-0.0.8.tgz#50c95b504617dd488a1f5cc449a4ed7b4c43a0da"
-  integrity sha512-EOIX/ewPgn/CXUvaAbR92jfWC8EXTSRBafpKtIbxchMcx/iIEG7/JqUndJdZ7BqgON1o6GLm3xP2+AtXtTZJkg==
+"@react-email/button@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@react-email/button/-/button-0.0.10.tgz#be453280f9c2f49660fbbcd9ea872d44ff1be523"
+  integrity sha512-S8r7NGTxXoxvw5kCdMzpwXdBHhYAhrYM9sylK6xr+2M9osrjHQOPLBoV3I/po9xdzN3WyRcZqQixH0wPeXy2Gw==
   dependencies:
     react "18.2.0"
 
