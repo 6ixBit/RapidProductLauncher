@@ -2,6 +2,10 @@ pull_request_rules:
   - name: Automatic merge on approval
     conditions:
       - '#approved-reviews-by>=1'
+      - check-success=build
+      - check-success=test-migrations
+      - check-success=vitest
+      - check-success~=^Vercel
     actions:
       queue:
         name: default
@@ -9,7 +13,10 @@ pull_request_rules:
   - name: Automatic merge for hotfixes
     conditions:
       - label=hotfix
-      - check-success=all
+      - check-success=build
+      - check-success=test-migrations
+      - check-success=vitest
+      - check-success~=^Vercel
     actions:
       queue:
         name: hotfix
@@ -17,17 +24,31 @@ pull_request_rules:
   - name: Automatic merge for Renovate PRs
     conditions:
       - author=renovate[bot]
-      - check-success=all
+      - check-success=build
+      - check-success=test-migrations
+      - check-success=vitest
+      - check-success~=^Vercel
     actions:
       queue:
         name: renovate
+        method: squash
 queue_rules:
   - name: default
     merge_conditions:
+      - check-success=build
+      - check-success=test-migrations
+      - check-success=vitest
+      - check-success~=^Vercel
       - '#approved-reviews-by>=1'
   - name: hotfix
-    conditions:
-      - check-success=all
+    merge_conditions:
+      - check-success=build
+      - check-success=test-migrations
+      - check-success=vitest
+      - check-success~=^Vercel
   - name: renovate
-    conditions:
-      - check-success=all
+    merge_conditions:
+      - check-success=build
+      - check-success=test-migrations
+      - check-success=vitest
+      - check-success~=^Vercel
