@@ -88,7 +88,7 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.1.1",
     "@playwright/test": "^1.29.1",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^14.0.0",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/nprogress": "^0.2.0",
     "@types/react": "18.2.22",
