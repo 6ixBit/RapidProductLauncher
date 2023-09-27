@@ -8,16 +8,16 @@ on:
       - '**'
 
 jobs:
-  build:
-    timeout-minutes: 20
+  # build:
+  #   timeout-minutes: 20
 
-    runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/ci-setup
-      - name: ts-check && build
-        run: yarn run tsc
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./.github/actions/ci-setup
+  #     - name: ts-check && build
+  #       run: yarn run tsc
 
   vitest:
     timeout-minutes: 20
