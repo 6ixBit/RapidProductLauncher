@@ -7486,10 +7486,10 @@ strip-literal@^1.0.1:
   dependencies:
     acorn "^8.10.0"
 
-stripe@13.8.0:
-  version "13.8.0"
-  resolved "https://registry.yarnpkg.com/stripe/-/stripe-13.8.0.tgz#15b09eb3d55f77561179ada52d34c07cf0cef295"
-  integrity sha512-QFOOeaEwNOAj4k/T9OtSb9sKx9oLVI5y9HrJJn3XN9RJYKGAuE+fMD+rHA5u9ILmf3FDx99jaEvVvykftJtBGA==
+stripe@11.8.0:
+  version "11.8.0"
+  resolved "https://registry.yarnpkg.com/stripe/-/stripe-11.8.0.tgz#4c163bbfa30b2f20d642c9dc40ac05bd8fade1fb"
+  integrity sha512-aGwrJDqYzpjQj0ejt7oN7BE7kUjZFxhUz/gDeyDCS7CBpZhDb26Eb6z9sS8KdbsbmuS8rkkn2lBY4koK7L1ZCw==
   dependencies:
     "@types/node" ">=8.1.0"
     qs "^6.11.0"
