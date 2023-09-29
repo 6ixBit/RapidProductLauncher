@@ -1,16 +1,10 @@
 pull_request_rules:
-  - name: Label renovate PRs
-    conditions:
-      - author=renovate[bot]
-    actions:
-      label:
-        add: ['dependency']
   - name: Automatic merge on approval
     conditions:
       - '#approved-reviews-by>=1'
       - check-success=test-migrations
       - check-success=vitest
-      - check-success~=^Vercel
+      - check-success="Vercel"
     actions:
       queue:
         name: default
@@ -20,7 +14,7 @@ pull_request_rules:
       - label=hotfix
       - check-success=test-migrations
       - check-success=vitest
-      - check-success~=^Vercel
+      - check-success="Vercel"
     actions:
       review:
         type: APPROVE
@@ -32,8 +26,10 @@ pull_request_rules:
       - author=renovate[bot]
       - check-success=test-migrations
       - check-success=vitest
-      - check-success~=^Vercel
+      - check-success="Vercel"
     actions:
+      label:
+        add: ['dependency']
       review:
         type: APPROVE
       queue:
@@ -44,17 +40,17 @@ queue_rules:
     merge_conditions:
       - check-success=test-migrations
       - check-success=vitest
-      - check-success~=^Vercel
+      - check-success="Vercel"
       - '#approved-reviews-by>=1'
   - name: hotfix
     merge_conditions:
       - check-success=test-migrations
       - check-success=vitest
-      - check-success~=^Vercel
+      - check-success="Vercel"
       - '#approved-reviews-by>=1'
   - name: renovate
     merge_conditions:
       - check-success=test-migrations
       - check-success=vitest
-      - check-success~=^Vercel
+      - check-success="Vercel"
       - '#approved-reviews-by>=1'
