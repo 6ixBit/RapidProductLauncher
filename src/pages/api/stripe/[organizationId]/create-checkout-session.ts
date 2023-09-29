@@ -24,7 +24,7 @@ async function createCheckoutSession(
   res: NextApiResponse,
   supabaseServerClient: AppSupabaseClient,
   _: Session,
-  user: User
+  user: User,
 ) {
   if (req.method === 'POST') {
     const { organizationId } = req.query;

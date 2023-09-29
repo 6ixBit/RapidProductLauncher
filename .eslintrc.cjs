@@ -1,7 +1,24 @@
 var tsConfigs = ['./tsconfig.json'];
 var tsConfigEmail = ['./tsconfig-emails.json'];
 
-var ruleOverrides = {};
+var ruleOverrides = {
+  '@typescript-eslint/no-unused-vars': 'warn',
+};
+var srcRuleOverrides = {
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: [
+        {
+          name: 'lucide-react',
+          message: 'Please use lucide-react/dist/esm/icons instead.',
+        },
+      ],
+    },
+  ],
+  'prettier/prettier': 1,
+  '@typescript-eslint/no-unused-vars': 'warn',
+};
 
 module.exports = {
   overrides: [
@@ -17,9 +34,7 @@ module.exports = {
         project: tsConfigs,
       },
       plugins: ['@typescript-eslint', 'prettier'],
-      rules: {
-        'prettier/prettier': 1,
-      },
+      rules: srcRuleOverrides,
       files: ['src/**/*.ts', 'src/**/*.tsx'],
     },
     {
@@ -34,9 +49,7 @@ module.exports = {
         project: tsConfigEmail,
       },
       plugins: ['@typescript-eslint', 'prettier'],
-      rules: {
-        'prettier/prettier': 1,
-      },
+      rules: srcRuleOverrides,
       files: [
         'src/**/*.ts',
         'src/**/*.tsx',
@@ -59,14 +72,18 @@ module.exports = {
         'plugin:playwright/playwright-test',
         'prettier',
       ],
-      rules: {
-        'prettier/prettier': 'error',
-      },
+      rules: srcRuleOverrides,
       files: ['e2e/**/*.spec.ts'],
     },
     {
       extends: ['eslint:recommended', 'prettier', 'esnext'],
       files: '*.mjs',
+      rules: ruleOverrides,
+    },
+    // make nextconfig.mjs node environment
+    {
+      extends: ['eslint:recommended', 'prettier', 'node'],
+      files: 'next.config.mjs',
       rules: ruleOverrides,
     },
     {
