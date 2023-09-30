@@ -10,15 +10,10 @@ import RouterProgressionContext from '@/contexts/RouterProgressionContext';
 import { usePathname, useSearchParams } from 'next/navigation';
 import NProgress from 'nprogress';
 import NavigationProgressBar from './NavigationProgressBar';
-import {
-  SessionContextProvider,
-  SessionContextProviderProps,
-} from '@supabase/auth-helpers-react';
-import { SupabaseListener } from '@/components/SupabaseListener';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import ReactNoSSR from 'react-no-ssr';
-import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { ThemeProvider } from './ThemeProvider';
 
 /**
  ** Inspiration from here
@@ -63,30 +58,21 @@ export default function AppProviders({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
   children,
-  initialSession,
 }: {
   children: React.ReactNode;
-  initialSession: Pick<
-    SessionContextProviderProps,
-    'initialSession'
-  >['initialSession'];
 }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionContextProvider
-        supabaseClient={supabaseUserClientComponentClient}
-        initialSession={initialSession}
-      >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
         <RouterEventWrapper>
           <NavigationProgressBar />
-          <SupabaseListener accessToken={initialSession?.access_token} />
 
           {children}
           <ReactNoSSR>
             <Toaster />
           </ReactNoSSR>
         </RouterEventWrapper>
-      </SessionContextProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

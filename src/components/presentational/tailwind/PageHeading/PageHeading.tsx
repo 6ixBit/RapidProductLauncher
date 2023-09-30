@@ -1,27 +1,44 @@
 import { Anchor } from '@/components/Anchor';
-import H1 from '../Text/H1';
+import { T } from '@/components/ui/Typography';
+import { cn } from '@/utils/cn';
 
 type PageHeadingProps = {
   title: string;
+  subTitle?: string;
   actions?: React.ReactNode;
   titleHref?: string;
+  titleClassName?: string;
+  subTitleClassName?: string;
 };
 
-export function PageHeading({ title, titleHref, actions }: PageHeadingProps) {
+export function PageHeading({
+  title,
+  subTitle,
+  titleHref,
+  actions,
+  titleClassName,
+  subTitleClassName,
+}: PageHeadingProps) {
   const titleElement = (
-    <H1 className="font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-      {title}
-    </H1>
+    <T.H2 className={cn('border-none', titleClassName)}>{title}</T.H2>
+  );
+  const subTitleElement = (
+    <T.P className={cn('text-muted-foreground leading-6', subTitleClassName)}>
+      {subTitle}
+    </T.P>
   );
   const wrappedTitleElement = titleHref ? (
     <Anchor href={titleHref}>{titleElement}</Anchor>
   ) : (
-    <>{titleElement}</>
+    <div className="w-[480px]">
+      {titleElement}
+      {subTitleElement}
+    </div>
   );
   return (
-    <div className="md:flex  md:items-center md:justify-between">
+    <div className="md:flex md:items-start md:justify-between">
       <div className="min-w-0 flex-1">{wrappedTitleElement}</div>
-      {actions}
+      <div>{actions}</div>
     </div>
   );
 }

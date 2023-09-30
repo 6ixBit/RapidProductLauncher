@@ -1,13 +1,13 @@
 import { AxiosError } from 'axios';
 
-function isAxiosError(error: any): error is AxiosError<Error> {
-  return (
-    error.isAxiosError &&
-    error.response.data &&
-    'message' in error.response.data
+function isAxiosError(error: unknown): error is AxiosError<Error> {
+  const axiosError = error as AxiosError<Error>;
+  return Boolean(
+    axiosError.isAxiosError &&
+    axiosError.response &&
+    'message' in axiosError.response.data,
   );
 }
-
 export function getPossibleAxiosErrorMessage(error: unknown): string {
   console.log(error);
   if (!isAxiosError(error)) {

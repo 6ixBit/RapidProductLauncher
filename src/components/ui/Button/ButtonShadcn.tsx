@@ -7,16 +7,16 @@ const outlineColorClasses = (color: string) => `
 `;
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center font-[600] transition-colors focus-visible:outline-none shadow-[0_10px_8px_-12px_rgba(0,0,0,0.3)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
+  'inline-flex items-center justify-center font-[600] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background',
   {
     variants: {
       variant: {
         default:
-          'bg-blue-600   text-base  text-white rounded-lg hover:bg-blue-500',
+          'bg-gray-900 text-sm  text-white rounded-lg hover:bg-gray-700 dark:bg-gray-200 dark:text-black dark:hover:bg-gray-300',
         destructive:
           'bg-destructive  text-base  text-destructive-foreground rounded-lg hover:bg-destructive/90',
         outline:
-          'border-2 border-slate-300  text-base  text-slate-700 rounded-lg hover:bg-gray-100 hover:text-slate-900',
+          'border border-gray-400  dark:border-gray-700/50  dark:bg-gray-800/40 text-sm text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-gray-100',
         outlineColor: outlineColorClasses('{color}'),
         secondary:
           'bg-secondary text-secondary-foreground  text-base rounded-lg hover:bg-secondary/80',
@@ -27,17 +27,19 @@ const buttonVariants = cva(
         warning:
           'bg-yellow-500 text-base text-white rounded-lg hover:bg-yellow-400',
         info: 'bg-blue-500 text-base text-white rounded-lg hover:bg-blue-400',
-        link: 'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-blue-500',
+        link: 'text-base text-slate-700 rounded-lg hover:text-slate-900',
         primaryLink:
           'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-primary',
         secondaryLink:
           'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-secondary',
         infoLink:
           'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-blue-500',
+        destructiveLink:
+          'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-destructive',
       },
       size: {
         default: 'h-10 py-2 px-4',
-        sm: 'h-9 px-3 rounded-full',
+        sm: 'h-9 px-3 rounded-md',
         lg: 'h-11 px-8 rounded-md',
         link: 'p-0',
         xs: 'h-7 px-2 rounded-full',
@@ -56,7 +58,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, color, ...props }, ref) => {
     const baseClass = buttonVariants({ variant, size });
-    const appliedColor = color && variant === 'outlineColor' ? color : 'slate';
+    const appliedColor = color && variant === 'outlineColor' ? color : 'gray';
     const replacedColorClass = baseClass.replace(/{color}/g, appliedColor);
     return (
       <button

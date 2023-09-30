@@ -4,6 +4,8 @@ import { PropsOf } from '@headlessui/react/dist/types';
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { Button } from '../Button';
+import { Label } from '@/components/ui/Label';
+import { T } from '@/components/ui/Typography';
 
 export const Email = ({
   onSubmit,
@@ -42,14 +44,11 @@ export const Email = ({
         onSubmit(email);
       }}
     >
-      <div className="space-y-4">
+      <div className="space-y-2">
         <div className="space-y-2">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <Label htmlFor="email" className="text-muted-foreground">
             {label}
-          </label>
+          </Label>
           <div>
             <input
               id={`${view}-email`}
@@ -59,8 +58,9 @@ export const Email = ({
               disabled={isLoading}
               onChange={(event) => setEmail(event.target.value)}
               autoComplete={'email'}
+              placeholder="placeholder@email.com"
               required
-              className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
             />
           </div>
         </div>
@@ -69,7 +69,7 @@ export const Email = ({
             <div className="text-sm">
               <Anchor
                 href="/login"
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 Log in instead?
               </Anchor>
@@ -80,10 +80,10 @@ export const Email = ({
           <Button
             type="submit"
             className={classNames(
-              'flex w-full justify-center rounded border border-transparent py-2 px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
+              'flex w-full justify-center rounded-lg border border-transparent py-2 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
               isLoading
-                ? 'bg-yellow-300  focus:ring-yellow-500 text-black'
-                : 'bg-blue-500  hover:bg-blue-600  text-white focus:ring-blue-500 '
+                ? 'bg-yellow-300 dark:bg-yellow-700 '
+                : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  '
             )}
           >
             {buttonLabelText}
@@ -91,9 +91,9 @@ export const Email = ({
         </div>
         <div>
           {successMessage ? (
-            <p className="text-sm text-green-500 text-center">
+            <T.P className="text-green-500 dark:text-green-400 text-center">
               {successMessage}
-            </p>
+            </T.P>
           ) : null}
         </div>
       </div>

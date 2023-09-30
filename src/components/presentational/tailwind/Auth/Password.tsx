@@ -1,6 +1,9 @@
 import { PropsOf } from '@headlessui/react/dist/types';
 import { useState } from 'react';
 import { Button } from '../Button';
+import { Label } from '@/components/ui/Label';
+import { classNames } from '@/utils/classNames';
+import { T } from '@/components/ui/Typography';
 
 export const Password = ({
   onSubmit,
@@ -26,12 +29,9 @@ export const Password = ({
     >
       <div className="space-y-4">
         <div className="space-y-2">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <Label htmlFor="email" className="text-muted-foreground">
             {label}
-          </label>
+          </Label>
           <div>
             <input
               id="password"
@@ -42,7 +42,7 @@ export const Password = ({
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="email"
               required
-              className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
             />
           </div>
         </div>
@@ -51,14 +51,24 @@ export const Password = ({
             <Button
               disabled
               type="submit"
-              className="flex w-full justify-center rounded-md border border-transparent cursor-not-allowed bg-yellow-300 py-2 px-4 text-sm font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+              className={classNames(
+                'flex w-full justify-center rounded-lg border border-transparent py-3 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
+                isLoading
+                  ? 'bg-yellow-300 dark:bg-yellow-700 '
+                  : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  '
+              )}
             >
               Loading...
             </Button>
           ) : (
             <Button
               type="submit"
-              className="flex w-full justify-center rounded border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className={classNames(
+                'flex w-full justify-center rounded-lg border border-transparent py-3 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
+                isLoading
+                  ? 'bg-yellow-300 dark:bg-yellow-700 '
+                  : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  '
+              )}
             >
               {buttonLabel}
             </Button>
@@ -66,9 +76,9 @@ export const Password = ({
         </div>
         <div>
           {successMessage ? (
-            <p className="text-sm text-green-500 text-center">
+            <T.P className="text-sm text-green-500 dark:text-green-400 text-center">
               {successMessage}
-            </p>
+            </T.P>
           ) : null}
         </div>
       </div>

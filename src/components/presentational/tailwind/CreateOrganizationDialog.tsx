@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import PlusIcon from 'lucide-react/dist/esm/icons/plus';
+import OrganizationIcon from 'lucide-react/dist/esm/icons/network';
 
 type CreateOrganizationDialogProps = {
   onConfirm: (organizationTitle: string) => void;
@@ -38,46 +39,58 @@ export function CreateOrganizationDialog({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button>
-            <PlusIcon className="text-white mr-2" />
+            <PlusIcon className="mr-2" />
             Create Organisation
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create Organization</DialogTitle>
+            <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
+              <OrganizationIcon className=" w-6 h-6" />
+            </div>
+            <div className="p-1">
+              <DialogTitle className="text-lg">Create Organization</DialogTitle>
+              <DialogDescription className="text-base mt-0">
+                Create a new organization and get started.
+              </DialogDescription>
+            </div>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <Label className="space-y-2">
-                <span>Organization Name</span>
-                <Input
-                  value={organizationTitle}
-                  onChange={(event) => {
-                    setOrganizationTitle(event.target.value);
-                  }}
-                  required
-                  className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
-                  id="name"
-                  type="text"
-                  placeholder="Organization Name"
-                  disabled={isLoading}
-                />
-              </Label>
+            <div className="mb-8">
+              <Label className="text-muted-foreground">Organization Name</Label>
+              <Input
+                value={organizationTitle}
+                onChange={(event) => {
+                  setOrganizationTitle(event.target.value);
+                }}
+                required
+                className="mt-1.5 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
+                id="name"
+                type="text"
+                placeholder="Organization Name"
+                disabled={isLoading}
+              />
             </div>
 
             <DialogFooter>
-              <Button variant="success" type="submit" disabled={isLoading}>
-                Create Organization
-              </Button>
               <Button
                 type="button"
                 variant="outline"
                 disabled={isLoading}
+                className="w-full"
                 onClick={() => {
                   setOpen(false);
                 }}
               >
                 Cancel
+              </Button>
+              <Button
+                variant="default"
+                type="submit"
+                className="w-full"
+                disabled={isLoading}
+              >
+                Create Organization
               </Button>
             </DialogFooter>
           </form>

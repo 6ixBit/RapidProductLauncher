@@ -13,9 +13,20 @@ body {
   width: 100%;
 }
 
+.dotted-bg {
+  background-image: radial-gradient(
+    circle,
+    var(--dot-color) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
 
 @layer base {
   :root {
+    --dot-color: #c1c1c1;
+
     --background: 0 0% 100%;
     --foreground: 222.2 47.4% 11.2%;
 
@@ -49,6 +60,8 @@ body {
   }
 
   .dark {
+    --dot-color: #374151;
+
     --background: 224 71% 4%;
     --foreground: 213 31% 91%;
 

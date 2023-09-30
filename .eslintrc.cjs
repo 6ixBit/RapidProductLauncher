@@ -4,6 +4,7 @@ var tsConfigEmail = ['./tsconfig-emails.json'];
 var ruleOverrides = {
   '@typescript-eslint/no-unused-vars': 'warn',
 };
+
 var srcRuleOverrides = {
   'no-restricted-imports': [
     'error',

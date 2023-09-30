@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/Dialog';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Plus } from 'lucide-react';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 import { useState } from 'react';
 import { ZodError, z } from 'zod';
 import { toast } from 'react-hot-toast';

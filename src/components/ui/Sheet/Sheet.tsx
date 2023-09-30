@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { VariantProps, cva } from 'class-variance-authority';
-import { X } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
 import { cn } from '@/utils/cn';
 
 const Sheet = SheetPrimitive.Root;
@@ -24,7 +24,7 @@ const portalVariants = cva('fixed inset-0 z-50 flex', {
 
 interface SheetPortalProps
   extends SheetPrimitive.DialogPortalProps,
-    VariantProps<typeof portalVariants> {}
+  VariantProps<typeof portalVariants> { }
 
 const SheetPortal = ({
   position,
@@ -45,7 +45,7 @@ const SheetOverlay = React.forwardRef<
   <SheetPrimitive.Overlay
     className={cn(
       'data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-100',
-      className
+      className,
     )}
     {...props}
     ref={ref}
@@ -138,12 +138,12 @@ const sheetVariants = cva(
       position: 'right',
       size: 'default',
     },
-  }
+  },
 );
 
 export interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {}
+  VariantProps<typeof sheetVariants> { }
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
@@ -173,7 +173,7 @@ const SheetHeader = ({
   <div
     className={cn(
       'flex flex-col space-y-2 text-center sm:text-left',
-      className
+      className,
     )}
     {...props}
   />
@@ -187,7 +187,7 @@ const SheetFooter = ({
   <div
     className={cn(
       'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
-      className
+      className,
     )}
     {...props}
   />
@@ -203,7 +203,7 @@ const SheetTitle = React.forwardRef<
     className={cn(
       'text-lg font-semibold text-slate-900',
       'dark:text-slate-50',
-      className
+      className,
     )}
     {...props}
   />

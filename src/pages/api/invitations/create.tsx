@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withUserLoggedInApi } from '@/utils/api-routes/wrappers/withUserLoggedInApi';
-import { AppSupabaseClient, Enum } from '@/types';
+import { AppSupabaseClient } from '@/types';
 import { Session, User } from '@supabase/supabase-js';
 import { render as renderEmail } from '@react-email/render';
 import TeamInvitationEmail from 'emails/TeamInvitation';

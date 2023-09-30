@@ -2,12 +2,16 @@ import { NextApiResponse } from 'next';
 import { Stripe } from 'stripe';
 import { errors } from '../errors';
 
-function isStripeError(error: any): error is Stripe.errors.StripeError {
-  return error && typeof error.type === 'string';
+function isStripeError(error: unknown): error is Stripe.errors.StripeError {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'type' in error &&
+    typeof (error as { type?: unknown }).type === 'string'
+  );
 }
-
 function isStripeErrorWithRawMessage(
-  error: any
+  error: unknown,
 ): error is Stripe.errors.StripeError & {
   raw: {
     message: string;

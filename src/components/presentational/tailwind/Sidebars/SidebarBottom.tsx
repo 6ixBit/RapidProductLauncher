@@ -1,4 +1,3 @@
-import { Menu } from '@headlessui/react';
 import Image from 'next/image';
 import { UserSidebarMenu } from '../UserSidebarMenu';
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
@@ -8,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/Popover';
+import { T } from '@/components/ui/Typography';
 
 export const SidebarBottom = ({
   avatarUrl,
@@ -21,7 +21,7 @@ export const SidebarBottom = ({
   isExpanded: boolean;
 }) => {
   const userClassName = cn(
-    `flex w-full gap-3 mb-2 items-center py-3 text-white h-[80px] border-t border-slate-600`,
+    `flex w-full gap-3 mb-2 items-center py-3 h-[80px] border-t `,
     isExpanded ? 'px-4 pl-5 justify-start' : 'px-4 justify-center',
     'group hover:cursor-pointer'
   );
@@ -36,18 +36,18 @@ export const SidebarBottom = ({
                 width="32"
                 height="32"
                 src={avatarUrl}
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-8 h-8 rounded-full object-cover border"
                 alt="User avatar"
               />
               {isExpanded ? (
                 <div className="flex flex-col w-full">
                   <div className="flex justify-between w-full items-center">
-                    <p className="text-sm text-white font-[500]">
-                      {userFullname}
-                    </p>
-                    <ChevronRight className="text-2xl text-white opacity-0 group-hover:opacity-100" />
+                    <T.P>{userFullname}</T.P>
+                    <ChevronRight className="text-2xl text-muted-foreground opacity-0 group-hover:opacity-100" />
                   </div>
-                  <p className="text-sm text-slate-400">{userEmail}</p>
+                  <T.Small className=" text-muted-foreground">
+                    {userEmail}
+                  </T.Small>
                 </div>
               ) : null}
             </div>
