@@ -14,9 +14,9 @@ const buttonVariants = cva(
         default:
           'bg-gray-900 text-sm  text-white rounded-lg hover:bg-gray-700 dark:bg-gray-200 dark:text-black dark:hover:bg-gray-300',
         destructive:
-          'bg-destructive  text-base  text-destructive-foreground rounded-lg hover:bg-destructive/90',
+          'bg-destructive dark:bg-red-800 dark:hover:bg-red-700  text-base  text-destructive-foreground rounded-lg hover:bg-destructive/90',
         outline:
-          'border border-gray-400  dark:border-gray-700/50  dark:bg-gray-800/40 text-sm text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-gray-100',
+          'border border-gray-300  dark:border-slate-700  dark:bg-gray-800/60 text-sm text-gray-700 rounded-lg hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-slate-800 dark:text-slate-300 dark:hover:text-gray-100',
         outlineColor: outlineColorClasses('{color}'),
         secondary:
           'bg-secondary text-secondary-foreground  text-base rounded-lg hover:bg-secondary/80',
@@ -29,7 +29,7 @@ const buttonVariants = cva(
         info: 'bg-blue-500 text-base text-white rounded-lg hover:bg-blue-400',
         link: 'text-base text-slate-700 rounded-lg hover:text-slate-900',
         primaryLink:
-          'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-primary',
+          'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-primary hover:text-primary-foreground dark:text-slate-500 dark:hover:text-primary',
         secondaryLink:
           'underline-offset-4 text-base rounded-lg shadow-none group-hover:underline text-secondary',
         infoLink:
@@ -39,7 +39,7 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-10 py-2 px-4',
-        sm: 'h-9 px-3 rounded-md',
+        sm: 'h-9 px-3 rounded-full',
         lg: 'h-11 px-8 rounded-md',
         link: 'p-0',
         xs: 'h-7 px-2 rounded-full',
@@ -49,7 +49,7 @@ const buttonVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  }
+  },
 );
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
@@ -67,7 +67,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Button.displayName = 'Button';
 

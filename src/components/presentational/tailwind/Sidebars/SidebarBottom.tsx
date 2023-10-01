@@ -23,7 +23,7 @@ export const SidebarBottom = ({
   const userClassName = cn(
     `flex w-full gap-3 mb-2 items-center py-3 h-[80px] border-t `,
     isExpanded ? 'px-4 pl-5 justify-start' : 'px-4 justify-center',
-    'group hover:cursor-pointer'
+    'group hover:cursor-pointer',
   );
 
   return (
@@ -43,7 +43,7 @@ export const SidebarBottom = ({
                 <div className="flex flex-col w-full">
                   <div className="flex justify-between w-full items-center">
                     <T.P>{userFullname}</T.P>
-                    <ChevronRight className="text-2xl text-muted-foreground opacity-0 group-hover:opacity-100" />
+                    <ChevronRight className="text-2xl dark:text-white text-muted-foreground opacity-0 group-hover:opacity-100" />
                   </div>
                   <T.Small className=" text-muted-foreground">
                     {userEmail}

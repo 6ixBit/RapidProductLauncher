@@ -15,15 +15,14 @@ export function GraphContainer({
     classname,
 }: GraphContainerProps) {
     return (
-        <div
-            className={cn(
-                'p-6 bg-gray-200/30 dark:bg-gray-800/40 rounded-2xl w-full ',
-                classname
-            )}
-        >
-            <T.H4 className="mt-0">{title}</T.H4>
-            <T.P className="text-muted-foreground">{subTitle}</T.P>
-            {children}
+        <div className={cn('border rounded-xl overflow-hidden', classname)}>
+            <div className="px-6 bg-gray-200/30 dark:bg-slate-900 border-b py-5 w-full ">
+                <T.H4 className="mt-0 text-lg mb-1">{title}</T.H4>
+                <T.P className="text-muted-foreground text-sm">{subTitle}</T.P>
+            </div>
+            <div className="px-6 py-5 bg-white dark:bg-slate-950/40 h-full ">
+                {children}
+            </div>
         </div>
     );
 }
