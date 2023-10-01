@@ -20,14 +20,30 @@ export function UserSidebarLink({
     <Anchor
       href={href}
       className={classNames(
-        `flex w-full gap-2.5 items-center group py-2.5 mb-1 rounded-lg transition hover:cursor-pointer hover:bg-gray-300/50 dark:hover:bg-gray-700/50 `,
-        isActive ? ' bg-gray-300/50  dark:bg-gray-700/80  ' : ' bg-transparent',
-        isExpanded ? ' pl-5 pr-2 justify-start' : ' justify-center'
+        `flex w-full gap-2.5 items-center group py-2.5 mb-1 rounded-lg transition hover:cursor-pointer hover:bg-gray-300/50 dark:hover:bg-slate-700/50 `,
+        isActive ? ' bg-gray-300/50  dark:bg-slate-800  ' : ' bg-transparent',
+        isExpanded ? ' pl-5 pr-2 justify-start' : ' justify-center',
       )}
     >
-      <span className="text-gray-700 dark:text-gray-300 ">{icon}</span>
+      <span
+        className={classNames(
+          'text-gray-700 dark:text-slate-300 ',
+          isActive
+            ? ' text-gray-900 dark:text-slate-100 '
+            : ' text-gray-700 dark:text-slate-400 group-hover:text-gray-900 dark:group-hover:text-slate-300',
+        )}
+      >
+        {icon}
+      </span>
       {isExpanded ? (
-        <span className="transition text-base font-medium group-hover:text-gray-900 dark:group-hover:text-white">
+        <span
+          className={classNames(
+            'transition text-base font-medium ',
+            isActive
+              ? ' text-gray-900 dark:text-slate-100 '
+              : ' text-gray-700 dark:text-slate-400 group-hover:text-gray-900 dark:group-hover:text-slate-300',
+          )}
+        >
           {label}
         </span>
       ) : null}

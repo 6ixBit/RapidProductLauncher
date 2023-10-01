@@ -1,6 +1,7 @@
 'use client';
 import { Email } from '@/components/presentational/tailwind/Auth/Email';
 import { Password } from '@/components/presentational/tailwind/Auth/Password';
+import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
 import H3 from '@/components/presentational/tailwind/Text/H3';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 
@@ -9,20 +10,18 @@ import {
   useUpdateUserEmailMutation,
 } from '@/utils/react-query-hooks';
 
-
-
 export default function SecuritySettings() {
   const updateEmailMutation = useUpdateUserEmailMutation();
   const updatePasswordMutation = useUpdatePassword({});
   const user = useLoggedInUser();
   return (
-    <div className="space-y-8 max-w-xl">
-      <div className="space-y-2">
-        <H3>Security Settings</H3>
-        <p className="text-sm text-gray-400">
-          Manage your login credentials here.
-        </p>
-      </div>
+    <div className="space-y-8 max-w-sm">
+      <PageHeading
+        title="Security Settings"
+        titleClassName="text-xl"
+        subTitleClassName="text-base -mt-1"
+        subTitle="Manage your login credentials here."
+      />
       <div className="space-y-8">
         <Email
           isLoading={updateEmailMutation.isLoading}

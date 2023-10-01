@@ -19,6 +19,8 @@ import { Button } from '@/components/ui/Button';
 import { T } from '@/components/ui/Typography';
 import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscription';
 import { H2 } from '@/components/ui/Typography/H2';
+import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
+import { H4 } from '@/components/ui/Typography/H4';
 
 function ChoosePricingTable() {
   const { organizationId, organizationRole } = useOrganizationContext();
@@ -67,7 +69,7 @@ function ChoosePricingTable() {
 
     return products
       .sort(
-        (a, b) => (a?.price?.unit_amount ?? 0) - (b?.price?.unit_amount ?? 0)
+        (a, b) => (a?.price?.unit_amount ?? 0) - (b?.price?.unit_amount ?? 0),
       )
       .filter(Boolean);
   }, [activeProducts]);
@@ -86,7 +88,7 @@ function ChoosePricingTable() {
       {/* <H3 className='border-none mt-3 mb-0'>Pricing table</H3> */}
       <div className="space-y-2">
         {/* <PricingModeToggle mode={pricingMode} onChange={setPricingMode} /> */}
-        <div className="flex space-x-5 w-full">
+        <div className="flex space-x-6 w-full">
           {productsSortedByPrice.map((product) => {
             if (!product.price) {
               return null;
@@ -105,53 +107,60 @@ function ChoosePricingTable() {
               <>
                 <div
                   key={product.id + priceId}
-                  className="w-full flex-1 mt-4 order-2 bg-white shadow-none rounded-xl hover:shadow-xl transition sm:w-96 lg:w-full lg:order-1 border border-gray-300 hover:border-gray-400 "
+                  className="w-full flex flex-col justify-between mt-3 order-2 dark:bg-slate-900 bg-gray-200/10 shadow-none overflow-hidden rounded-xl hover:shadow-xl transition sm:w-96 lg:w-full lg:order-1 border mb-2  hover:border-gray-400 dark:hover:border-gray-700 "
                 >
-                  <div className="mb-6 p-7 pt-6 flex items-center border-b border-gray-300">
-                    <div>
-                      <span className="block text-xl mb-3 text-gray-700 font-medium">
-                        {' '}
-                        {product.name}
-                      </span>
-                      <span>
-                        <span key={priceId} className="text-4xl font-bold">
+                  <div>
+                    <div className="mb-6 p-7 pt-6 flex items-center border-b bg-gray-200/40 dark:bg-slate-800">
+                      <div>
+                        <T.H4 className="mt-0 mb-4 dark:text-slate-300">
                           {' '}
-                          {product.priceString}
-                          <span className="text-base text-gray-700 font-medium">
+                          {product.name}
+                        </T.H4>
+                        <span>
+                          <T.H1 className="dark:text-slate-50" key={priceId}>
                             {' '}
-                            per {product.price.interval}
-                          </span>
+                            {product.priceString}
+                            <span className="text-base tracking-normal text-muted-foreground font-medium">
+                              {' '}
+                              per {product.price.interval}
+                            </span>
+                          </T.H1>
                         </span>
-                      </span>
+                      </div>
+                    </div>
+
+                    <div className="px-5 pl-6 pt-0 mb-8">
+                      <ul className="font-medium text-muted-foreground">
+                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                          <CheckIcon className="text-green-600 w-6 h-6" />
+                          <T.P className="leading-6 ml-3">
+                            {product.description}
+                          </T.P>
+                        </li>
+                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                          <CheckIcon className="text-green-600 w-6 h-6" />
+                          <T.P className="leading-6 ml-3">A nice feature</T.P>
+                        </li>
+                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                          <CheckIcon className="text-green-600 w-6 h-6" />
+                          <T.P className="leading-6 ml-3">
+                            Another nice feature
+                          </T.P>
+                        </li>
+                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                          {product.price.unit_amount > 0 ? (
+                            <CheckIcon className="text-green-600 w-6 h-6" />
+                          ) : (
+                            <XIcon className="text-red-500" />
+                          )}
+                          <T.P className="leading-6 ml-3">
+                            A premium feature
+                          </T.P>
+                        </li>
+                      </ul>
                     </div>
                   </div>
-
-                  <div className="px-5 pl-6 pt-0 mb-8">
-                    <ul className="font-medium text-gray-600">
-                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                        <CheckIcon className="text-green-600 w-6 h-6" />
-                        <span className="ml-3">{product.description}</span>
-                      </li>
-                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                        <CheckIcon className="text-green-600 w-6 h-6" />
-                        <span className="ml-3">A nice feature</span>
-                      </li>
-                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                        <CheckIcon className="text-green-600 w-6 h-6" />
-                        <span className="ml-3">Another nice feature</span>
-                      </li>
-                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                        {product.price.unit_amount > 0 ? (
-                          <CheckIcon className="text-green-600 w-6 h-6" />
-                        ) : (
-                          <XIcon className="text-red-500" />
-                        )}
-                        <span className="ml-3">A premium feature</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-white text-xl space-y-2">
+                  <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-white text-xl space-y-2">
                     {isOrganizationAdmin ? (
                       <>
                         <Button
@@ -180,9 +189,9 @@ function ChoosePricingTable() {
                         </Button>
                       </>
                     ) : (
-                      <span className="text-sm bg-green-50 px-3 py-2 text-gray-900 rounded-lg">
+                      <T.P className=" py-2 px-4 bg-gray-100 dark:bg-slate-400/20 text-sm text-gray-900 dark:text-slate-100 rounded-lg">
                         Contact your administrator to upgrade plan
-                      </span>
+                      </T.P>
                     )}
                   </div>
                 </div>
@@ -209,7 +218,7 @@ export function OrganizationSubscripionDetails() {
     });
 
   const subscriptionDetails = formatNormalizedSubscription(
-    normalizedSubscription
+    normalizedSubscription,
   );
 
   if (
@@ -218,10 +227,12 @@ export function OrganizationSubscripionDetails() {
   ) {
     return (
       <>
-        <div className="space-y-2">
-          <T.H3>Subscription</T.H3>
+        <div className="">
+          <T.H2 className="border-none text-2xl mb-0 text-gray-900 dark:text-slate-100">
+            Subscription
+          </T.H2>
           <T.P className="text-muted-foreground">
-            This organization doesn't have any plan at the moment.
+            This organization doesn't have any plan at the moment
           </T.P>
         </div>
         <ChoosePricingTable />
@@ -232,12 +243,12 @@ export function OrganizationSubscripionDetails() {
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <H3>Subscription</H3>
-        <T.P>
+        <T.H3 className="text-gray-900 dark:text-slate-100 ">Subscription</T.H3>
+        <T.P className="text-muted-foreground">
           You are currently on the{' '}
-          <span className="text-blue-500">
+          <span className="text-blue-500 dark:text-blue-400">
             {subscriptionDetails.title}{' '}
-            <span>{subscriptionDetails.sidenote}</span>
+            <span className="ml-2">{subscriptionDetails.sidenote}</span>
           </span>
           .{' '}
         </T.P>
@@ -245,33 +256,26 @@ export function OrganizationSubscripionDetails() {
       </div>
       {isOrganizationAdmin ? (
         <div className="space-y-2">
-          <button
-            className={classNames(
-              'inline-flex space-x-1 items-center  justify-center rounded border border-transparent py-2 px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2  focus:ring-offset-2',
-              'bg-blue-500 focus:ring-blue-500 hover:bg-blue-600  text-white'
-            )}
+          <Button
+            variant="default"
             onClick={() => {
               mutate({
                 organizationId: organizationId,
               });
             }}
           >
-            <span>
-              {isLoadingCustomerPortalLink
-                ? 'Loading...'
-                : 'Manage Subscription'}{' '}
-            </span>
-            <ExternalLinkIcon aria-hidden="true" />{' '}
-          </button>
-          <p className="text-gray-500 text-xs">
+            {isLoadingCustomerPortalLink ? 'Loading...' : 'Manage Subscription'}{' '}
+            <ExternalLinkIcon aria-hidden="true" className="ml-2 w-5 h-5" />{' '}
+          </Button>
+          <T.P className="text-gray-500 dark:text-slate-400 text-sm">
             Manage your subscription. You can modify, upgrade or cancel your
             membership from here.
-          </p>
+          </T.P>
         </div>
       ) : (
-        <p className="text-gray-500 text-sm">
+        <T.P className=" py-2 px-4 bg-gray-100 dark:bg-slate-400/20 text-sm text-gray-900 dark:text-slate-100 rounded-lg">
           Contact your administrator to upgrade plan.
-        </p>
+        </T.P>
       )}
     </div>
   );

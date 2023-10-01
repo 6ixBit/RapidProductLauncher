@@ -30,16 +30,16 @@ export function UserSidebar({
   const [isExpanded, toggleIsExpanded] = useState<boolean>(false);
   const nextbaseIconClassName = cn(
     `flex w-full gap-2 items-center py-3 mb-1 text-white h-[64px] rounded-lg`,
-    isExpanded ? 'px-9 justify-start' : 'justify-center'
+    isExpanded ? 'px-9 justify-start' : 'justify-center',
   );
   const chevronClassName = cn(
     `absolute flex text-gray-700 dark:text-gray-400 justify-start transition hover:bg-gray-100 dark:hover:bg-gray-900 p-2.5 rounded-lg text-4xl cursor-pointer items-start -top-[0px]`,
-    isExpanded ? 'left-56 bg-transparent' : 'left-[calc(100%-19px)] '
+    isExpanded ? 'left-56 bg-transparent' : 'left-[calc(100%-19px)] ',
   );
 
   return (
     <div
-      className="relative bg-gray-100/50 dark:bg-gray-900/60 space-y-5 px-2 grid grid-rows-4 group border-r"
+      className="relative bg-white dark:bg-slate-900 space-y-5 px-2 grid grid-rows-4 border-r"
       style={{
         gridTemplateRows: 'auto auto 1fr auto',
       }}
@@ -52,7 +52,7 @@ export function UserSidebar({
             alt="Logo Login"
             className={cn(
               'rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0',
-              isExpanded ? '-ml-2 ' : 'ml-0  '
+              isExpanded ? '-ml-2 ' : 'ml-0  ',
             )}
           />
           <Image
@@ -61,7 +61,7 @@ export function UserSidebar({
             alt="Logo Login"
             className={cn(
               ' absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100',
-              isExpanded ? '-ml-2 ' : '-ml-0  '
+              isExpanded ? '-ml-2 ' : '-ml-0  ',
             )}
           />
           {isExpanded ? (

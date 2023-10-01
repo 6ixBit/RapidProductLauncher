@@ -14,7 +14,7 @@ function Links({ isExpanded, toggleIsExpanded }: LinksProps) {
 
   const sidebarContainerClassName = cn(
     `grid grid-rows-[auto,1fr,auto] h-full overflow-auto`,
-    isExpanded ? ' px-4 w-[264px]' : 'px-2 w-[64px]'
+    isExpanded ? ' px-4 w-[264px]' : 'px-2 w-[64px]',
   );
 
   return (
