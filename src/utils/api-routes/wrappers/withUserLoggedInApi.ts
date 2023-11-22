@@ -1,9 +1,6 @@
-import { Database } from '@/lib/database.types';
-import {
-  createServerSupabaseClient,
-  Session,
-  User,
-} from '@supabase/auth-helpers-nextjs';
+import { createSupabaseUserServerPagesClient } from '@/supabase-clients/user/createSupabaseUserServerPagesClient';
+import { AppSupabaseClient } from '@/types';
+import { Session, User } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { enableCors } from '../enable-cors';
 
@@ -15,16 +12,13 @@ export const withUserLoggedInApi = (
   cb: (
     req: NextApiRequest,
     res: NextApiResponse,
-    supabaseClient: ReturnType<typeof createServerSupabaseClient<Database>>,
+    supabaseClient: AppSupabaseClient,
     session: Session,
-    user: User
-  ) => void
+    user: User,
+  ) => void,
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    const supabaseClient = createServerSupabaseClient<Database>({
-      req,
-      res,
-    });
+    const supabaseClient = createSupabaseUserServerPagesClient({ req, res });
     enableCors(req, res);
 
     // return ok if options request

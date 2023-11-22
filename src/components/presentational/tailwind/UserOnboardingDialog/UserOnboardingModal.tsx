@@ -9,11 +9,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/Dialog';
 import { motion } from 'framer-motion';
 import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
 import Image from 'next/image';
+import { Label } from '@/components/ui/Label';
+import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
 
 const MotionImage = motion(Image);
 
@@ -46,7 +47,15 @@ export const UserOnboardingDialog = ({
     <Dialog open={isOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tell us about you</DialogTitle>
+          <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
+            <AddUserIcon className=" w-6 h-6" />
+          </div>
+          <div className="p-1">
+            <DialogTitle className="text-lg">Create new profile</DialogTitle>
+            <DialogDescription className="text-base mt-0">
+              Please fill in your details.
+            </DialogDescription>
+          </div>
         </DialogHeader>
         <form
           onSubmit={(event) => {
@@ -57,9 +66,9 @@ export const UserOnboardingDialog = ({
         >
           <div className="space-y-4">
             <div className="space-y-2">
-              <DialogDescription>Photo</DialogDescription>
+              <Label className="text-muted-foreground">Avatar</Label>
               <div className="mt-1 sm:col-span-2 sm:mt-0">
-                <div className="flex items-center">
+                <div className="flex items-center space-x-2">
                   <MotionImage
                     animate={{
                       opacity: hasImageLoaded ? 1 : 0.8,
@@ -88,16 +97,6 @@ export const UserOnboardingDialog = ({
                     src={avatarURL}
                     alt="avatarUrl"
                   />
-                  <button
-                    type="button"
-                    className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => {
-                      fileInputRef.current?.click();
-                    }}
-                    disabled={isUploading}
-                  >
-                    {isUploading ? 'Please wait...' : 'Change'}
-                  </button>
                   <input
                     disabled={isUploading}
                     onChange={(event) => {
@@ -112,14 +111,24 @@ export const UserOnboardingDialog = ({
                     hidden
                     accept="image/*"
                   />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      fileInputRef.current?.click();
+                    }}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? 'Please wait...' : 'Change'}
+                  </Button>
                 </div>
               </div>
             </div>
             <div className="space-y-2">
-              <DialogDescription>Name</DialogDescription>
+              <Label className="text-muted-foreground">Name</Label>
               <input
                 disabled={isLoading}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
                 id="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -129,12 +138,11 @@ export const UserOnboardingDialog = ({
               />
             </div>
           </div>
-
-          <DialogFooter>
+          <DialogFooter className="mt-6">
             <Button
               type="submit"
-              className="my-2"
-              variant="success"
+              className="w-full"
+              variant="default"
               disabled={isLoading}
             >
               {isLoading ? 'Saving...' : 'Save'}

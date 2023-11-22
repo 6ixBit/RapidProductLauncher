@@ -40,7 +40,7 @@ export const ConfirmSendLoginLinkDialog = ({ onConfirm }: Props) => {
             </DialogDescription>
           </div>
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className="mt-2">
           <Button
             type="button"
             variant="outline"

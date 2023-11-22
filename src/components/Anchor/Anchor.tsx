@@ -1,38 +1,40 @@
 'use client';
 
 import RouterProgressionContext from '@/contexts/RouterProgressionContext';
-// import Link from 'next/link';
+import Link from 'next/link';
 import {
   ComponentProps,
   ComponentPropsWithoutRef,
   forwardRef,
   useContext,
+  RefObject,
+  Ref,
 } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Workaround for this issue - https://github.com/vercel/next.js/issues/42991#issuecomment-1365230317
-const DynamicLink = forwardRef<
-  HTMLAnchorElement,
-  ComponentProps<'a'> & {
-    prefetch?: boolean;
-  }
->(({ href, prefetch: _prefetch, ...props }, ref) => {
-  const router = useRouter();
-  return (
-    <a
-      ref={ref}
-      href={String(href)}
-      {...props}
-      onClick={(e) => {
-        e.preventDefault();
-        props.onClick?.(e);
-        router.push(String(href));
-      }}
-    >
-      {props.children}
-    </a>
-  );
-});
+// // Workaround for this issue - https://github.com/vercel/next.js/issues/42991#issuecomment-1365230317
+// const DynamicLink = forwardRef<
+//   HTMLAnchorElement,
+//   ComponentProps<'a'> & {
+//     prefetch?: boolean;
+//   }
+// >(({ href, prefetch: _prefetch, ...props }, ref) => {
+//   const router = useRouter();
+//   return (
+//     <Link
+//       ref={ref}
+//       href={String(href)}
+//       {...props}
+//       onClick={(e) => {
+//         e.preventDefault();
+//         props.onClick?.(e);
+//         router.push(String(href));
+//       }}
+//     >
+//       {props.children}
+//     </Link>
+//   );
+// });
 
 /**
  * The original Link component from Next.js no longer has router events.
@@ -41,16 +43,14 @@ const DynamicLink = forwardRef<
  */
 export const Anchor = forwardRef<
   HTMLAnchorElement,
-  Omit<ComponentPropsWithoutRef<typeof DynamicLink>, 'href'> & {
-    href: string;
-  }
+  ComponentPropsWithoutRef<typeof Link>
 >((props, ref) => {
   const startChange = useContext(RouterProgressionContext);
   const { href, onClick, ...otherProps } = props;
   const useLink = href.toString().startsWith('/');
   if (useLink)
     return (
-      <DynamicLink
+      <Link
         ref={ref}
         href={href}
         onClick={(event) => {
@@ -59,7 +59,9 @@ export const Anchor = forwardRef<
           onClick?.(event);
         }}
         {...otherProps}
-      ></DynamicLink>
+      ></Link>
     );
-  return <a href={href.toString()} {...otherProps}></a>;
+  return (
+    <a ref={ref} href={href.toString()} onClick={onClick} {...otherProps}></a>
+  );
 });

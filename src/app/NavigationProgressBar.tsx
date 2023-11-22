@@ -14,11 +14,11 @@ declare global {
     navigation: {
       addEventListener: (
         eventName: string,
-        callback: (event: Event) => void
+        callback: (event: Event) => void,
       ) => void;
       removeEventListener: (
         eventName: string,
-        callback: (event: Event) => void
+        callback: (event: Event) => void,
       ) => void;
     };
   }
@@ -88,7 +88,7 @@ const NavigationProgressBar = ({
       NProgress.set(startPosition);
       NProgress.start();
     },
-    [startPosition]
+    [startPosition],
   );
 
   const routeChangeEnd = useCallback(() => {
@@ -108,7 +108,10 @@ const NavigationProgressBar = ({
   React.useEffect(() => {
     const { navigation } = window;
     if (options) {
-      NProgress.configure(options);
+      NProgress.configure({
+        showSpinner: false,
+        ...options,
+      });
     }
     if (navigation) {
       navigation.addEventListener('navigate', routeChangeStart);
@@ -151,7 +154,8 @@ const NavigationProgressBar = ({
        transform: rotate(3deg) translate(0px, -4px);
      }
      #nprogress .spinner {
-       display: block;
+      //  display: block;
+       display: hidden;
        position: fixed;
        z-index: 1031;
        top: 15px;
@@ -159,6 +163,7 @@ const NavigationProgressBar = ({
      }
      #nprogress .spinner-icon {
        width: 18px;
+       display: none;
        height: 18px;
        box-sizing: border-box;
        border: solid 2px transparent;

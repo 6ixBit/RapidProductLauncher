@@ -11,8 +11,9 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import NProgress from 'nprogress';
 import NavigationProgressBar from './NavigationProgressBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from 'react-hot-toast';
+import { Toaster as HotToaster } from 'react-hot-toast';
 import ReactNoSSR from 'react-no-ssr';
+import { Toaster as SonnerToaster } from 'sonner';
 import { ThemeProvider } from './ThemeProvider';
 
 /**
@@ -54,7 +55,7 @@ const queryClient = new QueryClient();
  *
  * The listener is used to listen for changes to the user's session and update the UI accordingly.
  */
-export default function AppProviders({
+export function AppProviders({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
   children,
@@ -62,17 +63,19 @@ export default function AppProviders({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <QueryClientProvider client={queryClient}>
-        <RouterEventWrapper>
-          <NavigationProgressBar />
-
-          {children}
-          <ReactNoSSR>
-            <Toaster />
-          </ReactNoSSR>
-        </RouterEventWrapper>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <QueryClientProvider client={queryClient}>
+          <RouterEventWrapper>
+            <NavigationProgressBar />
+            {children}
+            <ReactNoSSR>
+              <SonnerToaster theme={'light'} />
+              <HotToaster />
+            </ReactNoSSR>
+          </RouterEventWrapper>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </>
   );
 }

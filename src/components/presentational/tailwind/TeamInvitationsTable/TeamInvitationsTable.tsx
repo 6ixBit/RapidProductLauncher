@@ -12,7 +12,7 @@ export const TeamInvitationsTable = ({
   invitations,
 }: TeamInvitationsTableProps) => {
   return (
-    <div className="rounded-lg border shadow-sm overflow-hidden">
+    <div className="rounded-lg border  shadow-sm overflow-hidden">
       <ShadcnTable>
         <TableHeader>
           <TableRow>

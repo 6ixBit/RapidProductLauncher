@@ -2,6 +2,12 @@ import { stripe } from './stripe';
 import { toDateTime } from './helpers';
 import Stripe from 'stripe';
 import { Database } from '@/lib/database.types';
+import { DBFunction, View } from '@/types';
+import {
+  ADMIN_ORGANIZATION_LIST_VIEW_PAGE_SIZE,
+  ADMIN_USER_LIST_VIEW_PAGE_SIZE,
+} from '@/constants';
+import { errors } from './errors';
 import { supabaseAdminClient } from '@/supabase-clients/admin/supabaseAdminClient';
 
 const upsertProductRecord = async (product: Stripe.Product) => {
@@ -85,7 +91,7 @@ const createOrRetrieveCustomer = async ({
  */
 const copyBillingDetailsToCustomer = async (
   organizationId: string,
-  payment_method: Stripe.PaymentMethod
+  payment_method: Stripe.PaymentMethod,
 ) => {
   //Todo: check this assertion
   const customer = payment_method.customer as string;
@@ -124,7 +130,7 @@ const copyBillingDetailsToCustomer = async (
 const manageSubscriptionStatusChange = async (
   subscriptionId: string,
   customerId: string,
-  createAction = false
+  createAction = false,
 ) => {
   // Get organizations's UUID from mapping table.
   const { data: customerData, error: noCustomerError } =
@@ -134,8 +140,10 @@ const manageSubscriptionStatusChange = async (
       .eq('stripe_customer_id', customerId)
       .single();
   if (noCustomerError) throw noCustomerError;
-
-  const { organization_id: organizationId } = customerData!;
+  if (!customerData) {
+    throw new Error('No customer data');
+  }
+  const { organization_id: organizationId } = customerData;
 
   const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
     expand: ['default_payment_method'],
@@ -143,38 +151,38 @@ const manageSubscriptionStatusChange = async (
   // Upsert the latest status of the subscription object.
   /* eslint-disable prettier/prettier */
   const subscriptionData: Database['public']['Tables']['subscriptions']['Insert'] =
-  {
-    id: subscription.id,
-    organization_id: organizationId,
-    metadata: subscription.metadata,
-    status: subscription.status,
-    price_id: subscription.items.data[0].price.id,
-    //TODO check quantity on subscription
-    quantity: subscription.items.data[0].quantity,
-    cancel_at_period_end: subscription.cancel_at_period_end,
-    cancel_at: subscription.cancel_at
-      ? toDateTime(subscription.cancel_at).toISOString()
-      : null,
-    canceled_at: subscription.canceled_at
-      ? toDateTime(subscription.canceled_at).toISOString()
-      : null,
-    current_period_start: toDateTime(
-      subscription.current_period_start
-    ).toISOString(),
-    current_period_end: toDateTime(
-      subscription.current_period_end
-    ).toISOString(),
-    created: toDateTime(subscription.created).toISOString(),
-    ended_at: subscription.ended_at
-      ? toDateTime(subscription.ended_at).toISOString()
-      : null,
-    trial_start: subscription.trial_start
-      ? toDateTime(subscription.trial_start).toISOString()
-      : null,
-    trial_end: subscription.trial_end
-      ? toDateTime(subscription.trial_end).toISOString()
-      : null,
-  };
+    {
+      id: subscription.id,
+      organization_id: organizationId,
+      metadata: subscription.metadata,
+      status: subscription.status,
+      price_id: subscription.items.data[0].price.id,
+      //TODO check quantity on subscription
+      quantity: subscription.items.data[0].quantity,
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      cancel_at: subscription.cancel_at
+        ? toDateTime(subscription.cancel_at).toISOString()
+        : null,
+      canceled_at: subscription.canceled_at
+        ? toDateTime(subscription.canceled_at).toISOString()
+        : null,
+      current_period_start: toDateTime(
+        subscription.current_period_start,
+      ).toISOString(),
+      current_period_end: toDateTime(
+        subscription.current_period_end,
+      ).toISOString(),
+      created: toDateTime(subscription.created).toISOString(),
+      ended_at: subscription.ended_at
+        ? toDateTime(subscription.ended_at).toISOString()
+        : null,
+      trial_start: subscription.trial_start
+        ? toDateTime(subscription.trial_start).toISOString()
+        : null,
+      trial_end: subscription.trial_end
+        ? toDateTime(subscription.trial_end).toISOString()
+        : null,
+    };
   /* eslint-enable prettier/prettier */
 
   const { error } = await supabaseAdminClient
@@ -182,7 +190,7 @@ const manageSubscriptionStatusChange = async (
     .upsert([subscriptionData]);
   if (error) throw error;
   console.log(
-    `Inserted/updated subscription [${subscription.id}] for organization [${organizationId}]`
+    `Inserted/updated subscription [${subscription.id}] for organization [${organizationId}]`,
   );
 
   // For a new subscription copy the billing details to the customer object.
@@ -190,13 +198,13 @@ const manageSubscriptionStatusChange = async (
   if (subscription.default_payment_method && organizationId)
     await copyBillingDetailsToCustomer(
       organizationId,
-      subscription.default_payment_method as Stripe.PaymentMethod
+      subscription.default_payment_method as Stripe.PaymentMethod,
     );
 };
 
 export const updatePaymentMethod = async (
   paymentMethodId: string,
-  customerId: string
+  customerId: string,
 ) => {
   const { data: customerData, error: noCustomerError } =
     await supabaseAdminClient
@@ -207,7 +215,11 @@ export const updatePaymentMethod = async (
 
   if (noCustomerError) throw noCustomerError;
 
-  const { organization_id: organizationId } = customerData!;
+  if (!customerData) {
+    throw new Error('No customer data');
+  }
+
+  const { organization_id: organizationId } = customerData;
 
   const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
   const billingAddress = paymentMethod.billing_details;
@@ -244,6 +256,74 @@ export const updatePaymentMethod = async (
     })
     .eq('id', organizationId);
   if (error) throw error;
+};
+
+export const getUsersPaginated = async (
+  pageNumber = 0,
+  search?: string | undefined,
+): Promise<[number, DBFunction<'app_admin_get_all_users'>]> => {
+  // RPCs are 0-indexed, but our pagination is 1-indexed.
+  const effectivePageNumber = pageNumber + 1;
+  const { data, error } = await supabaseAdminClient.rpc(
+    'app_admin_get_all_users',
+    {
+      page: effectivePageNumber,
+      search_query: search,
+      page_size: ADMIN_USER_LIST_VIEW_PAGE_SIZE,
+    },
+  );
+  if (error) throw error;
+  if (!data) {
+    return [pageNumber, []];
+  }
+  return [pageNumber, data];
+};
+
+export const getOrganizationsPaginated = async (
+  pageNumber = 0,
+  search?: string | undefined,
+): Promise<[number, DBFunction<'app_admin_get_all_organizations'>]> => {
+  // RPCs are 0-indexed, but our pagination is 1-indexed.
+  const effectivePageNumber = pageNumber + 1;
+  const { data, error } = await supabaseAdminClient.rpc(
+    'app_admin_get_all_organizations',
+    {
+      page: effectivePageNumber,
+      search_query: search,
+      page_size: ADMIN_ORGANIZATION_LIST_VIEW_PAGE_SIZE,
+    },
+  );
+  if (error) throw error;
+  if (!data) {
+    return [pageNumber, []];
+  }
+  return [pageNumber, data];
+};
+
+export const enableMaintenanceMode = async () => {
+  const { data, error } = await supabaseAdminClient
+    .rpc('enable_maintenance_mode')
+    .single();
+
+  if (error) {
+    errors.add(error.message);
+    throw error;
+  }
+
+  return data;
+};
+
+export const disableMaintenanceMode = async () => {
+  const { data, error } = await supabaseAdminClient
+    .rpc('disable_maintenance_mode')
+    .single();
+
+  if (error) {
+    errors.add(error.message);
+    throw error;
+  }
+
+  return data;
 };
 
 export {

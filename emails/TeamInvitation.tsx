@@ -1,15 +1,11 @@
-import { Button } from '@react-email/button';
-import { Html } from '@react-email/html';
-import { Section } from '@react-email/section';
-import { Column } from '@react-email/column';
 import * as React from 'react';
-import { Text } from '@react-email/text';
+import { Button, Html, Section, Text } from '@react-email/components';
 
 type TeamInvitationEmailProps = {
-  acceptInvitationUrl: string;
-  declineInvitationUrl: string;
+  viewInvitationUrl: string;
   organizationName: string;
   inviterName: string;
+  isNewUser: boolean;
 };
 
 /**
@@ -18,32 +14,33 @@ type TeamInvitationEmailProps = {
 export default function TeamInvitationEmail(props: TeamInvitationEmailProps) {
   return (
     <Html>
-      <Text>
-        Hello,
-        {props.inviterName} has invited you to join the team{' '}
-        {props.organizationName}.
-      </Text>
+      {props.isNewUser ? (
+        <>
+          <Text>
+            Hello, you have been invited to join the team{' '}
+            {props.organizationName}. Your account has been created and you can
+            confirm your email address and join the team by clicking the button
+            below.
+          </Text>
+          <Text>
+            You will be able to set your password after confirming your email
+            address in the security settings page.
+          </Text>
+        </>
+      ) : (
+        <Text>
+          Hello,
+          {props.inviterName} has invited you to join the team{' '}
+          {props.organizationName}.
+        </Text>
+      )}
       <Section>
-        <Column>
-          <Button
-            href={props.acceptInvitationUrl}
-            pX={20}
-            pY={12}
-            style={{ background: '#00f', color: '#fff', borderRadius: '6px' }}
-          >
-            Accept Invitation
-          </Button>
-        </Column>
-        <Column>
-          <Button
-            pX={20}
-            pY={12}
-            href={props.declineInvitationUrl}
-            style={{ background: '#00f', color: '#fff', borderRadius: '6px' }}
-          >
-            Reject Invitation
-          </Button>
-        </Column>
+        <Button
+          href={props.viewInvitationUrl}
+          style={{ background: '#00f', color: '#fff', borderRadius: '6px' }}
+        >
+          View Invitation
+        </Button>
       </Section>
     </Html>
   );

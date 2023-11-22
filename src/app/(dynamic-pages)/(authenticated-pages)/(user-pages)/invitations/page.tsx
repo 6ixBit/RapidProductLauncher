@@ -1,28 +1,18 @@
-import { AppSupabaseClient } from '@/types';
-import { getUserPendingInvitationsByEmail } from '@/utils/supabase/invitations';
+import { T } from '@/components/ui/Typography';
+import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
+import { Suspense } from 'react';
 import { PendingInvitationsList } from './PendingInvitationsList';
-import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/supabaseUserServerComponentClient';
-
-const fetchData = async (supabaseClient: AppSupabaseClient) => {
-  const session = await supabaseClient.auth.getSession();
-  const user = session?.data.session?.user;
-  if (!user) throw new Error('No user found');
-  const [pendingInvitations] = await Promise.all([
-    user.email
-      ? getUserPendingInvitationsByEmail(supabaseClient, user.email)
-      : getUserPendingInvitationsByEmail(supabaseClient, user.id),
-  ]);
-  return { pendingInvitations };
-};
 
 export default async function DashboardPage() {
-  const supabaseClient = createSupabaseUserServerComponentClient();
-  const { pendingInvitations } = await fetchData(supabaseClient);
   return (
-    <div className="space-y-8">
-      <PendingInvitationsList
-        initialPendingInvitationsList={pendingInvitations}
+    <div className="space-y-4">
+      <PageHeading
+        title="Pending Invitations"
+        subTitle="Manage pending invitations here."
       />
+      <Suspense fallback={<T.Subtle>Loading...</T.Subtle>}>
+        <PendingInvitationsList />
+      </Suspense>
     </div>
   );
 }

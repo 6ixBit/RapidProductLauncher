@@ -1,10 +1,3 @@
-import { withBaseDescription, withBaseTitle } from '@/utils/seo';
-
-export const metadata = {
-  title: withBaseTitle('Terms'),
-  description: withBaseDescription('terms of Nextbase Essentail version'),
-};
-
 export default function TermsPage() {
-  return <p>Your terms</p>;
+  return <p>Static page for your terms. [Work-in-progress]</p>;
 }

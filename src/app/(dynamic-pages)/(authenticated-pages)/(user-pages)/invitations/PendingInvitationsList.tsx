@@ -1,11 +1,7 @@
-'use client';
 import { Button } from '@/components/ui/Button';
 import { T } from '@/components/ui/Typography';
-import { Enum, UnwrapPromise } from '@/types';
+import { Enum } from '@/types';
 import { toSiteURL } from '@/utils/helpers';
-import { useGetUserPendingInvitations } from '@/utils/react-queries/invitations';
-import { getUserPendingInvitationsByEmail } from '@/utils/supabase/invitations';
-import { useRouter } from 'next/navigation';
 import {
   ShadcnTable,
   TableBody,
@@ -14,9 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table/ShadcnTable';
-import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
 import CheckIcon from 'lucide-react/dist/esm/icons/check';
 import RejectIcon from 'lucide-react/dist/esm/icons/x';
+import { getPendingInvitationsOfUser } from '@/data/user/invitation';
+import { Anchor } from '@/components/Anchor';
 
 const PendingInvitationsTable = ({
   pendingInvitationsList,
@@ -25,21 +22,13 @@ const PendingInvitationsTable = ({
     id: string;
     inviterUserFullName: string;
     organizationTitle: string;
-    status: string;
-    acceptURL: string;
-    declineURL: string;
+    status: Enum<'organization_join_invitation_link_status'>;
     role: Enum<'organization_member_role'>;
   }>;
 }) => {
-  const router = useRouter();
-
   return (
-    <div className="space-y-6">
-      <T.P>
-        You have{' '}
-        <span className="font-bold">{pendingInvitationsList.length}</span>{' '}
-        pending invitations
-      </T.P>
+    <div className="space-y-2">
+      <T.P>You have {pendingInvitationsList.length} pending invitations</T.P>
       <div className="w-full rounded-lg border overflow-hidden">
         <ShadcnTable>
           <TableHeader>
@@ -62,20 +51,11 @@ const PendingInvitationsTable = ({
                 <TableCell>{invitation.role}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
-                    <Button
-                      size="sm"
-                      variant="default"
-                      onClick={() => router.push(invitation.acceptURL)}
-                    >
-                      <CheckIcon className="mr-2" /> Accept
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => router.push(invitation.declineURL)}
-                    >
-                      <RejectIcon className="mr-2" /> Decline
-                    </Button>
+                    <Anchor href={`/invitations/${invitation.id}`}>
+                      <Button size="default" variant="default">
+                        View Invitation
+                      </Button>
+                    </Anchor>
                   </div>
                 </TableCell>
               </TableRow>
@@ -87,24 +67,10 @@ const PendingInvitationsTable = ({
   );
 };
 
-export const PendingInvitationsList = ({
-  initialPendingInvitationsList,
-}: {
-  initialPendingInvitationsList: UnwrapPromise<
-    ReturnType<typeof getUserPendingInvitationsByEmail>
-  >;
-}) => {
-  const { data, isLoading } = useGetUserPendingInvitations(
-    initialPendingInvitationsList,
-  );
-  if (isLoading || !data) return <div>Loading...</div>;
-  if (data.length === 0) return null;
+export const PendingInvitationsList = async () => {
+  const pendingInvitations = await getPendingInvitationsOfUser();
 
-  const filteredData = data.filter((invitation) => {
-    return Boolean(invitation.organization) && Boolean(invitation.inviter);
-  });
-
-  const pendingInvitationsList = filteredData
+  const pendingInvitationsList = pendingInvitations
     .map((invitation) => {
       const inviter = Array.isArray(invitation.inviter)
         ? invitation.inviter[0]
@@ -121,20 +87,18 @@ export const PendingInvitationsList = ({
         organizationTitle: organization.title,
         status: invitation.status,
         role: invitation.invitee_organization_role,
-        acceptURL: toSiteURL(`/api/invitations/accept/${invitation.id}`),
-        declineURL: toSiteURL(`/api/invitations/decline/${invitation.id}`),
       };
     })
     .filter(Boolean);
   return (
-    <div className="space-y-8">
-      <PageHeading
-        title="Pending Invitations"
-        subTitle="Manage pending invitations here."
-      />
-      <PendingInvitationsTable
-        pendingInvitationsList={pendingInvitationsList}
-      />
-    </div>
+    <>
+      {pendingInvitationsList.length > 0 ? (
+        <PendingInvitationsTable
+          pendingInvitationsList={pendingInvitationsList}
+        />
+      ) : (
+        <T.Subtle>You have no pending invitations.</T.Subtle>
+      )}
+    </>
   );
 };

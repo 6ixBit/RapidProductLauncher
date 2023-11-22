@@ -1,29 +1,34 @@
+import { UserNav } from './UserNav';
+import { Badge } from '../Badge';
 import { cn } from '@/utils/cn';
-import Link from 'next/link';
-import Home from 'lucide-react/dist/esm/icons/home';
-import { ThemeToggle } from '@/components/presentational/tailwind/ThemeToggle';
+import { ReactNode, Suspense } from 'react';
+import { PendingInvitationCounter } from './PendingInvitationCounter';
+import { SidebarOpen } from './SidebarOpen';
 
-export default function InternalNavbar() {
-    return (
-        <header className="sticky top-0 w-full z-10 dark:bg-slate-900/50 bg-white/90 backdrop-blur">
-            <div
-                className={cn(
-                    'h-full flex mx-auto px-12 border-b dark:border-slate-700/50 py-5 w-full mb-8 justify-center items-center',
-                )}
-            >
-                <div className={cn('hidden lg:block', 'relative ')}>
-                    <Link
-                        href="/dashboard"
-                        className="flex items-center text-lg font-medium transition-colors hover:text-foreground/60 sm:text-sm"
-                        aria-label="Home page"
-                    >
-                        <Home className="h-5 w-5 mr-2" /> Dashboard
-                    </Link>
-                </div>
-                <div className="relative flex basis-0 items-center justify-end space-x-2 sm:gap-3 md:flex-grow">
-                    <ThemeToggle />
-                </div>
-            </div>
-        </header>
-    );
+export async function InternalNavbar({ children }: { children: ReactNode }) {
+  return (
+    <header className="sticky top-0 w-full z-10 dark:bg-slate-900/50 bg-white/90 backdrop-blur">
+      <div
+        className={cn(
+          'h-full  text-sm font-medium flex gap-2 mx-auto pl-6 pr-6 border-b dark:border-gray-700/50 py-3 w-full justify-between items-center',
+        )}
+      >
+        <SidebarOpen />
+        <Suspense>{children}</Suspense>
+
+        <div className="relative w-max flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-px h-5 ml-2 mr-4 bg-gray-300 dark:bg-slate-700" />
+            <PendingInvitationCounter />
+          </div>
+          <div className="w-px h-5 mr-4 ml-2 bg-gray-300 dark:bg-slate-700" />
+          <div className="relative w-max flex items-center space-x-3">
+            <Suspense>
+              <UserNav />
+            </Suspense>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }

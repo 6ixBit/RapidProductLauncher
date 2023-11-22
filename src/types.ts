@@ -4,6 +4,11 @@ import { Database } from './lib/database.types';
 export type AppSupabaseClient = SupabaseClient<Database>;
 export type Table<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Row'];
+export type TableInsertPayload<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Insert'];
+export type TableUpdatePayload<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Update'];
+
 export type View<T extends keyof Database['public']['Views']> =
   Database['public']['Views'][T]['Row'];
 export type DBFunction<T extends keyof Database['public']['Functions']> =
@@ -54,6 +59,10 @@ export type DropzoneFile = File & {
 
 export type DropzoneFileWithDuration = DropzoneFile & {
   duration: number;
+};
+
+export type CommentWithUser = Table<'project_comments'> & {
+  user_profile: Table<'user_profiles'>;
 };
 
 export type NoSubscription = {

@@ -1,11 +1,11 @@
 'use client';
 import { UserOnboardingDialog } from '@/components/presentational/tailwind/UserOnboardingDialog/UserOnboardingModal';
-import { Table } from '@/types';
 import {
-  useUpdateUserFullnameAndAvatarMutation,
-  useUploadUserAvatarMutation,
-} from '@/utils/react-query-hooks';
-import { toast } from 'react-hot-toast';
+  updateUserProfileNameAndAvatar,
+  uploadPublicUserAvatar,
+} from '@/data/user/user';
+import { useToastMutation } from '@/hooks/useToastMutation';
+import { Table } from '@/types';
 
 export function UserOnboardingFlow({
   userProfile,
@@ -14,44 +14,54 @@ export function UserOnboardingFlow({
   userProfile: Table<'user_profiles'>;
   onSuccess: () => void;
 }) {
-  const { mutate, isLoading } = useUpdateUserFullnameAndAvatarMutation({
-    onSuccess: () => {
-      toast('Success updating user profile');
-      onSuccess();
-    },
-    onError: () => {
-      toast('Error updating user profile');
-    },
-  });
+  const { mutate: updateProfile, isLoading: isUpdatingProfile } =
+    useToastMutation(
+      async ({
+        fullName,
+        avatarUrl,
+      }: {
+        fullName: string;
+        avatarUrl?: string;
+      }) => {
+        return await updateUserProfileNameAndAvatar({ fullName, avatarUrl });
+      },
+      {
+        loadingMessage: 'Updating profile...',
+        successMessage: 'Profile updated!',
+        errorMessage: 'Error updating profile',
+        onSuccess: () => {
+          onSuccess();
+        },
+      },
+    );
 
-  const { mutate: upload, isLoading: isUploading } =
-    useUploadUserAvatarMutation({
-      onSuccess: (avatarUrl: string) => {
-        mutate({
-          avatarUrl,
-        });
-      },
-      onError: () => {
-        toast('Error uploading avatar');
-      },
-    });
+  const { mutate: uploadFile, isLoading: isUploading } = useToastMutation(
+    async (file: File) => {
+      return uploadPublicUserAvatar(file, file.name, {
+        upsert: true,
+      });
+    },
+    {
+      loadingMessage: 'Uploading avatar...',
+      successMessage: 'Avatar uploaded!',
+      errorMessage: 'Error uploading avatar',
+    },
+  );
 
   return (
-    <>
-      <UserOnboardingDialog
-        isOpen
-        onSubmit={(fullName: string) => {
-          mutate({
-            fullName,
-          });
-        }}
-        onFileUpload={(file: File) => {
-          upload(file);
-        }}
-        profileAvatarUrl={userProfile.avatar_url ?? undefined}
-        isUploading={isUploading}
-        isLoading={isLoading ?? isUploading}
-      />
-    </>
+    <UserOnboardingDialog
+      isOpen
+      onSubmit={(fullName: string) => {
+        updateProfile({
+          fullName,
+        });
+      }}
+      onFileUpload={(file: File) => {
+        uploadFile(file);
+      }}
+      profileAvatarUrl={userProfile.avatar_url ?? undefined}
+      isUploading={isUploading}
+      isLoading={isUpdatingProfile ?? isUploading}
+    />
   );
 }
