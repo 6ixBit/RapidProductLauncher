@@ -33,7 +33,7 @@ export default async function OrganizationSettingsPage({
   const { organizationId } = paramsSchema.parse(params);
   return (
     <Suspense fallback={<T.Subtle>Loading billing details...</T.Subtle>}>
-      <Subscription organizationId={organizationId} />;
+      <Subscription organizationId={organizationId} />
     </Suspense>
   );
 }

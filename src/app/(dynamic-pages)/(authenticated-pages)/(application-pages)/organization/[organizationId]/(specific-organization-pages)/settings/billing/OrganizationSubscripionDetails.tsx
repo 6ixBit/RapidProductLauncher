@@ -84,15 +84,12 @@ async function ChoosePricingTable({
                     <div className="mb-6 p-7 pt-6 flex items-center border-b bg-gray-200/40 dark:bg-slate-800">
                       <div>
                         <T.H4 className="mt-0 mb-4 dark:text-slate-300">
-                          {' '}
                           {product.name}
                         </T.H4>
                         <span>
                           <T.H1 className="dark:text-slate-50" key={priceId}>
-                            {' '}
                             {product.priceString}
                             <span className="text-base tracking-normal text-muted-foreground font-medium">
-                              {' '}
                               per {product.price.interval}
                             </span>
                           </T.H1>

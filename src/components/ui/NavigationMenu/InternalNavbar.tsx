@@ -17,10 +17,7 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         <Suspense>{children}</Suspense>
 
         <div className="relative w-max flex items-center gap-2">
-          <div className="flex items-center gap-2">
-            <div className="w-px h-5 ml-2 mr-4 bg-gray-300 dark:bg-slate-700" />
-            <PendingInvitationCounter />
-          </div>
+          <PendingInvitationCounter />
           <div className="w-px h-5 mr-4 ml-2 bg-gray-300 dark:bg-slate-700" />
           <div className="relative w-max flex items-center space-x-3">
             <Suspense>
