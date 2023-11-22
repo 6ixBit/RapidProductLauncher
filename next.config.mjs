@@ -23,9 +23,6 @@ export default {
       },
     ],
   },
-  experimental: {
-    serverActions: true,
-  },
   webpack: (config) => {
     if (typeof nextRuntime === 'undefined') {
       config.resolve.fallback = {

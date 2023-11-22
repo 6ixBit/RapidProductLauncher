@@ -14,7 +14,6 @@ export default async function OrganizationPage({
 }) {
   const parsedParams = paramsSchema.parse(params);
   const { organizationId } = parsedParams;
-
   return (
     <div className="">
       <div className="space-y-0 block lg:hidden">

@@ -4,7 +4,6 @@ import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/Appl
 import { OrganizationSidebar } from '../../../_sidebar/OrganizationSidebar';
 import { InternalNavbar } from '@/components/ui/NavigationMenu/InternalNavbar';
 import { Anchor } from '@/components/Anchor';
-
 import SettingsIcon from 'lucide-react/dist/esm/icons/settings';
 import TeamsIcon from 'lucide-react/dist/esm/icons/folders';
 import { SimpleDialog } from '@/components/SimpleDialog';

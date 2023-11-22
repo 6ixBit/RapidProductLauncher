@@ -1,6 +1,5 @@
 // https://github.com/vercel/next.js/issues/58272
 import { Anchor } from '@/components/Anchor';
-import { Badge } from '@/components/ui/Badge';
 import { T } from '@/components/ui/Typography';
 import { getOrganizationTitle } from '@/data/user/organizations';
 import { Suspense } from 'react';

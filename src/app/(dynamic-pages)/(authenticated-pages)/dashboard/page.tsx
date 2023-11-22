@@ -1,24 +1,31 @@
-import { fetchSlimOrganizations } from '@/data/user/organizations';
-import { RedirectType } from 'next/dist/client/components/redirect';
+import {
+  fetchSlimOrganizations,
+  getDefaultOrganization,
+  setDefaultOrganization,
+} from '@/data/user/organizations';
 import { notFound, redirect } from 'next/navigation';
 
-async function getDefaultOrganization(): Promise<string> {
-  const slimOrganizations = await fetchSlimOrganizations();
+async function getOrganizationToRedirectTo(): Promise<string> {
+  const [slimOrganizations, defaultOrganizationId] = await Promise.all([
+    fetchSlimOrganizations(),
+    getDefaultOrganization(),
+  ]);
   const firstOrganization = slimOrganizations[0];
-  const defaultOrganization = slimOrganizations.find(
-    (organization) => organization.is_default,
-  );
 
-  const defaultOrganizationId =
-    defaultOrganization?.id ?? firstOrganization?.id;
-  if (!defaultOrganizationId) {
+  if (defaultOrganizationId) {
+    return defaultOrganizationId;
+  }
+
+  if (!firstOrganization) {
     return notFound();
   }
 
-  return defaultOrganizationId;
+  await setDefaultOrganization(firstOrganization.id);
+
+  return firstOrganization.id;
 }
 
 export default async function DashboardPage() {
-  const firstOrganizationId = await getDefaultOrganization();
+  const firstOrganizationId = await getOrganizationToRedirectTo();
   return redirect(`/organization/${firstOrganizationId}`);
 }

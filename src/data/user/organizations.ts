@@ -42,7 +42,7 @@ export async function fetchSlimOrganizations() {
 
   const { data, error } = await supabaseClient
     .from('organizations')
-    .select('id,title,is_default')
+    .select('id,title')
     .in(
       'id',
       organizations.map((org) => org.organization_id),
@@ -420,3 +420,34 @@ export const getTeamMembersInOrganization = async (organizationId: string) => {
     };
   });
 };
+
+export const getDefaultOrganization = async () => {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const user = await serverGetLoggedInUser();
+  const { data: preferences, error } = await supabaseClient
+    .from('user_private_info')
+    .select('id, default_organization')
+    .eq('id', user.id)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return preferences.default_organization;
+};
+
+export async function setDefaultOrganization(organizationId: string) {
+  const supabaseClient = createSupabaseUserServerComponentClient();
+  const user = await serverGetLoggedInUser();
+  const { error: updateError } = await supabaseClient
+    .from('user_private_info')
+    .update({ default_organization: organizationId })
+    .eq('id', user.id);
+
+  if (updateError) {
+    throw updateError;
+  }
+
+  revalidatePath('/');
+}
