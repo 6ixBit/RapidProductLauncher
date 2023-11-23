@@ -1,4 +1,3 @@
-import 'server-only';
 import { Database } from '@/lib/database.types';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -21,6 +20,6 @@ export const createSupabaseUserServerPagesClient = ({
           fetch,
         },
       },
-    }
+    },
   );
 };

@@ -81,7 +81,7 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             await manageSubscriptionStatusChange(
               subscription.id,
               subscription.customer as string,
-              event.type === 'customer.subscription.created'
+              event.type === 'customer.subscription.created',
             );
             break;
           }
@@ -94,7 +94,7 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
               await manageSubscriptionStatusChange(
                 subscriptionId as string,
                 checkoutSession.customer as string,
-                true
+                true,
               );
             }
             break;

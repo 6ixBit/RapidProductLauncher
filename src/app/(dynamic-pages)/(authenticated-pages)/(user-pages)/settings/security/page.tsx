@@ -1,19 +1,10 @@
-'use client';
-import { Email } from '@/components/presentational/tailwind/Auth/Email';
-import { Password } from '@/components/presentational/tailwind/Auth/Password';
 import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
-import H3 from '@/components/presentational/tailwind/Text/H3';
-import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { UpdatePassword } from './UpdatePassword';
+import { UpdateEmail } from './UpdateEmail';
+import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 
-import {
-  useUpdatePassword,
-  useUpdateUserEmailMutation,
-} from '@/utils/react-query-hooks';
-
-export default function SecuritySettings() {
-  const updateEmailMutation = useUpdateUserEmailMutation();
-  const updatePasswordMutation = useUpdatePassword({});
-  const user = useLoggedInUser();
+export default async function SecuritySettings() {
+  const user = await serverGetLoggedInUser();
   return (
     <div className="space-y-8 max-w-sm">
       <PageHeading
@@ -22,30 +13,9 @@ export default function SecuritySettings() {
         subTitleClassName="text-base -mt-1"
         subTitle="Manage your login credentials here."
       />
-      <div className="space-y-8">
-        <Email
-          isLoading={updateEmailMutation.isLoading}
-          onSubmit={(email) => {
-            updateEmailMutation.mutate({
-              newEmail: email,
-            });
-          }}
-          defaultValue={user.email}
-          label="Update Email"
-          view="update-email"
-        />
-        <div className="space-y-1">
-          <Password
-            isLoading={updatePasswordMutation.isLoading}
-            onSubmit={(password) => {
-              updatePasswordMutation.mutate({
-                password,
-              });
-            }}
-            label="Update Password"
-            buttonLabel="Update password"
-          />
-        </div>
+      <div className="space-y-24">
+        <UpdateEmail initialEmail={user.email} />
+        <UpdatePassword />
       </div>
     </div>
   );

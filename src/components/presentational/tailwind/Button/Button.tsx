@@ -5,6 +5,17 @@ type ButtonProps = React.DetailedHTMLProps<
   HTMLButtonElement
 >;
 
-export function Button({ ...props }: ButtonProps) {
-  return <button {...props}></button>;
+export function Button({
+  className: classNameProp,
+  disabled: disabledProp,
+  ...props
+}: ButtonProps) {
+  const disabled = disabledProp;
+  const className = classNameProp;
+
+  const buttonElement = (
+    <button disabled={disabled} className={className} {...props}></button>
+  );
+
+  return buttonElement;
 }

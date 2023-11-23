@@ -1,44 +1,59 @@
 'use client';
-import { LoadingSpinner } from '@/components/presentational/tailwind/LoadingSpinner';
 import { UpdateAvatarAndNameBody } from '@/components/presentational/tailwind/UpdateAvatarAndName';
-import { Table } from '@/types';
 import {
-  useUpdateUserFullnameAndAvatarMutation,
-  useUploadUserAvatarMutation,
-  useUserProfile,
-} from '@/utils/react-query-hooks';
+  updateUserProfileNameAndAvatar,
+  uploadPublicUserAvatar,
+} from '@/data/user/user';
+import { useToastMutation } from '@/hooks/useToastMutation';
+import { Table } from '@/types';
 import { useState } from 'react';
 
 export function AccountSettings({
-  userProfile: initialUserProfile,
+  userProfile,
 }: {
   userProfile: Table<'user_profiles'>;
 }) {
-  const { data: _userProfile, isLoading: isProfileLoading } =
-    useUserProfile(initialUserProfile);
-  // THIS is a hack to bypass the ts error as
-  // the _userProfile is never null since there is an initial value
-  const userProfile = _userProfile ?? initialUserProfile;
-  const { mutate, isLoading } = useUpdateUserFullnameAndAvatarMutation({});
+  const { mutate, isLoading } = useToastMutation(
+    async ({
+      fullName,
+      avatarUrl,
+    }: {
+      fullName: string;
+      avatarUrl?: string;
+    }) => {
+      return await updateUserProfileNameAndAvatar({
+        fullName,
+        avatarUrl,
+      });
+    },
+    {
+      loadingMessage: 'Updating profile...',
+      errorMessage: 'Failed to update profile',
+      successMessage: 'Profile updated!',
+    },
+  );
   // This loading state is for the new avatar image
   // being fetched from the server to the browser. At this point the
   // upload is complete, but the new image is not yet available to the browser.
   const [isNewAvatarImageLoading, setIsNewAvatarImageLoading] =
     useState<boolean>(false);
 
-  const { mutate: upload, isLoading: isUploading } =
-    useUploadUserAvatarMutation({
-      onSuccess: (avatarUrl: string) => {
+  const { mutate: upload, isLoading: isUploading } = useToastMutation(
+    async (file: File) => {
+      return await uploadPublicUserAvatar(file, file.name, {
+        upsert: true,
+      });
+    },
+    {
+      loadingMessage: 'Uploading avatar...',
+      errorMessage: 'Failed to upload avatar',
+      successMessage: 'Avatar uploaded!',
+      onSuccess: () => {
         setIsNewAvatarImageLoading(true);
-        mutate({
-          avatarUrl,
-        });
       },
-    });
+    },
+  );
 
-  if (isProfileLoading) {
-    return <LoadingSpinner />;
-  }
   return (
     <div className="max-w-2xl">
       <UpdateAvatarAndNameBody

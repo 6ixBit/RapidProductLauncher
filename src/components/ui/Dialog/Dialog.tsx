@@ -9,6 +9,8 @@ const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
+const DialogClose = DialogPrimitive.Close;
+
 const DialogPortal = ({
   className,
   children,
@@ -29,7 +31,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     className={cn(
       'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-100 data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out',
-      className
+      className,
     )}
     {...props}
     ref={ref}
@@ -47,8 +49,8 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         'fixed z-50 grid w-full gap-4 rounded-b-lg bg-white p-6 animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:max-w-lg sm:rounded-lg sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0',
-        ' p-6 dark:bg-black border dark:border-gray-900 border-gray-200',
-        className
+        ' p-6 dark:bg-slate-900 border dark:border-gray-900 border-gray-200',
+        className,
       )}
       {...props}
     >
@@ -69,7 +71,7 @@ const DialogHeader = ({
   <div
     className={cn(
       'flex flex-col space-y-2 text-center sm:text-left',
-      className
+      className,
     )}
     {...props}
   />
@@ -83,7 +85,7 @@ const DialogFooter = ({
   <div
     className={cn(
       'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 w-full gap-1"',
-      className
+      className,
     )}
     {...props}
   />
@@ -99,7 +101,7 @@ const DialogTitle = React.forwardRef<
     className={cn(
       'text-lg font-semibold text-slate-900',
       'dark:text-slate-50',
-      className
+      className,
     )}
     {...props}
   />
@@ -126,4 +128,7 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogClose,
+  DialogPortal,
+  DialogOverlay,
 };

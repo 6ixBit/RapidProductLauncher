@@ -2,39 +2,82 @@
 import { RenderProviders } from '@/components/presentational/tailwind/Auth/RenderProviders';
 import { Email } from '@/components/presentational/tailwind/Auth/Email';
 import { EmailAndPassword } from '@/components/presentational/tailwind/Auth/EmailAndPassword';
-import {
-  useSignInWithMagicLink,
-  useSignInWithProvider,
-  useSignUp,
-} from '@/utils/react-query-hooks';
 import { useState } from 'react';
+import { useToastMutation } from '@/hooks/useToastMutation';
+import {
+  signInWithMagicLink,
+  signInWithProvider,
+  signUp,
+} from '@/data/auth/auth';
+import { AuthProvider } from '@/types';
+import { useRouter } from 'next/navigation';
 
-export function SignUp() {
-  const [isSuccessful, setIsSuccessful] = useState(false);
+export function SignUp({
+  next,
+  nextActionType,
+}: {
+  next?: string;
+  nextActionType?: string;
+}) {
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const router = useRouter();
 
   function redirectToDashboard() {
-    setIsSuccessful(true);
+    router.refresh();
+    if (next) {
+      router.push(`/auth/callback?next=${next}`);
+    } else {
+      router.push('/auth/callback');
+    }
   }
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const magicLinkMutation = useSignInWithMagicLink({
-    onSuccess: () => {
-      setSuccessMessage('A magic link has been sent to your email!');
+  const magicLinkMutation = useToastMutation(
+    async (email: string) => {
+      // since we can't use the onSuccess callback here to redirect from here
+      // we pass on the `next` to the signInWithMagicLink function
+      // the user gets redirected from their email message
+      return await signInWithMagicLink(email, next);
     },
-    onMutate: () => {
-      setSuccessMessage(null);
+    {
+      loadingMessage: 'Sending magic link...',
+      errorMessage: 'Failed to send magic link',
+      successMessage: 'Magic link sent!',
+      onSuccess: () => {
+        setSuccessMessage('A magic link has been sent to your email!');
+      },
+      onMutate: () => {
+        setSuccessMessage(null);
+      },
     },
-  });
-  const passwordMutation = useSignUp({
-    onSuccess: redirectToDashboard,
-  });
-  const providerMutation = useSignInWithProvider();
+  );
+  const passwordMutation = useToastMutation(
+    async ({ email, password }: { email: string; password: string }) => {
+      return await signUp(email, password);
+    },
+    {
+      onSuccess: redirectToDashboard,
+      loadingMessage: 'Creating account...',
+      errorMessage: 'Failed to create account',
+      successMessage: 'Account created!',
+    },
+  );
+  const providerMutation = useToastMutation(
+    async (provider: AuthProvider) => {
+      // since we can't use the onSuccess callback here to redirect from here
+      // we pass on the `next` to the signInWithProvider function
+      // the user gets redirected from the provider redirect callback
+      return signInWithProvider(provider, next);
+    },
+    {
+      loadingMessage: 'Requesting login...',
+      successMessage: 'Redirecting...',
+      errorMessage: 'Failed to login',
+    },
+  );
   return (
     <div className="container h-full grid items-center text-left max-w-lg mx-auto overflow-auto">
-      {isSuccessful ? (
-        <p className="text-blue-500 text-sm">
-          We sent you an email with a confirmation link. Please confirm your
-          email address.
-        </p>
+      {successMessage ? (
+        <p className="text-blue-500 text-sm">{successMessage}</p>
       ) : (
         <div className="space-y-8 ">
           {/* <Auth providers={['twitter']} supabaseClient={supabase} /> */}
@@ -47,20 +90,11 @@ export function SignUp() {
           <RenderProviders
             providers={['google', 'github', 'twitter']}
             isLoading={providerMutation.isLoading}
-            onProviderLoginRequested={(provider) => {
-              providerMutation.mutate({
-                provider,
-              });
-            }}
+            onProviderLoginRequested={providerMutation.mutate}
           />
           <hr />
           <Email
-            onSubmit={(email) => {
-              magicLinkMutation.mutate({
-                email,
-              });
-            }}
-            successMessage={successMessage}
+            onSubmit={magicLinkMutation.mutate}
             isLoading={magicLinkMutation.isLoading}
             view="sign-up"
           />

@@ -19,28 +19,41 @@ import OrganizationIcon from 'lucide-react/dist/esm/icons/network';
 type CreateOrganizationDialogProps = {
   onConfirm: (organizationTitle: string) => void;
   isLoading: boolean;
+  variant?: 'default' | 'outline' | 'ghost';
+  className?: string;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (isOpen: boolean) => void;
 };
 
 export function CreateOrganizationDialog({
   onConfirm,
   isLoading,
+  variant,
+  className,
+  isDialogOpen,
+  setIsDialogOpen,
 }: CreateOrganizationDialogProps) {
   const [organizationTitle, setOrganizationTitle] = useState<string>('');
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onConfirm(organizationTitle);
-    setOpen(false);
+    // setOpen(false);
+    setIsDialogOpen?.(false);
   };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button>
-            <PlusIcon className="mr-2" />
-            Create Organisation
+          <Button
+            variant="default"
+            size="default"
+            className="w-full flex space-x-1"
+          >
+            <PlusIcon />
+            <span>New Organization</span>
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -79,7 +92,7 @@ export function CreateOrganizationDialog({
                 disabled={isLoading}
                 className="w-full"
                 onClick={() => {
-                  setOpen(false);
+                  setIsDialogOpen(false);
                 }}
               >
                 Cancel

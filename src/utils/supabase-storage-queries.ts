@@ -6,7 +6,7 @@ export const uploadUserImage = async (
   userId: string,
   file: File,
   fileName: string,
-  fileOptions?: SupabaseFileUploadOptions | undefined
+  fileOptions?: SupabaseFileUploadOptions | undefined,
 ): Promise<{
   path: string;
 }> => {
@@ -27,7 +27,7 @@ export const uploadPublicUserAvatar = async (
   userId: string,
   file: File,
   fileName: string,
-  fileOptions?: SupabaseFileUploadOptions | undefined
+  fileOptions?: SupabaseFileUploadOptions | undefined,
 ): Promise<string> => {
   const userImagesPath = `${userId}/images/${fileName}`;
 
@@ -45,7 +45,7 @@ export const uploadPublicUserAvatar = async (
   const supabaseFileUrl = urlJoin(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     '/storage/v1/object/public/public-user-assets',
-    filePath
+    filePath,
   );
   return supabaseFileUrl;
 };
@@ -55,7 +55,7 @@ export const uploadOrganizationImage = async (
   organizationId: string,
   file: File,
   fileName: string,
-  fileOptions?: SupabaseFileUploadOptions | undefined
+  fileOptions?: SupabaseFileUploadOptions | undefined,
 ): Promise<{
   path: string;
 }> => {

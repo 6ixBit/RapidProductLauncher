@@ -1,4 +1,6 @@
+import { LoggedInUserContext } from '@/contexts/LoggedInUserContext';
 import { User, useUser } from '@supabase/auth-helpers-react';
+import { useContext } from 'react';
 
 /**
  * The original useUser hook from @supabase/auth-helpers-react
@@ -7,9 +9,6 @@ import { User, useUser } from '@supabase/auth-helpers-react';
  * @returns The logged in user or throws an error if the user is not logged in
  */
 export const useLoggedInUser = (): User => {
-  const user = useUser();
-  if (!user) {
-    throw new Error('User is not logged in');
-  }
+  const { user } = useContext(LoggedInUserContext);
   return user;
 };

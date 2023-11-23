@@ -15,7 +15,7 @@ import MoonIcon from 'lucide-react/dist/esm/icons/moon';
 import LaptopIcon from 'lucide-react/dist/esm/icons/laptop';
 
 export function ThemeToggle() {
-  const { setTheme, theme } = useTheme();
+  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -29,7 +29,6 @@ export function ThemeToggle() {
           className="h-5 w-5 px-0 text-muted-foreground focus:ring-0"
         >
           <LightIcon className="rotate-0 scale-100 transition-all dark:-rotate-90 hover:text-black dark:scale-0" />
-
           <MoonIcon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 dark:hover:text-white" />
           <span className="sr-only">Toggle theme</span>
         </Button>

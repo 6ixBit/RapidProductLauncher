@@ -6,7 +6,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/HoverCard';
 import { T } from '@/components/ui/Typography';
-import { Button } from '@/components/ui/Button/ButtonShadcn';
+import { Button } from '@/components/ui/Button';
 
 function capitalize(word: string) {
   const lower = word.toLowerCase();
@@ -25,18 +25,21 @@ export const RenderProviders = ({
   isLoading: boolean;
 }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5 flex flex-col">
       {providers.map((provider) => {
         const AuthIcon = SocialIcons[provider];
         const component = (
           <Button
             variant="default"
-            key={provider}
+            size="default"
             disabled={isLoading || isDemo}
             onClick={() => onProviderLoginRequested(provider)}
+            key={provider}
             className="bg-white dark:bg-white text-black dark:text-black border h-10 border-gray-400 dark:border-gray-600 rounded-lg"
           >
-            <AuthIcon />
+            <div className="mr-2">
+              <AuthIcon />
+            </div>
             <span className="">{capitalize(provider)}</span>
           </Button>
         );

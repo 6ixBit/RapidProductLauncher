@@ -1,15 +1,24 @@
 'use client';
 import { Password } from '@/components/presentational/tailwind/Auth/Password';
-import { useUpdatePassword } from '@/utils/react-query-hooks';
+import { updatePasswordAction } from '@/data/user/security';
+import { useToastMutation } from '@/hooks/useToastMutation';
 import { useRouter } from 'next/navigation';
 
 export function UpdatePassword() {
   const router = useRouter();
-  const updatePasswordMutation = useUpdatePassword({
-    onSuccess: () => {
-      router.push('/check-auth');
+  const updatePasswordMutation = useToastMutation(
+    async (password: string) => {
+      return await updatePasswordAction(password);
     },
-  });
+    {
+      loadingMessage: 'Updating password...',
+      successMessage: 'Password updated!',
+      errorMessage: 'Failed to update password',
+      onSuccess: () => {
+        router.push('/auth/callback');
+      },
+    },
+  );
 
   return (
     <div className="container h-full grid items-center text-left max-w-lg mx-auto overflow-auto">
@@ -24,11 +33,7 @@ export function UpdatePassword() {
 
         <Password
           isLoading={updatePasswordMutation.isLoading}
-          onSubmit={(password) => {
-            updatePasswordMutation.mutate({
-              password,
-            });
-          }}
+          onSubmit={updatePasswordMutation.mutate}
           label="Create your new Password"
           buttonLabel="Confirm Password"
         />

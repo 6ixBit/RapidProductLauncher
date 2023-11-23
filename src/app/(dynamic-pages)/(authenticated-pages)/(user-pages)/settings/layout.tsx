@@ -27,7 +27,10 @@ export default function UserSettingsClientLayout({
 
   return (
     <div className="space-y-6">
-      <PageHeading title="User Settings" />
+      <PageHeading
+        title="User Settings"
+        subTitle="Manage your account and security settings here."
+      />
       <TabsNavigation tabs={tabs} />
       {children}
     </div>

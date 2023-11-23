@@ -1,9 +1,5 @@
-import { Button } from '@react-email/button';
-import { Html } from '@react-email/html';
-import { Section } from '@react-email/section';
-import { Column } from '@react-email/column';
 import * as React from 'react';
-import { Text } from '@react-email/text';
+import { Button, Html, Section, Column, Text } from '@react-email/components';
 
 type SignInEmailProps = {
   signInUrl: string;
@@ -24,8 +20,6 @@ export default function SignInEmail(props: SignInEmailProps) {
         <Column>
           <Button
             href={props.signInUrl}
-            pX={20}
-            pY={12}
             style={{ background: '#00f', color: '#fff', borderRadius: '6px' }}
           >
             Sign In to Your Account

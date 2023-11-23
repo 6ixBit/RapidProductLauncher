@@ -4,15 +4,14 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { getUserAvatarUrl } from '@/utils/helpers';
-import H3 from '../Text/H3';
+import { PageHeading } from '../PageHeading';
 import { Button } from '../Button';
 import { classNames } from '@/utils/classNames';
 import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
-import { PageHeading } from '../PageHeading';
 import { T } from '@/components/ui/Typography';
+import CameraIcon from 'lucide-react/dist/esm/icons/camera';
 import { Label } from '@/components/ui/Label';
 const MotionImage = motion(Image);
-import CameraIcon from 'lucide-react/dist/esm/icons/camera';
 
 export function UpdateAvatarAndNameBody({
   onSubmit,
@@ -33,7 +32,6 @@ export function UpdateAvatarAndNameBody({
   isNewAvatarImageLoading: boolean;
   setIsNewAvatarImageLoading: (value: boolean) => void;
 }) {
-  const user = useLoggedInUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const email = useLoggedInUserEmail();
   const [fullName, setFullName] = useState(profileFullname ?? email);
@@ -106,14 +104,16 @@ export function UpdateAvatarAndNameBody({
                   hidden
                   accept="image/*"
                 />
+                <div className="bg-gray-900 group-hover:bg-gray-800  absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)]  border border-muted-foreground rounded-full p-1">
+                  <CameraIcon className="h-4 w-4 group-hover:fill-white/30 text-white" />
+                </div>
               </Label>
-              <div className="bg-gray-900 group-hover:bg-gray-800  absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)]  border border-muted-foreground rounded-full p-1">
-                <CameraIcon className="h-4 w-4 group-hover:fill-white/30 text-white" />
-              </div>
             </div>
           </div>
           <div className="space-y-2">
-            <p className="text-gray-500 text-sm">Name</p>
+            <Label htmlFor="name" className="text-muted-foreground">
+              Name
+            </Label>
             <div className="flex space-x-2 ">
               <input
                 disabled={isLoading}
@@ -127,7 +127,7 @@ export function UpdateAvatarAndNameBody({
               />
             </div>
           </div>
-          <div className="flex justify-start space-x-2 pt-4">
+          <div className="flex justify-start space-x-2">
             <Button
               className={classNames(
                 'flex w-full justify-center rounded-lg border border-transparent py-2 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',

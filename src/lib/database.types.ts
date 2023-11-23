@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -26,6 +26,7 @@ export interface Database {
           {
             foreignKeyName: "customers_organization_id_fkey"
             columns: ["organization_id"]
+            isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
@@ -66,18 +67,21 @@ export interface Database {
           {
             foreignKeyName: "organization_join_invitations_invitee_user_id_fkey"
             columns: ["invitee_user_id"]
+            isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "organization_join_invitations_inviter_user_id_fkey"
             columns: ["inviter_user_id"]
+            isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "organization_join_invitations_organization_id_fkey"
             columns: ["organization_id"]
+            isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
@@ -109,12 +113,14 @@ export interface Database {
           {
             foreignKeyName: "organization_members_member_id_fkey"
             columns: ["member_id"]
+            isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "organization_members_organization_id_fkey"
             columns: ["organization_id"]
+            isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
@@ -143,6 +149,7 @@ export interface Database {
           {
             foreignKeyName: "organizations_created_by_fkey"
             columns: ["created_by"]
+            isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           }
@@ -168,6 +175,7 @@ export interface Database {
           {
             foreignKeyName: "organizations_private_info_id_fkey"
             columns: ["id"]
+            isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
@@ -217,6 +225,7 @@ export interface Database {
           {
             foreignKeyName: "prices_product_id_fkey"
             columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           }
@@ -305,12 +314,14 @@ export interface Database {
           {
             foreignKeyName: "subscriptions_organization_id_fkey"
             columns: ["organization_id"]
+            isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "subscriptions_price_id_fkey"
             columns: ["price_id"]
+            isOneToOne: false
             referencedRelation: "prices"
             referencedColumns: ["id"]
           }
@@ -319,20 +330,31 @@ export interface Database {
       user_private_info: {
         Row: {
           created_at: string | null
+          default_organization: string | null
           id: string
         }
         Insert: {
           created_at?: string | null
+          default_organization?: string | null
           id: string
         }
         Update: {
           created_at?: string | null
+          default_organization?: string | null
           id?: string
         }
         Relationships: [
           {
+            foreignKeyName: "user_private_info_default_organization_fkey"
+            columns: ["default_organization"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_private_info_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -361,6 +383,7 @@ export interface Database {
           {
             foreignKeyName: "user_profiles_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -371,6 +394,12 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      app_admin_get_user_id_by_email: {
+        Args: {
+          emailarg: string
+        }
+        Returns: string
+      }
       check_if_authenticated_user_owns_email: {
         Args: {
           email: string

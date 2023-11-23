@@ -2,7 +2,7 @@ import { Stripe } from 'stripe';
 
 export async function isCustomerInFreeTrial(
   stripe: Stripe,
-  customerId: string
+  customerId: string,
 ): Promise<boolean> {
   const customer = await stripe.customers.retrieve(customerId);
   const subscription = await stripe.subscriptions.list({
@@ -15,7 +15,7 @@ export async function isCustomerInFreeTrial(
 
 export async function hasCustomerSubscription(
   stripe: Stripe,
-  customerId: string
+  customerId: string,
 ): Promise<boolean> {
   const subscriptions = await stripe.subscriptions.list({
     customer: customerId,
@@ -27,7 +27,7 @@ export async function hasCustomerSubscription(
 
 export async function daysLeftInTrial(
   stripe: Stripe,
-  customerId: string
+  customerId: string,
 ): Promise<number | null> {
   const subscriptions = await stripe.subscriptions.list({
     customer: customerId,
@@ -50,7 +50,7 @@ export async function startFreeTrial(
   stripe: Stripe,
   customerId: string,
   planId: string,
-  trialDays: number
+  trialDays: number,
 ): Promise<Stripe.Subscription | null> {
   if (!trialDays || trialDays <= 0) {
     return null;

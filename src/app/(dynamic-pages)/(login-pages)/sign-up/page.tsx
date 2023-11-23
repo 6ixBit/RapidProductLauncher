@@ -1,12 +1,16 @@
-import { withBaseDescription, withBaseTitle } from '@/utils/seo';
+import { z } from 'zod';
 import { SignUp } from './Signup';
 
-export const metadata = {
-  title: withBaseTitle('Sign Up'),
-  description: withBaseDescription('sign up page of Nextbase Essentail version'),
-  
-}
+const SearchParamsSchema = z.object({
+  next: z.string().optional(),
+  nextActionType: z.string().optional(),
+});
 
-export default function SignupPage() {
-  return <SignUp />;
+export default function SignupPage({
+  searchParams,
+}: {
+  searchParams: unknown;
+}) {
+  const { next, nextActionType } = SearchParamsSchema.parse(searchParams);
+  return <SignUp next={next} nextActionType={nextActionType} />;
 }
