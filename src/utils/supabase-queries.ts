@@ -34,40 +34,6 @@ export const updateUserName = async (
     .eq('id', user.id);
 };
 
-export const getAllOrganizationsForUser = async (
-  supabase: AppSupabaseClient,
-  userId: string,
-) => {
-  const { data: organizations, error: organizationsError } = await supabase.rpc(
-    'get_organizations_for_user',
-    {
-      user_id: userId,
-    },
-  );
-  if (!organizations) {
-    throw new Error(organizationsError.message);
-  }
-
-  const { data, error } = await supabase
-    .from('organizations')
-    .select(
-      '*, organization_members(id,member_id,member_role, user_profiles(*)), subscriptions(id, prices(id,products(id,name)))',
-    )
-    .in(
-      'id',
-      organizations.map((org) => org.organization_id),
-    )
-    .order('created_at', {
-      ascending: false,
-    });
-  if (error) {
-    errors.add(error.message);
-    throw error;
-  }
-
-  return data || [];
-};
-
 export const getOrganizationById = async (
   supabase: AppSupabaseClient,
   organizationId: string,

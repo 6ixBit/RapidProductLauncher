@@ -394,6 +394,12 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      app_admin_get_user_id_by_email: {
+        Args: {
+          emailarg: string
+        }
+        Returns: string
+      }
       check_if_authenticated_user_owns_email: {
         Args: {
           email: string

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { EditOrganizationForm } from './EditOrganizationForm';
 import { getOrganizationTitle } from '@/data/user/organizations';
 import { T } from '@/components/ui/Typography';
+import { SetDefaultOrganizationPreference } from './SetDefaultOrganizationPreference';
 
 async function EditOrganization({
   organizationId,
@@ -26,8 +27,13 @@ export default async function EditOrganizationPage({
 }) {
   const { organizationId } = params;
   return (
-    <Suspense fallback={<T.Subtle>Loading...</T.Subtle>}>
-      <EditOrganization organizationId={organizationId} />
-    </Suspense>
+    <div className="space-y-4">
+      <Suspense fallback={<T.Subtle>Loading...</T.Subtle>}>
+        <EditOrganization organizationId={organizationId} />
+      </Suspense>
+      <Suspense fallback={<T.Subtle>Loading...</T.Subtle>}>
+        <SetDefaultOrganizationPreference organizationId={organizationId} />
+      </Suspense>
+    </div>
   );
 }

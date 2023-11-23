@@ -72,41 +72,6 @@ export const getSlimOrganizationById = async (organizationId: string) => {
   return data;
 };
 
-export const getAllOrganizationsForUser = async (userId: string) => {
-  const supabase = createSupabaseUserServerComponentClient();
-  const { data: organizations, error: organizationsError } = await supabase.rpc(
-    'get_organizations_for_user',
-    {
-      user_id: userId,
-    },
-  );
-  if (!organizations) {
-    throw new Error(organizationsError.message);
-  }
-
-  const { data, error } = await supabase
-    .from('organizations')
-    .select(
-      '*, organization_members(id,member_id,member_role, user_profiles(*)), subscriptions(id, prices(id,products(id,name)))',
-    )
-    .in(
-      'id',
-      organizations.map((org) => org.organization_id),
-    )
-    .order('created_at', {
-      ascending: false,
-    });
-  if (error) {
-    throw error;
-  }
-
-  return data || [];
-};
-
-export type InitialOrganizationListType = UnwrapPromise<
-  ReturnType<typeof getAllOrganizationsForUser>
->;
-
 export const getOrganizationById = async (organizationId: string) => {
   const supabaseClient = createSupabaseUserServerComponentClient();
 

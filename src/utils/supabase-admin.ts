@@ -151,38 +151,38 @@ const manageSubscriptionStatusChange = async (
   // Upsert the latest status of the subscription object.
   /* eslint-disable prettier/prettier */
   const subscriptionData: Database['public']['Tables']['subscriptions']['Insert'] =
-    {
-      id: subscription.id,
-      organization_id: organizationId,
-      metadata: subscription.metadata,
-      status: subscription.status,
-      price_id: subscription.items.data[0].price.id,
-      //TODO check quantity on subscription
-      quantity: subscription.items.data[0].quantity,
-      cancel_at_period_end: subscription.cancel_at_period_end,
-      cancel_at: subscription.cancel_at
-        ? toDateTime(subscription.cancel_at).toISOString()
-        : null,
-      canceled_at: subscription.canceled_at
-        ? toDateTime(subscription.canceled_at).toISOString()
-        : null,
-      current_period_start: toDateTime(
-        subscription.current_period_start,
-      ).toISOString(),
-      current_period_end: toDateTime(
-        subscription.current_period_end,
-      ).toISOString(),
-      created: toDateTime(subscription.created).toISOString(),
-      ended_at: subscription.ended_at
-        ? toDateTime(subscription.ended_at).toISOString()
-        : null,
-      trial_start: subscription.trial_start
-        ? toDateTime(subscription.trial_start).toISOString()
-        : null,
-      trial_end: subscription.trial_end
-        ? toDateTime(subscription.trial_end).toISOString()
-        : null,
-    };
+  {
+    id: subscription.id,
+    organization_id: organizationId,
+    metadata: subscription.metadata,
+    status: subscription.status,
+    price_id: subscription.items.data[0].price.id,
+    //TODO check quantity on subscription
+    quantity: subscription.items.data[0].quantity,
+    cancel_at_period_end: subscription.cancel_at_period_end,
+    cancel_at: subscription.cancel_at
+      ? toDateTime(subscription.cancel_at).toISOString()
+      : null,
+    canceled_at: subscription.canceled_at
+      ? toDateTime(subscription.canceled_at).toISOString()
+      : null,
+    current_period_start: toDateTime(
+      subscription.current_period_start,
+    ).toISOString(),
+    current_period_end: toDateTime(
+      subscription.current_period_end,
+    ).toISOString(),
+    created: toDateTime(subscription.created).toISOString(),
+    ended_at: subscription.ended_at
+      ? toDateTime(subscription.ended_at).toISOString()
+      : null,
+    trial_start: subscription.trial_start
+      ? toDateTime(subscription.trial_start).toISOString()
+      : null,
+    trial_end: subscription.trial_end
+      ? toDateTime(subscription.trial_end).toISOString()
+      : null,
+  };
   /* eslint-enable prettier/prettier */
 
   const { error } = await supabaseAdminClient
@@ -256,74 +256,6 @@ export const updatePaymentMethod = async (
     })
     .eq('id', organizationId);
   if (error) throw error;
-};
-
-export const getUsersPaginated = async (
-  pageNumber = 0,
-  search?: string | undefined,
-): Promise<[number, DBFunction<'app_admin_get_all_users'>]> => {
-  // RPCs are 0-indexed, but our pagination is 1-indexed.
-  const effectivePageNumber = pageNumber + 1;
-  const { data, error } = await supabaseAdminClient.rpc(
-    'app_admin_get_all_users',
-    {
-      page: effectivePageNumber,
-      search_query: search,
-      page_size: ADMIN_USER_LIST_VIEW_PAGE_SIZE,
-    },
-  );
-  if (error) throw error;
-  if (!data) {
-    return [pageNumber, []];
-  }
-  return [pageNumber, data];
-};
-
-export const getOrganizationsPaginated = async (
-  pageNumber = 0,
-  search?: string | undefined,
-): Promise<[number, DBFunction<'app_admin_get_all_organizations'>]> => {
-  // RPCs are 0-indexed, but our pagination is 1-indexed.
-  const effectivePageNumber = pageNumber + 1;
-  const { data, error } = await supabaseAdminClient.rpc(
-    'app_admin_get_all_organizations',
-    {
-      page: effectivePageNumber,
-      search_query: search,
-      page_size: ADMIN_ORGANIZATION_LIST_VIEW_PAGE_SIZE,
-    },
-  );
-  if (error) throw error;
-  if (!data) {
-    return [pageNumber, []];
-  }
-  return [pageNumber, data];
-};
-
-export const enableMaintenanceMode = async () => {
-  const { data, error } = await supabaseAdminClient
-    .rpc('enable_maintenance_mode')
-    .single();
-
-  if (error) {
-    errors.add(error.message);
-    throw error;
-  }
-
-  return data;
-};
-
-export const disableMaintenanceMode = async () => {
-  const { data, error } = await supabaseAdminClient
-    .rpc('disable_maintenance_mode')
-    .single();
-
-  if (error) {
-    errors.add(error.message);
-    throw error;
-  }
-
-  return data;
 };
 
 export {

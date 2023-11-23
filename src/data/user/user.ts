@@ -6,20 +6,6 @@ import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { User } from '@supabase/supabase-js';
 import urlJoin from 'url-join';
 
-export async function getIsAppAdmin(authUser: User): Promise<boolean> {
-  const supabaseClient = createSupabaseUserServerComponentClient();
-  const { data: isUserAppAdmin, error } = await supabaseClient
-    .rpc('check_if_user_is_app_admin', {
-      user_id: authUser.id,
-    })
-    .single();
-  if (error) {
-    throw error;
-  }
-
-  return isUserAppAdmin;
-}
-
 export const getUserProfile = async (
   userId: string,
 ): Promise<Table<'user_profiles'>> => {

@@ -30,7 +30,6 @@ export function OrganizationSwitcher({
   slimOrganizations: Array<{
     id: string;
     title: string;
-    is_default: boolean;
   }>;
   currentOrganizationId: string;
 }) {

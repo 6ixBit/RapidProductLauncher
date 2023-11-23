@@ -61,10 +61,6 @@ export type DropzoneFileWithDuration = DropzoneFile & {
   duration: number;
 };
 
-export type CommentWithUser = Table<'project_comments'> & {
-  user_profile: Table<'user_profiles'>;
-};
-
 export type NoSubscription = {
   type: 'no-subscription';
 };
