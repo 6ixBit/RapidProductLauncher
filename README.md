@@ -4,4 +4,5 @@ Nextbase is a simple, fast, and secure way to build and deploy your next web app
 
 ## Developing and deployment instructions
 
-Please checkout the documentation site [here](https://docs.usenextbase.com). 
+Please checkout the documentation site [here](https://usenextbase.com/docs).
+
