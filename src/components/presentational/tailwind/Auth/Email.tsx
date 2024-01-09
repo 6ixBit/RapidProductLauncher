@@ -44,6 +44,7 @@ export const Email = ({
         event.preventDefault();
         onSubmit(email);
       }}
+      data-testid="magic-link-form"
     >
       <div className="space-y-2">
         <div className="space-y-2">

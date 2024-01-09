@@ -11,16 +11,22 @@ export const UserNavPopover = ({
   avatarUrl,
   userFullname,
   userEmail,
+  userId,
 }: {
   avatarUrl: string;
   userFullname: string;
   userEmail: string;
+  userId: string;
 }) => {
   return (
     <>
       <Popover>
         <PopoverTrigger>
-          <div className="h-[24px] w-[24px] border rounded-full">
+          <div
+            data-testid="user-nav-avatar"
+            data-user-id={userId}
+            className="h-[24px] w-[24px] border rounded-full"
+          >
             <Image
               src={avatarUrl}
               width={24}

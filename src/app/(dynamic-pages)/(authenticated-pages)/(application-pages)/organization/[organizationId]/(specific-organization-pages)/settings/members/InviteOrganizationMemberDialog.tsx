@@ -31,7 +31,11 @@ export const InviteOrganizationMemberDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" size="default">
+        <Button
+          variant="default"
+          size="default"
+          data-testid="invite-user-button"
+        >
           <AddUserIcon className="mr-2 w-5 h-5" />
           Invite user{' '}
         </Button>
@@ -55,6 +59,7 @@ export const InviteOrganizationMemberDialog = ({
             setEmail('');
             setOpen(false);
           }}
+          data-testid="invite-user-form"
         >
           <div className="mb-8">
             <Label className="text-muted-foreground">Enter Email</Label>
@@ -65,6 +70,7 @@ export const InviteOrganizationMemberDialog = ({
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               type="email"
+              name="email"
               required
               disabled={isLoading}
             />

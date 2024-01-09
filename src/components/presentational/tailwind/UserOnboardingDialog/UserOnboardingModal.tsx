@@ -58,6 +58,7 @@ export const UserOnboardingDialog = ({
           </div>
         </DialogHeader>
         <form
+          data-testid="user-onboarding-form"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmit(fullName);
@@ -77,10 +78,10 @@ export const UserOnboardingDialog = ({
                       hasImageLoaded
                         ? undefined
                         : {
-                            duration: 0.5,
-                            repeat: Infinity,
-                            repeatType: 'reverse',
-                          }
+                          duration: 0.5,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                        }
                     }
                     onLoadingComplete={() => {
                       setHasImageLoaded(true);
@@ -130,6 +131,7 @@ export const UserOnboardingDialog = ({
                 disabled={isLoading}
                 className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
                 id="name"
+                name={'name'}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Full Name"

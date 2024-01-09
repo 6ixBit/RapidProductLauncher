@@ -2,8 +2,11 @@ name: 'CI setup'
 runs:
   using: 'composite'
   steps:
+    - name: Set environment variable
+      run: echo "GITHUB_ACTION=true" >> $GITHUB_ENV
+      shell: bash
     - name: Use Node.js 18.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18.x
     - name: Get yarn cache directory path

@@ -41,6 +41,7 @@ export const EmailAndPassword = ({
               value={email}
               placeholder="placeholder@email.com"
               onChange={(event) => setEmail(event.target.value)}
+              data-strategy="email-password"
               autoComplete={'email'}
               required
               className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
