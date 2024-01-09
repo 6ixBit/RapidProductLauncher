@@ -106,7 +106,7 @@ test('forgot password works correctly', async ({ page }) => {
 
   await page.waitForSelector('text=Reset Password');
 
-  const newPassword = 'qaqaqaqa';
+  const newPassword = 'password';
   await page.fill('input[name="password"]', newPassword);
 
   await page.click(`button:has-text("${constants.confirmPasswordButtonLabel}")`);
