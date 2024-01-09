@@ -28,7 +28,7 @@ export const ConfirmDeclineInvitationDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="default">
+        <Button data-testid="decline" variant="outline" size="default">
           <X className="mr-2 h-5 w-5" /> Decline Invitation
         </Button>
       </DialogTrigger>

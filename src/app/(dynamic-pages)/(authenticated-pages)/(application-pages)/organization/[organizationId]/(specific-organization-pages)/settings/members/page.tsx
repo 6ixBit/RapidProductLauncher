@@ -47,7 +47,7 @@ async function TeamMembers({ organizationId }: { organizationId: string }) {
       </div>
 
       <div className="rounded-lg border  shadow-sm overflow-hidden">
-        <ShadcnTable>
+        <ShadcnTable data-testid="members-table">
           <TableHeader>
             <TableRow>
               <TableHead> # </TableHead>
@@ -59,10 +59,14 @@ async function TeamMembers({ organizationId }: { organizationId: string }) {
           <TableBody>
             {normalizedMembers.map((member, index) => {
               return (
-                <TableRow key={member.id}>
+                <TableRow data-user-id={member.id} key={member.id}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{member.name}</TableCell>
-                  <TableCell className="capitalize">{member.role}</TableCell>
+                  <TableCell data-testid={'member-name'}>
+                    {member.name}
+                  </TableCell>
+                  <TableCell data-testid={'member-role'} className="capitalize">
+                    {member.role}
+                  </TableCell>
                   <TableCell>{member.created_at}</TableCell>
                 </TableRow>
               );

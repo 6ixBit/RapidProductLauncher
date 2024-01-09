@@ -24,6 +24,7 @@ export async function UserNav() {
         })}
         userFullname={userProfile.full_name ?? `User ${email}`}
         userEmail={email}
+        userId={user.id}
       />
     </>
   );

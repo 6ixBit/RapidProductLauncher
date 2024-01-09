@@ -1,4 +1,7 @@
 import { Button } from '@/components/ui/Button';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { getUserAvatarUrl } from '@/utils/helpers';
+import { useRef, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,14 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog';
-import { Label } from '@/components/ui/Label';
-import { useLoggedInUser } from '@/hooks/useLoggedInUser';
-import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
-import { getUserAvatarUrl } from '@/utils/helpers';
 import { motion } from 'framer-motion';
-import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
+import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { Label } from '@/components/ui/Label';
+import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
 
 const MotionImage = motion(Image);
 
@@ -129,9 +129,9 @@ export const UserOnboardingDialog = ({
               <Label className="text-muted-foreground">Name</Label>
               <input
                 disabled={isLoading}
-                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 dark:text-gray-100 leading-tight focus:outline-none focus:shadow-outline text-base"
+                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
                 id="name"
-                name="name"
+                name={'name'}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Full Name"
