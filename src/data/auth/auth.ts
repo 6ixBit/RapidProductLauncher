@@ -71,8 +71,10 @@ export const signInWithProvider = async (
 
 export const resetPassword = async (email: string) => {
   const supabase = createSupabaseUserServerActionClient();
+  const redirectToURL = new URL(toSiteURL('/auth/callback'));
+  redirectToURL.searchParams.set('next', `/update-password`);
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: toSiteURL('/update-password'),
+    redirectTo: redirectToURL.toString(),
   });
 
   if (error) {

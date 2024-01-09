@@ -1,7 +1,4 @@
 import { Button } from '@/components/ui/Button';
-import { useLoggedInUser } from '@/hooks/useLoggedInUser';
-import { getUserAvatarUrl } from '@/utils/helpers';
-import { useRef, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -10,11 +7,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog';
-import { motion } from 'framer-motion';
-import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
-import Image from 'next/image';
 import { Label } from '@/components/ui/Label';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
+import { getUserAvatarUrl } from '@/utils/helpers';
+import { motion } from 'framer-motion';
 import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 const MotionImage = motion(Image);
 
@@ -58,6 +58,7 @@ export const UserOnboardingDialog = ({
           </div>
         </DialogHeader>
         <form
+          data-testid="user-onboarding-form"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmit(fullName);
@@ -77,10 +78,10 @@ export const UserOnboardingDialog = ({
                       hasImageLoaded
                         ? undefined
                         : {
-                            duration: 0.5,
-                            repeat: Infinity,
-                            repeatType: 'reverse',
-                          }
+                          duration: 0.5,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                        }
                     }
                     onLoadingComplete={() => {
                       setHasImageLoaded(true);
@@ -128,8 +129,9 @@ export const UserOnboardingDialog = ({
               <Label className="text-muted-foreground">Name</Label>
               <input
                 disabled={isLoading}
-                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
+                className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 dark:text-gray-100 leading-tight focus:outline-none focus:shadow-outline text-base"
                 id="name"
+                name="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Full Name"

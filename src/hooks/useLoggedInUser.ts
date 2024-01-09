@@ -1,5 +1,5 @@
 import { LoggedInUserContext } from '@/contexts/LoggedInUserContext';
-import { User, useUser } from '@supabase/auth-helpers-react';
+import { User } from '@supabase/auth-helpers-react';
 import { useContext } from 'react';
 
 /**
@@ -10,5 +10,6 @@ import { useContext } from 'react';
  */
 export const useLoggedInUser = (): User => {
   const { user } = useContext(LoggedInUserContext);
+  if (!user) throw new Error('User is not logged in');
   return user;
 };
