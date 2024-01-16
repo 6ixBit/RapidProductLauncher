@@ -55,14 +55,14 @@ function getIdentifier(): string {
 
 const authFile = 'playwright/.auth/user.json';
 
-setup('authenticate', async ({ page }) => {
+setup('create account', async ({ page }) => {
   const identifier = getIdentifier()
   const emailAddress = `${identifier}@myapp.com`
   // Perform authentication steps. Replace these actions with your own.
-  await page.goto('/login');
+  await page.goto('/sign-up');
   await page.getByTestId('magic-link-form').locator('input').fill(emailAddress);
   // await page.getByLabel('Password').fill('password');
-  await page.getByRole('button', { name: 'Login with Magic Link' }).click();
+  await page.getByRole('button', { name: 'Sign up with Magic Link' }).click();
   // check for this text - A magic link has been sent to your email!
   await page.waitForSelector('text=A magic link has been sent to your email!');
   let url;
