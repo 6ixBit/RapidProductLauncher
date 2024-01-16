@@ -1,4 +1,5 @@
 import { test, expect, request } from '@playwright/test'
+import { dashboardDefaultOrganizationIdHelper } from './helpers/dashboard-default-organization-id.helper';
 
 const INBUCKET_URL = `http://localhost:54324`;
 async function getResetPasswordEmail(username: string): Promise<{
@@ -55,23 +56,14 @@ test('forgot password works correctly', async ({ page }) => {
   }
 
   // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
-  await page.goto('/dashboard');
-  // wait for the url to change to `/organization/<organizationUUID>`
-  let organizationId;
-  await page.waitForURL(url => {
-    const match = url.toString().match(/\/organization\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})/);
-    if (match) {
-      organizationId = match[1];
-      return true;
-    }
-    return false;
-  });
+  await dashboardDefaultOrganizationIdHelper({ page });
 
   await page.goto(`/settings/security`);
 
   // read email value in the input field
   const emailInput = page.locator('input[name="email"]');
   const email = await emailInput.getAttribute('value');
+
   await page.goto(`/logout`);
 
   await page.goto(`/forgot-password`);
@@ -80,9 +72,12 @@ test('forgot password works correctly', async ({ page }) => {
     throw new Error('Email is empty');
   }
 
-  await page.goto('/forgot-password')
+  // fill in the email
   await page.fill('input[name="email"]', email);
+
+  // click button with text Reset password
   await page.click(`button:has-text("${constants.resetPasswordButtonlabel}")`);
+
   await page.waitForSelector(`text=${constants.resetPasswordConfirmation}`);
 
   let identifier = email.split('@')[0];
@@ -102,26 +97,51 @@ test('forgot password works correctly', async ({ page }) => {
 
   await page.goto(url);
 
-  await page.waitForURL(`update-password`);
+  await page.waitForURL(`/update-password`);
 
-  await page.waitForSelector('text=Reset Password');
+  // wait for text = Reset Password
+  await page.waitForSelector(`text=${constants.resetPasswordButtonlabel}`);
 
+  // fill in a new password in the input field with name password
   const newPassword = 'password';
   await page.fill('input[name="password"]', newPassword);
 
+  // click on button with text Confirm Password
   await page.click(`button:has-text("${constants.confirmPasswordButtonLabel}")`);
+
   await page.waitForURL(`/dashboard`);
 
-  // await page.goto(`/logout`);
+  await page.goto(`/logout`);
 
-  // await page.goto(`/login`);
+  await page.goto(`/login`);
 
-  // await page.fill('input[data-strategy="email-password"]', email);
-  // // fill in the password
-  // await page.fill('input[name="password"]', newPassword);
+  // find form element with data-testid password-form
+  const form = await page.waitForSelector('form[data-testid="password-form"]');
+  const emailInput2 = await form.$('input[data-strategy="email-password"]');
+  const passwordInput = await form.$('input[name="password"]');
 
-  // // click on button with text exact: Login
-  // await page.click('button:text-is("Login")')
+  if (!emailInput2) {
+    throw new Error('Email input is empty');
+  }
 
-  // await page.waitForURL(`/dashboard`);
+  if (!passwordInput) {
+    throw new Error('Password input is empty');
+  }
+
+  await emailInput2.fill(email);
+  // fill in the password
+  await passwordInput.fill(newPassword);
+
+  // click on button of type submit in form
+  const submitButton = await form.waitForSelector('button[type="submit"]');
+
+  if (!submitButton) {
+    throw new Error('Submit button is empty');
+  }
+
+  await submitButton.click();
+
+  await page.waitForURL(`/dashboard`);
+
+  await page.goto(`/settings/security`);
 })
