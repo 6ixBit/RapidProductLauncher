@@ -6,3 +6,8 @@ tsconfig.tsbuildinfo
 supabase/.temp/project-ref
 supabase/.DS_Store
 .vercel
+playwright/.auth/user.json
+./test-results/
+supabase/.temp
+test-results
+.env
