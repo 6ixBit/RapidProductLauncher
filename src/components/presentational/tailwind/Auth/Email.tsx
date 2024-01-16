@@ -30,7 +30,7 @@ export const Email = ({
       case 'sign-in':
         return 'Login with Magic Link';
       case 'sign-up':
-        return 'Sign up';
+        return 'Sign up with Magic Link';
       case 'update-email':
         return 'Update Email';
       case 'forgot-password':

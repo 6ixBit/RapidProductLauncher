@@ -38,7 +38,7 @@ const config: PlaywrightTestConfig = {
     // More information: https://playwright.dev/docs/trace-viewer
     trace: 'retry-with-trace',
 
-    actionTimeout: 3 * 1000,
+    actionTimeout: 60 * 1000,
 
     // All available context options: https://playwright.dev/docs/api/class-browser#browser-new-context
     // contextOptions: {

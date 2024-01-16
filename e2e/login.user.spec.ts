@@ -1,5 +1,6 @@
-import { expect, request, test as setup } from '@playwright/test';
-import { onboardUserHelper } from 'e2e/helpers/onboard-user.helper';
+import { expect, request, test } from '@playwright/test';
+import { dashboardDefaultOrganizationIdHelper } from './helpers/dashboard-default-organization-id.helper';
+
 
 const INBUCKET_URL = `http://localhost:54324`;
 
@@ -48,23 +49,28 @@ async function getConfirmEmail(username: string): Promise<{
   throw new Error('No email received')
 }
 
-function getIdentifier(): string {
-  return `johndoe` + Date.now().toString().slice(-4)
-}
+test('login works correctly', async ({ page }) => {
 
+  await page.goto(`/settings/security`);
 
-const authFile = 'playwright/.auth/user.json';
+  // read email value in the input field
+  const emailInput = page.locator('input[name="email"]');
+  const emailAddress = await emailInput.getAttribute('value');
 
-setup('authenticate', async ({ page }) => {
-  const identifier = getIdentifier()
-  const emailAddress = `${identifier}@myapp.com`
-  // Perform authentication steps. Replace these actions with your own.
-  await page.goto('/login');
+  await page.goto(`/logout`);
+
+  await page.goto(`/login`);
+
+  if (!emailAddress) {
+    throw new Error('Email is empty');
+  }
+
   await page.getByTestId('magic-link-form').locator('input').fill(emailAddress);
   // await page.getByLabel('Password').fill('password');
   await page.getByRole('button', { name: 'Login with Magic Link' }).click();
   // check for this text - A magic link has been sent to your email!
   await page.waitForSelector('text=A magic link has been sent to your email!');
+  const identifier = emailAddress.split('@')[0];
   let url;
   await expect.poll(async () => {
     try {
@@ -80,7 +86,5 @@ setup('authenticate', async ({ page }) => {
   }).toBe('string')
 
   await page.goto(url);
-  await page.waitForURL('/dashboard');
-  await onboardUserHelper({ page, name: 'John Doe' });
-  await page.context().storageState({ path: authFile });
+  await dashboardDefaultOrganizationIdHelper({ page });
 });

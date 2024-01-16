@@ -26,6 +26,7 @@ export const EmailAndPassword = ({
           password,
         });
       }}
+      data-testid="password-form"
     >
       <div className="space-y-4">
         <div>
