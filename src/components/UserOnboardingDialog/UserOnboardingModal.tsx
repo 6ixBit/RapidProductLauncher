@@ -1,7 +1,4 @@
-import { Button } from '@/components/ui/Button';
-import { useLoggedInUser } from '@/hooks/useLoggedInUser';
-import { getUserAvatarUrl } from '@/utils/helpers';
-import { useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,12 +6,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/Dialog';
-import { motion } from 'framer-motion';
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
-import Image from 'next/image';
-import { Label } from '@/components/ui/Label';
+import { getUserAvatarUrl } from '@/utils/helpers';
+import { motion } from 'framer-motion';
 import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 const MotionImage = motion(Image);
 

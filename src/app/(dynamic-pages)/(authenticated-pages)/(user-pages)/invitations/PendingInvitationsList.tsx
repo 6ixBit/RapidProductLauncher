@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
-  ShadcnTable,
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/Table/ShadcnTable';
+} from '@/components/ui/table';
 import { T } from '@/components/ui/Typography';
 import { getPendingInvitationsOfUser } from '@/data/user/invitation';
 import { Enum } from '@/types';
@@ -28,7 +28,7 @@ const PendingInvitationsTable = ({
     <div className="space-y-2">
       <T.P>You have {pendingInvitationsList.length} pending invitations</T.P>
       <div className="w-full rounded-lg border overflow-hidden">
-        <ShadcnTable>
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead scope="col">#</TableHead>
@@ -63,7 +63,7 @@ const PendingInvitationsTable = ({
               </TableRow>
             ))}
           </TableBody>
-        </ShadcnTable>
+        </Table>
       </div>
     </div>
   );

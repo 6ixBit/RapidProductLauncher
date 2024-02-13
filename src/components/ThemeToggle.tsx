@@ -1,18 +1,17 @@
 'use client';
 
-import * as React from 'react';
 import { useTheme } from 'next-themes';
 
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
-import LightIcon from 'lucide-react/dist/esm/icons/sun';
-import MoonIcon from 'lucide-react/dist/esm/icons/moon';
+} from '@/components/ui/dropdown-menu';
 import LaptopIcon from 'lucide-react/dist/esm/icons/laptop';
+import MoonIcon from 'lucide-react/dist/esm/icons/moon';
+import LightIcon from 'lucide-react/dist/esm/icons/sun';
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();

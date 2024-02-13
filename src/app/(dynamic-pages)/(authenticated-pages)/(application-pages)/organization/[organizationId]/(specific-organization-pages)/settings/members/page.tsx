@@ -1,17 +1,17 @@
 'use server';
 import { TeamMembersTableProps } from '@/components/TeamMembersTable/types';
+import { T } from '@/components/ui/Typography';
 import {
-  ShadcnTable,
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/Table/ShadcnTable';
-import { T } from '@/components/ui/Typography';
+} from '@/components/ui/table';
 import {
   getPendingInvitationsInOrganization,
-  getTeamMembersInOrganization
+  getTeamMembersInOrganization,
 } from '@/data/user/organizations';
 import moment from 'moment';
 import { Suspense } from 'react';
@@ -46,7 +46,7 @@ async function TeamMembers({ organizationId }: { organizationId: string }) {
       </div>
 
       <div className="rounded-lg border  shadow-sm overflow-hidden">
-        <ShadcnTable data-testid="members-table">
+        <Table data-testid="members-table">
           <TableHeader>
             <TableRow>
               <TableHead> # </TableHead>
@@ -71,7 +71,7 @@ async function TeamMembers({ organizationId }: { organizationId: string }) {
               );
             })}
           </TableBody>
-        </ShadcnTable>
+        </Table>
       </div>
     </div>
   );
@@ -94,7 +94,7 @@ async function TeamInvitations({ organizationId }: { organizationId: string }) {
     <div className="space-y-4 max-w-4xl">
       <T.H3>Invitations</T.H3>
       <div className="rounded-lg border  shadow-sm overflow-hidden">
-        <ShadcnTable>
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead scope="col"> # </TableHead>
@@ -123,7 +123,7 @@ async function TeamInvitations({ organizationId }: { organizationId: string }) {
               );
             })}
           </TableBody>
-        </ShadcnTable>
+        </Table>
       </div>
     </div>
   );

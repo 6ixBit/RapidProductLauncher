@@ -1,6 +1,5 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,12 +8,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/Dialog';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
-import PlusIcon from 'lucide-react/dist/esm/icons/plus';
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import OrganizationIcon from 'lucide-react/dist/esm/icons/network';
+import PlusIcon from 'lucide-react/dist/esm/icons/plus';
+import { useState } from 'react';
 
 type CreateOrganizationDialogProps = {
   onConfirm: (organizationTitle: string) => void;

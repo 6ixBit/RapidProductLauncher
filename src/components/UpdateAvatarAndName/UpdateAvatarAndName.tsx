@@ -1,16 +1,15 @@
-import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { useRef, useState } from 'react';
 
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { getUserAvatarUrl } from '@/utils/helpers';
-import { PageHeading } from '../PageHeading';
-import { Button } from '../Button';
-import { classNames } from '@/utils/classNames';
-import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
 import { T } from '@/components/ui/Typography';
+import { Label } from '@/components/ui/label';
+import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
+import { classNames } from '@/utils/classNames';
+import { getUserAvatarUrl } from '@/utils/helpers';
+import { motion } from 'framer-motion';
 import CameraIcon from 'lucide-react/dist/esm/icons/camera';
-import { Label } from '@/components/ui/Label';
+import Image from 'next/image';
+import { Button } from '../Button';
+import { PageHeading } from '../PageHeading';
 const MotionImage = motion(Image);
 
 export function UpdateAvatarAndNameBody({

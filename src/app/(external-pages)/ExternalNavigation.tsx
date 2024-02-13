@@ -1,7 +1,7 @@
 'use client';
 
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import acmeLightLogo from '@public/logos/acme-logo-dark.png';
 import acmeDarkLogo from '@public/logos/acme-logo-light.png';
 import Menu from 'lucide-react/dist/esm/icons/menu';

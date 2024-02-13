@@ -1,6 +1,6 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { setDefaultOrganization } from '@/data/user/organizations';
-import { Button } from '@/components/ui/Button';
 import { useToastMutation } from '@/hooks/useToastMutation';
 
 export function SetDefaultOrganizationButton({

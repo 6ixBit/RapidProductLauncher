@@ -1,15 +1,15 @@
+import { T } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@/components/ui/HoverCard';
-import { T } from '@/components/ui/Typography';
+} from '@/components/ui/hover-card';
 import { getNormalizedOrganizationSubscription } from '@/data/user/organizations';
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
 import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscription';
 import ArrowUpRightIcon from 'lucide-react/dist/esm/icons/arrow-up-right';
 import Link from 'next/link';
-import { Button } from '../ui/Button';
 
 export async function SubscriptionCardSmall({
   organizationId,

@@ -1,4 +1,4 @@
-import { Label } from '@/components/ui/Label';
+import { Label } from '@/components/ui/label';
 import { classNames } from '@/utils/classNames';
 import Link from 'next/link';
 import { useState } from 'react';

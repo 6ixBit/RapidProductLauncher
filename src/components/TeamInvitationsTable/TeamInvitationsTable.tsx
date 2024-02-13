@@ -1,19 +1,19 @@
-import { TeamInvitationsTableProps } from './types';
 import {
-  ShadcnTable,
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/Table/ShadcnTable';
+} from '@/components/ui/table';
+import { TeamInvitationsTableProps } from './types';
 
 export const TeamInvitationsTable = ({
   invitations,
 }: TeamInvitationsTableProps) => {
   return (
     <div className="rounded-lg border  shadow-sm overflow-hidden">
-      <ShadcnTable>
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead scope="col"> # </TableHead>
@@ -42,7 +42,7 @@ export const TeamInvitationsTable = ({
             );
           })}
         </TableBody>
-      </ShadcnTable>
+      </Table>
     </div>
   );
 };

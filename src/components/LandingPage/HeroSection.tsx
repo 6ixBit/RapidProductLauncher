@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { T } from '@/components/ui/Typography';
 import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
 import Image from 'next/image';

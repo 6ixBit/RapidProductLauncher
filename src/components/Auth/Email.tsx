@@ -1,6 +1,6 @@
 'use client';
-import { Label } from '@/components/ui/Label';
 import { T } from '@/components/ui/Typography';
+import { Label } from '@/components/ui/label';
 import { classNames } from '@/utils/classNames';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';

@@ -1,10 +1,10 @@
 'use server';
 
-import { SetDefaultOrganizationButton } from './SetDefaultOrganizationButton';
-import Check from 'lucide-react/dist/esm/icons/check';
-import { getDefaultOrganization } from '@/data/user/organizations';
 import { T } from '@/components/ui/Typography';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
+import { getDefaultOrganization } from '@/data/user/organizations';
+import Check from 'lucide-react/dist/esm/icons/check';
+import { SetDefaultOrganizationButton } from './SetDefaultOrganizationButton';
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -33,10 +33,7 @@ export async function SetDefaultOrganizationPreference({
   if (isDefaultOrganization) {
     return (
       <Wrapper>
-        <Button
-          variant="success"
-          className="space-x-2 pointer-events-none select-none"
-        >
+        <Button className="space-x-2 pointer-events-none select-none">
           <Check className="w-4 h-4 mr-2" />
           <span>This is your default organization</span>
         </Button>

@@ -1,17 +1,17 @@
-import { TeamMembersTableProps } from './types';
 import {
-  ShadcnTable,
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/Table/ShadcnTable';
+} from '@/components/ui/table';
+import { TeamMembersTableProps } from './types';
 
 export const TeamMembersTable = ({ members }: TeamMembersTableProps) => {
   return (
     <div className="rounded-lg border  shadow-sm overflow-hidden">
-      <ShadcnTable>
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead> # </TableHead>
@@ -32,7 +32,7 @@ export const TeamMembersTable = ({ members }: TeamMembersTableProps) => {
             );
           })}
         </TableBody>
-      </ShadcnTable>
+      </Table>
     </div>
   );
 };

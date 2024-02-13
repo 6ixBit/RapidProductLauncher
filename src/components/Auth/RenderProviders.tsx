@@ -1,10 +1,10 @@
 import * as SocialIcons from '@/components/Auth/Icons';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@/components/ui/HoverCard';
+} from '@/components/ui/hover-card';
 import { T } from '@/components/ui/Typography';
 import { AuthProvider } from '@/types';
 

@@ -1,10 +1,10 @@
 'use client';
-import { Label } from '@/components/ui/Label';
-import { classNames } from '@/utils/classNames';
-import { Button } from '@/components/ui/Button';
-import { useInput } from 'rooks';
-import { useToastMutation } from '@/hooks/useToastMutation';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { updatePasswordAction } from '@/data/user/security';
+import { useToastMutation } from '@/hooks/useToastMutation';
+import { classNames } from '@/utils/classNames';
+import { useInput } from 'rooks';
 
 export const UpdatePassword = () => {
   const passwordInput = useInput('');

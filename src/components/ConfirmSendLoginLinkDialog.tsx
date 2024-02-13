@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,9 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/Dialog';
-import { useState } from 'react';
+} from '@/components/ui/dialog';
 import SendLinkIcon from 'lucide-react/dist/esm/icons/send';
+import { useState } from 'react';
 
 type Props = {
   onConfirm: () => void;
@@ -21,10 +21,7 @@ export const ConfirmSendLoginLinkDialog = ({ onConfirm }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="primaryLink"
-          className="text-sm font-medium underline underline-offset-4 "
-        >
+        <Button className="text-sm font-medium underline underline-offset-4 ">
           Send login link
         </Button>
       </DialogTrigger>

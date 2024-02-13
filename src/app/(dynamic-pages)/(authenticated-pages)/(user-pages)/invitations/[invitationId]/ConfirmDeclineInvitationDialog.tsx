@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/Dialog';
+} from '@/components/ui/dialog';
 import { declineInvitationAction } from '@/data/user/invitation';
 import { useToastMutation } from '@/hooks/useToastMutation';
 import X from 'lucide-react/dist/esm/icons/x';

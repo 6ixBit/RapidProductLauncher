@@ -1,5 +1,5 @@
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell';
-import { InternalNavbar } from '@/components/ui/NavigationMenu/InternalNavbar';
+import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
 import { ReactNode, Suspense } from 'react';
 import { UserSidebar } from '../(application-pages)/_sidebar/UserSidebar';
 
