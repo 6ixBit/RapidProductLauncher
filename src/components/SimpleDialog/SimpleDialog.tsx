@@ -1,5 +1,5 @@
 'use client';
-import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/Dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ReactNode, useState } from 'react';
 
 interface SimpleDialogProps {

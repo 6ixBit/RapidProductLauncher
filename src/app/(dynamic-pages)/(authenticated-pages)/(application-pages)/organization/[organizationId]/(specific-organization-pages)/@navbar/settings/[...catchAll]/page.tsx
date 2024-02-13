@@ -1,7 +1,7 @@
-import { Anchor } from '@/components/Anchor';
 import { T } from '@/components/ui/Typography';
 import { cn } from '@/utils/cn';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 import { z } from 'zod';
 
 const paramsSchema = z.object({
@@ -17,12 +17,12 @@ export default function OrganizationSettingsNavbar({
   return (
     <div className={cn('hidden lg:block', 'relative ')}>
       <T.P className="my-0">
-        <Anchor href={`/organization/${organizationId}`}>
+        <Link href={`/organization/${organizationId}`}>
           <span className="space-x-2 flex items-center">
             <ArrowLeftIcon />
             <span>Back to Organization catch all</span>
           </span>
-        </Anchor>
+        </Link>
       </T.P>
     </div>
   );

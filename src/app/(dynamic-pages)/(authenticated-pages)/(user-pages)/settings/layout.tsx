@@ -1,9 +1,9 @@
 'use client';
-import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
-import { TabsNavigation } from '@/components/presentational/tailwind/TabsNavigation';
-import { useMemo } from 'react';
+import { PageHeading } from '@/components/PageHeading';
+import { TabsNavigation } from '@/components/TabsNavigation';
 import LockIcon from 'lucide-react/dist/esm/icons/lock';
 import UserIcon from 'lucide-react/dist/esm/icons/user';
+import { useMemo } from 'react';
 
 export default function UserSettingsClientLayout({
   children,

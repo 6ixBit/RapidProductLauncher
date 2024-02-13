@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,12 +8,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/Dialog';
-import { Button } from '@/components/ui/Button';
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Enum } from '@/types';
 import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
-import { Label } from '@/components/ui/Label';
-import { Input } from '@/components/ui/Input';
+import { useState } from 'react';
 
 type Props = {
   onInvite: (email: string, role: Enum<'organization_member_role'>) => void;

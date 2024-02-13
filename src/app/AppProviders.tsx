@@ -1,50 +1,11 @@
 'use client';
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import RouterProgressionContext from '@/contexts/RouterProgressionContext';
-import { usePathname, useSearchParams } from 'next/navigation';
-import NProgress from 'nprogress';
-import NavigationProgressBar from './NavigationProgressBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import React, { Suspense } from 'react';
 import { Toaster as HotToaster } from 'react-hot-toast';
 import ReactNoSSR from 'react-no-ssr';
 import { Toaster as SonnerToaster } from 'sonner';
 import { ThemeProvider } from './ThemeProvider';
-
-/**
- ** Inspiration from here
- ** The original Router component from Next.js no longer has router events.
- ** More discussion here
- @link https://github.com/vercel/next.js/discussions/41745#discussioncomment-3986452
- @link https://github.com/vercel/next.js/discussions/41745#discussioncomment-4202641
- @link https://github.com/joulev/nextjs13-router-events/blob/main/app/Anchor.client.tsx
-*/
-function RouterEventWrapper({ children }: { children: ReactNode }) {
-  const onStart = useCallback(() => NProgress.start(), []);
-  const onComplete = useCallback(() => NProgress.done(), []);
-  const [isChanging, setIsChanging] = useState(false);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const onCompleteFresh = useRef(onComplete);
-  const onStartFresh = useRef(onStart);
-  useEffect(() => setIsChanging(false), [pathname, searchParams]);
-
-  useEffect(() => {
-    if (isChanging) onStartFresh.current();
-    else onCompleteFresh.current();
-  }, [isChanging]);
-
-  return (
-    <RouterProgressionContext.Provider value={() => setIsChanging(true)}>
-      {children}
-    </RouterProgressionContext.Provider>
-  );
-}
 
 // Create a client
 const queryClient = new QueryClient();
@@ -66,14 +27,19 @@ export function AppProviders({
     <>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <QueryClientProvider client={queryClient}>
-          <RouterEventWrapper>
-            <NavigationProgressBar />
-            {children}
-            <ReactNoSSR>
-              <SonnerToaster theme={'light'} />
-              <HotToaster />
-            </ReactNoSSR>
-          </RouterEventWrapper>
+          {children}
+          <ReactNoSSR>
+            <SonnerToaster theme={'light'} />
+            <HotToaster />
+          </ReactNoSSR>
+          <Suspense>
+            <ProgressBar
+              height="4px"
+              color="#0047ab"
+              options={{ showSpinner: false }}
+              shallowRouting
+            />
+          </Suspense>
         </QueryClientProvider>
       </ThemeProvider>
     </>

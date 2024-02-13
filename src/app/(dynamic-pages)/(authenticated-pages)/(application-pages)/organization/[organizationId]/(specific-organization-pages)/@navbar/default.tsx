@@ -1,7 +1,7 @@
 // https://github.com/vercel/next.js/issues/58272
-import { Anchor } from '@/components/Anchor';
 import { T } from '@/components/ui/Typography';
 import { getOrganizationTitle } from '@/data/user/organizations';
+import Link from 'next/link';
 import { Suspense } from 'react';
 import { z } from 'zod';
 
@@ -23,13 +23,13 @@ export default async function OrganizationNavbar({
   const { organizationId } = paramsSchema.parse(params);
   return (
     <div className="flex items-center">
-      <Anchor href={`/organization/${organizationId}`}>
+      <Link href={`/organization/${organizationId}`}>
         <span className="space-x-2 flex items-center">
           <Suspense fallback={<span>Loading...</span>}>
             <Title organizationId={organizationId} /> Default
           </Suspense>
         </span>
-      </Anchor>
+      </Link>
     </div>
   );
 }

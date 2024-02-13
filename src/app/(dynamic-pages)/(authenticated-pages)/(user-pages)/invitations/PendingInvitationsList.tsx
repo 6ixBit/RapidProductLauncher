@@ -1,19 +1,16 @@
-import { Button } from '@/components/ui/Button';
-import { T } from '@/components/ui/Typography';
-import { Enum } from '@/types';
-import { toSiteURL } from '@/utils/helpers';
+import { Button } from '@/components/ui/button';
 import {
-  ShadcnTable,
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/Table/ShadcnTable';
-import CheckIcon from 'lucide-react/dist/esm/icons/check';
-import RejectIcon from 'lucide-react/dist/esm/icons/x';
+} from '@/components/ui/table';
+import { T } from '@/components/ui/Typography';
 import { getPendingInvitationsOfUser } from '@/data/user/invitation';
-import { Anchor } from '@/components/Anchor';
+import { Enum } from '@/types';
+import Link from 'next/link';
 
 const PendingInvitationsTable = ({
   pendingInvitationsList,
@@ -31,7 +28,7 @@ const PendingInvitationsTable = ({
     <div className="space-y-2">
       <T.P>You have {pendingInvitationsList.length} pending invitations</T.P>
       <div className="w-full rounded-lg border overflow-hidden">
-        <ShadcnTable>
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead scope="col">#</TableHead>
@@ -56,17 +53,17 @@ const PendingInvitationsTable = ({
                 <TableCell>{invitation.role}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
-                    <Anchor href={`/invitations/${invitation.id}`}>
+                    <Link href={`/invitations/${invitation.id}`}>
                       <Button size="default" variant="default">
                         View Invitation
                       </Button>
-                    </Anchor>
+                    </Link>
                   </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-        </ShadcnTable>
+        </Table>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 'use client';
-import { Anchor } from '@/components/Anchor';
 import { T } from '@/components/ui/Typography';
 import { useSession } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/navigation';

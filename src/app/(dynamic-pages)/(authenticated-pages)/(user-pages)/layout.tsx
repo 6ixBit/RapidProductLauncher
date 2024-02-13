@@ -1,8 +1,6 @@
-import { ReactNode, Suspense } from 'react';
-import { InternalNavbar } from '@/components/ui/NavigationMenu/InternalNavbar';
-import { Anchor } from '@/components/Anchor';
-import { Badge } from '@/components/ui/Badge';
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell';
+import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
+import { ReactNode, Suspense } from 'react';
 import { UserSidebar } from '../(application-pages)/_sidebar/UserSidebar';
 
 export default async function Layout({

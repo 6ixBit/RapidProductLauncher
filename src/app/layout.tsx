@@ -1,11 +1,9 @@
-import 'server-only';
-import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
-import '@/styles/prosemirror.css';
-import 'react-tooltip/dist/react-tooltip.css';
-import { AppProviders } from './AppProviders';
-import localFont from 'next/font/local';
 import { GeistSans } from 'geist/font/sans';
+import { Inter } from 'next/font/google';
+import 'react-tooltip/dist/react-tooltip.css';
+import 'server-only';
+import { AppProviders } from './AppProviders';
 
 // const satoshiFont = localFont({
 //   src: '../fonts/satoshi/Satoshi-Variable.woff2',

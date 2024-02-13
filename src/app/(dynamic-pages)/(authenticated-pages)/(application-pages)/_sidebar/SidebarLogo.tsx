@@ -1,16 +1,15 @@
-import { Anchor } from '@/components/Anchor';
+import { T } from '@/components/ui/Typography';
 import { cn } from '@/utils/cn';
+import Image from 'next/image';
+import Link from 'next/link';
 import darkLogo from 'public/logos/nextbase-dark-logo.png';
 import lightLogo from 'public/logos/nextbase-light-logo.png';
-import Image from 'next/image';
-import { T } from '@/components/ui/Typography';
-import PanelLeftClose from 'lucide-react/dist/esm/icons/panel-left-close';
 import { SidebarClose } from './SidebarClose';
 
 export function SidebarLogo() {
   return (
     <div className="flex justify-between items-center w-full mb-5">
-      <Anchor
+      <Link
         href="/dashboard"
         className="ml-2 cursor-pointer flex items-center gap-1 w-full"
       >
@@ -36,7 +35,7 @@ export function SidebarLogo() {
         <T.P className="text-sm font-medium text-neutral-600 dark:text-slate-300">
           Nextbase
         </T.P>
-      </Anchor>
+      </Link>
 
       <SidebarClose />
     </div>

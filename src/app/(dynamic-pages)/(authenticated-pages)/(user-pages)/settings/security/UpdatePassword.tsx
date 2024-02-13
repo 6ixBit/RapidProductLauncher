@@ -1,10 +1,11 @@
 'use client';
-import { Label } from '@/components/ui/Label';
-import { classNames } from '@/utils/classNames';
-import { Button } from '@/components/ui/Button';
-import { useInput } from 'rooks';
-import { useToastMutation } from '@/hooks/useToastMutation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { updatePasswordAction } from '@/data/user/security';
+import { useToastMutation } from '@/hooks/useToastMutation';
+import { classNames } from '@/utils/classNames';
+import { useInput } from 'rooks';
 
 export const UpdatePassword = () => {
   const passwordInput = useInput('');
@@ -26,14 +27,14 @@ export const UpdatePassword = () => {
           Password
         </Label>
         <div>
-          <input
+          <Input
             id="password"
             name="password"
             type="password"
             autoComplete="password"
             required
             {...passwordInput}
-            className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+            className="block"
           />
         </div>
         <Button

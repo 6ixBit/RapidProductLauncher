@@ -1,7 +1,6 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import { cn } from '@/utils/cn';
-import { CreateOrganizationDialog } from '@/components/presentational/tailwind/CreateOrganizationDialog';
+import { CreateOrganizationDialog } from '@/components/CreateOrganizationDialog';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -9,19 +8,20 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@/components/ui/Command';
+} from '@/components/ui/command';
+import { createOrganization } from '@/data/user/organizations';
+import { useToastMutation } from '@/hooks/useToastMutation';
+import { cn } from '@/utils/cn';
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from '@radix-ui/react-popover';
-import { useState } from 'react';
-import ChevronUpDown from 'lucide-react/dist/esm/icons/chevrons-up-down';
 import CheckIcon from 'lucide-react/dist/esm/icons/check';
+import ChevronUpDown from 'lucide-react/dist/esm/icons/chevrons-up-down';
 import UsersIcon from 'lucide-react/dist/esm/icons/users-2';
-import { Button } from '@/components/ui/Button';
-import { useToastMutation } from '@/hooks/useToastMutation';
-import { createOrganization } from '@/data/user/organizations';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export function OrganizationSwitcher({
   slimOrganizations,

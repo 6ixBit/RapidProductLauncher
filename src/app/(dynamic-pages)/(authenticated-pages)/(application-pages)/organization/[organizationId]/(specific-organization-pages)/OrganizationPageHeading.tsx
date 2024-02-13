@@ -1,4 +1,4 @@
-import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
+import { PageHeading } from '@/components/PageHeading';
 import { getOrganizationTitle } from '@/data/user/organizations';
 
 export async function OrganizationPageHeading({

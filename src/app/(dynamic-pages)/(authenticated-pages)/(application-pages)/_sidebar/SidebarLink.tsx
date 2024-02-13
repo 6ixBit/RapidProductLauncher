@@ -1,4 +1,4 @@
-import { Anchor } from '@/components/Anchor';
+import Link from 'next/link';
 
 type SidebarLinkProps = {
   label: string;
@@ -15,12 +15,12 @@ export function SidebarLink({ label, href, icon }: SidebarLinkProps) {
       <div className="p-2 group-hover:text-gray-800 dark:group-hover:text-slate-300">
         {icon}
       </div>
-      <Anchor
+      <Link
         className="p-2 w-full text-sm group-hover:text-gray-800 dark:group-hover:text-slate-300"
         href={href}
       >
         {label}
-      </Anchor>
+      </Link>
     </div>
   );
 }
