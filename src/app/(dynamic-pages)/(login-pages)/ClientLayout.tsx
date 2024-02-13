@@ -30,7 +30,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
           {/* Blue Background Image */}
           <div
             className="gap-10 bg-cover flex flex-col justify-between rounded-xl w-full dark:bg-gray-800 bg-gray-100 bg-opacity-90 h-full px-10 pt-10 pb-10"
-          // style={{ backgroundImage: `url(${LoginBackgroundLight.src})` }}
+            // style={{ backgroundImage: `url(${LoginBackgroundLight.src})` }}
           >
             <div className="ml-6 space-y-8">
               <div className="relative flex items-center space-x-2">

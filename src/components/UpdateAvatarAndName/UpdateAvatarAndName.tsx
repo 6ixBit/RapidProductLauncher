@@ -69,10 +69,10 @@ export function UpdateAvatarAndNameBody({
                     /* eslint-disable */
                     isNewAvatarImageLoading
                       ? {
-                        duration: 1,
-                        repeat: Infinity,
-                        repeatType: 'reverse',
-                      }
+                          duration: 1,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                        }
                       : undefined
                     /* eslint-enable */
                   }

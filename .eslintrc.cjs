@@ -6,17 +6,6 @@ var ruleOverrides = {
 };
 
 var srcRuleOverrides = {
-  'no-restricted-imports': [
-    'error',
-    {
-      paths: [
-        {
-          name: 'lucide-react',
-          message: 'Please use lucide-react/dist/esm/icons instead.',
-        },
-      ],
-    },
-  ],
   'prettier/prettier': 1,
   '@typescript-eslint/no-unused-vars': 'warn',
 };
