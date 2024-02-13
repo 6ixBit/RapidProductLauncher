@@ -15,9 +15,9 @@ jobs:
         run: |
           if [[ "${{ github.repository }}" != "imbhargav5/nextbase-essential" ]]; then
             echo "Workflow can only run on imbhargav5/nextbase-essential"
-            echo "SHOULD_CONTINUE=false" >> $GITHUB_STATE
+            echo "SHOULD_CONTINUE=false" >> $GITHUB_ENV
           else
-            echo "SHOULD_CONTINUE=true" >> $GITHUB_STATE
+            echo "SHOULD_CONTINUE=true" >> $GITHUB_ENV
           fi
 
       - name: Checkout
