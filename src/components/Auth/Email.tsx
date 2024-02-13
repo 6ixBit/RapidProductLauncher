@@ -1,5 +1,6 @@
 'use client';
 import { T } from '@/components/ui/Typography';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { classNames } from '@/utils/classNames';
 import Link from 'next/link';
@@ -50,7 +51,7 @@ export const Email = ({
             {label}
           </Label>
           <div>
-            <input
+            <Input
               id={`${view}-email`}
               name="email"
               type="email"
@@ -60,7 +61,7 @@ export const Email = ({
               autoComplete={'email'}
               placeholder="placeholder@email.com"
               required
-              className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="block"
             />
           </div>
         </div>

@@ -3,6 +3,7 @@ import { classNames } from '@/utils/classNames';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '../Button';
+import { Input } from '../ui/input';
 
 export const EmailAndPassword = ({
   onSubmit,
@@ -33,7 +34,7 @@ export const EmailAndPassword = ({
             Email address
           </Label>
           <div className="mt-1">
-            <input
+            <Input
               id={`${view}-email`}
               name="email"
               type="email"
@@ -44,7 +45,7 @@ export const EmailAndPassword = ({
               data-strategy="email-password"
               autoComplete={'email'}
               required
-              className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="block "
             />
           </div>
         </div>
@@ -53,7 +54,7 @@ export const EmailAndPassword = ({
             Password
           </Label>
           <div className="mt-1">
-            <input
+            <Input
               id={`${view}-password`}
               name="password"
               type="password"
@@ -65,7 +66,7 @@ export const EmailAndPassword = ({
                 view === 'sign-in' ? 'current-password' : 'new-password'
               }
               required
-              className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="block"
             />
           </div>
         </div>

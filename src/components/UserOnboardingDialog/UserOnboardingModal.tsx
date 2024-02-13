@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
@@ -127,7 +128,7 @@ export const UserOnboardingDialog = ({
             </div>
             <div className="space-y-2">
               <Label className="text-muted-foreground">Name</Label>
-              <input
+              <Input
                 disabled={isLoading}
                 className="mt-1.5 mb-8 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
                 id="name"

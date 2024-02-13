@@ -10,6 +10,7 @@ import CameraIcon from 'lucide-react/dist/esm/icons/camera';
 import Image from 'next/image';
 import { Button } from '../Button';
 import { PageHeading } from '../PageHeading';
+import { Input } from '../ui/input';
 const MotionImage = motion(Image);
 
 export function UpdateAvatarAndNameBody({
@@ -114,9 +115,9 @@ export function UpdateAvatarAndNameBody({
               Name
             </Label>
             <div className="flex space-x-2 ">
-              <input
+              <Input
                 disabled={isLoading}
-                className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                className="block"
                 id="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}

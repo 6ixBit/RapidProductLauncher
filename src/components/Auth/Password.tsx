@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { classNames } from '@/utils/classNames';
 import { useState } from 'react';
 import { Button } from '../Button';
+import { Input } from '../ui/input';
 
 export const Password = ({
   onSubmit,
@@ -33,7 +34,7 @@ export const Password = ({
             {label}
           </Label>
           <div>
-            <input
+            <Input
               id="password"
               name="password"
               type="password"
@@ -42,7 +43,7 @@ export const Password = ({
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="email"
               required
-              className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              className="block"
             />
           </div>
         </div>
