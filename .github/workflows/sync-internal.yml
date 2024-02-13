@@ -11,16 +11,21 @@ jobs:
 
     steps:
       - name: Check repository
+        id: check_repo
         run: |
           if [[ "${{ github.repository }}" != "imbhargav5/nextbase-essential" ]]; then
             echo "Workflow can only run on imbhargav5/nextbase-essential"
-            exit 1
+            echo "SHOULD_CONTINUE=false" >> $GITHUB_STATE
+          else
+            echo "SHOULD_CONTINUE=true" >> $GITHUB_STATE
           fi
 
       - name: Checkout
+        if: env.SHOULD_CONTINUE == 'true'
         uses: actions/checkout@v4
 
       - name: Sync fork
+        if: env.SHOULD_CONTINUE == 'true'
         uses: repo-sync/github-sync@v2
         with:
           source_repo: 'https://${{secrets.NEXTBASE_SYNC_REPO_SECRET}}@github.com/usenextbase/nextbase-essential.git'
