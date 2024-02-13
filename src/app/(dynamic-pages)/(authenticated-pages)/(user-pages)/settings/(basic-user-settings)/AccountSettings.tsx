@@ -1,5 +1,5 @@
 'use client';
-import { UpdateAvatarAndNameBody } from '@/components/presentational/tailwind/UpdateAvatarAndName';
+import { UpdateAvatarAndNameBody } from '@/components/UpdateAvatarAndName';
 import {
   updateUserProfileNameAndAvatar,
   uploadPublicUserAvatar,

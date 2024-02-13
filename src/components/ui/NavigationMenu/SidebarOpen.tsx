@@ -1,15 +1,14 @@
 'use client';
-import PanelLeftOpen from 'lucide-react/dist/esm/icons/panel-left-open';
-import { useContext } from 'react';
 import { SidebarVisibilityContext } from '@/contexts/SidebarVisibilityContext';
-import { useMutation } from '@tanstack/react-query';
 import { setSidebarVisibility } from '@/data/user/ui';
-import { toast } from 'sonner';
+import { cn } from '@/utils/cn';
+import { useMutation } from '@tanstack/react-query';
+import PanelLeftOpen from 'lucide-react/dist/esm/icons/panel-left-open';
 import Image from 'next/image';
-import { Anchor } from '@/components/Anchor';
 import darkLogo from 'public/logos/nextbase-dark-logo.png';
 import lightLogo from 'public/logos/nextbase-light-logo.png';
-import { cn } from '@/utils/cn';
+import { useContext } from 'react';
+import { toast } from 'sonner';
 
 export function SidebarOpen() {
   const { setVisibility: setVisibilityContextValue, isVisible } = useContext(

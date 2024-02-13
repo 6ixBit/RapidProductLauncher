@@ -1,7 +1,7 @@
-import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
-import { UpdatePassword } from './UpdatePassword';
-import { UpdateEmail } from './UpdateEmail';
+import { PageHeading } from '@/components/PageHeading';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
+import { UpdateEmail } from './UpdateEmail';
+import { UpdatePassword } from './UpdatePassword';
 
 export default async function SecuritySettings() {
   const user = await serverGetLoggedInUser();

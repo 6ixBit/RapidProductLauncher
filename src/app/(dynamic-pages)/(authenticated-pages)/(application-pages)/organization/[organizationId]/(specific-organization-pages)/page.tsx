@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import { PageHeading } from '@/components/PageHeading';
 import { Suspense } from 'react';
-import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
-import { OrganizationPageHeading } from './OrganizationPageHeading';
+import { z } from 'zod';
 import { OrganizationGraphs } from './OrganizationGraphs';
+import { OrganizationPageHeading } from './OrganizationPageHeading';
 const paramsSchema = z.object({
   organizationId: z.coerce.string(),
 });

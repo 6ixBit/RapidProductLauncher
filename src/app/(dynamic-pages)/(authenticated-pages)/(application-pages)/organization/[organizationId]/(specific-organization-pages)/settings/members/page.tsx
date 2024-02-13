@@ -1,14 +1,5 @@
 'use server';
-import moment from 'moment';
-import { Suspense } from 'react';
-import { TeamMembersTableProps } from '@/components/presentational/tailwind/TeamMembersTable/types';
-import { T } from '@/components/ui/Typography';
-import { z } from 'zod';
-import {
-  getLoggedInUserOrganizationRole,
-  getPendingInvitationsInOrganization,
-  getTeamMembersInOrganization,
-} from '@/data/user/organizations';
+import { TeamMembersTableProps } from '@/components/TeamMembersTable/types';
 import {
   ShadcnTable,
   TableBody,
@@ -17,6 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table/ShadcnTable';
+import { T } from '@/components/ui/Typography';
+import {
+  getPendingInvitationsInOrganization,
+  getTeamMembersInOrganization
+} from '@/data/user/organizations';
+import moment from 'moment';
+import { Suspense } from 'react';
+import { z } from 'zod';
 import { InviteUser } from './InviteUser';
 
 async function TeamMembers({ organizationId }: { organizationId: string }) {

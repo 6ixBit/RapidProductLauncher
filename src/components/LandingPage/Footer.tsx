@@ -1,9 +1,6 @@
-import { Anchor } from '@/components/Anchor';
-import { Button } from '@/components/ui/Button';
-import Image from 'next/image';
-import Features from './MainFeatures';
 import acmeDarkLogo from '@public/logos/acme-logo-dark.png';
 import acmeLightLogo from '@public/logos/acme-logo-light.png';
+import Image from 'next/image';
 
 const Footer = () => {
   return (

@@ -1,16 +1,16 @@
 'use client';
-import { RenderProviders } from '@/components/presentational/tailwind/Auth/RenderProviders';
-import { Email } from '@/components/presentational/tailwind/Auth/Email';
-import { EmailAndPassword } from '@/components/presentational/tailwind/Auth/EmailAndPassword';
-import { useState } from 'react';
-import { useToastMutation } from '@/hooks/useToastMutation';
+import { Email } from '@/components/Auth/Email';
+import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
+import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
   signInWithMagicLink,
   signInWithProvider,
   signUp,
 } from '@/data/auth/auth';
+import { useToastMutation } from '@/hooks/useToastMutation';
 import { AuthProvider } from '@/types';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export function SignUp({
   next,

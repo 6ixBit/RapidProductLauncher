@@ -1,17 +1,12 @@
 'use client';
-import { GraphContainer } from '@/components/presentational/tailwind/GraphContainer';
+import { GraphContainer } from '@/components/GraphContainer';
 import { T } from '@/components/ui/Typography';
 import {
-  Card,
-  Title,
   AreaChart,
   BarChart,
   BarList,
-  LineChart,
   DonutChart,
-  Bold,
-  Flex,
-  Text,
+  LineChart
 } from '@tremor/react';
 
 const chartdata = [

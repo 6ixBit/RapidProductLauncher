@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/components/presentational/tailwind/Button';
+import { Button } from '@/components/Button';
 import { T } from '@/components/ui/Typography';
 import { updateOrganizationTitle } from '@/data/user/organizations';
 import { useToastMutation } from '@/hooks/useToastMutation';

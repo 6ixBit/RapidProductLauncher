@@ -1,5 +1,5 @@
+import { PageHeading } from '@/components/PageHeading';
 import { T } from '@/components/ui/Typography';
-import { PageHeading } from '@/components/presentational/tailwind/PageHeading';
 import { Suspense } from 'react';
 import { PendingInvitationsList } from './PendingInvitationsList';
 

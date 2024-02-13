@@ -1,6 +1,6 @@
 'use client';
 
-import { ThemeToggle } from '@/components/presentational/tailwind/ThemeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/Button';
 import acmeLightLogo from '@public/logos/acme-logo-dark.png';
 import acmeDarkLogo from '@public/logos/acme-logo-light.png';

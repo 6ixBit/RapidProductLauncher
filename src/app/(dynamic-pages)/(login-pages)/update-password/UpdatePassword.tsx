@@ -1,5 +1,5 @@
 'use client';
-import { Password } from '@/components/presentational/tailwind/Auth/Password';
+import { Password } from '@/components/Auth/Password';
 import { updatePasswordAction } from '@/data/user/security';
 import { useToastMutation } from '@/hooks/useToastMutation';
 import { useRouter } from 'next/navigation';
