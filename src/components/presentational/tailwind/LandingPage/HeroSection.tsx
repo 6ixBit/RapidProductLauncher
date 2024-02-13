@@ -1,8 +1,8 @@
-import { Anchor } from '@/components/Anchor';
 import { Button } from '@/components/ui/Button';
-import Image from 'next/image';
-import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
 import { T } from '@/components/ui/Typography';
+import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type HeroSectionProps = {
   title: string;
@@ -42,7 +42,7 @@ export default function HeroSection({
             {description}
           </p>
           <div className="space-y-3 md:space-x-3">
-            <Anchor href="/login" className="w-full lg:w-fit">
+            <Link href="/login" className="w-full lg:w-fit">
               <Button
                 variant="default"
                 size="lg"
@@ -62,8 +62,8 @@ export default function HeroSection({
                   />
                 </svg>
               </Button>
-            </Anchor>
-            <Anchor href="/">
+            </Link>
+            <Link href="/">
               <Button
                 variant="outline"
                 size="lg"
@@ -72,7 +72,7 @@ export default function HeroSection({
                 Learn More
                 <ChevronRightIcon className="ml-2 group-hover:translate-x-1 transition" />
               </Button>
-            </Anchor>
+            </Link>
           </div>
         </div>
         <div className="lg:mt-0 lg:col-span-5 rounded-lg overflow-hidden h-[320px] md:h-[640px] md:w-full lg:flex">

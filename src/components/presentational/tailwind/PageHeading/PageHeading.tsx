@@ -1,6 +1,6 @@
-import { Anchor } from '@/components/Anchor';
 import { T } from '@/components/ui/Typography';
 import { cn } from '@/utils/cn';
+import Link from 'next/link';
 
 type PageHeadingProps = {
   title: string;
@@ -38,7 +38,7 @@ export function PageHeading({
     </T.P>
   );
   const wrappedTitleElement = titleHref ? (
-    <Anchor href={titleHref}>{titleElement}</Anchor>
+    <Link href={titleHref}>{titleElement}</Link>
   ) : (
     <div className="md:max-w-[480px] lg:max-w-[640px] w-full">
       {titleElement}

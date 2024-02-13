@@ -1,11 +1,9 @@
-import { Anchor } from '@/components/Anchor';
-import AccountsIcon from 'lucide-react/dist/esm/icons/user';
+import { cn } from '@/utils/cn';
 import SecurityIcon from 'lucide-react/dist/esm/icons/lock';
 import LogoutIcon from 'lucide-react/dist/esm/icons/log-out';
-import MailIcon from 'lucide-react/dist/esm/icons/mail';
-import { cn } from '@/utils/cn';
+import AccountsIcon from 'lucide-react/dist/esm/icons/user';
 import Image from 'next/image';
-import { SelectSeparator } from '@radix-ui/react-select';
+import Link from 'next/link';
 import { FeatureViewModal } from './FeatureViewModal';
 
 export function UserSidebarMenu({
@@ -46,7 +44,7 @@ export function UserSidebarMenu({
         </div>
       </div>
       <div className="h-px bg-gray-200 dark:bg-gray-700 mx-2.5 my-2" />
-      <Anchor
+      <Link
         href="/settings"
         className={cn(
           'hover:bg-gray-100 hover:text-gray-900 text-gray-700 rounded-sm dark:text-gray-400 dark:hover:bg-gray-700/50',
@@ -54,9 +52,9 @@ export function UserSidebarMenu({
         )}
       >
         <AccountsIcon className="text-lg" /> Account settings
-      </Anchor>
+      </Link>
 
-      <Anchor
+      <Link
         href="/settings/security"
         className={cn(
           'hover:bg-gray-100 hover:text-gray-900 text-gray-700 rounded-sm dark:text-gray-400 dark:hover:bg-gray-700/50',
@@ -64,11 +62,11 @@ export function UserSidebarMenu({
         )}
       >
         <SecurityIcon className="text-lg" /> Security Settings
-      </Anchor>
+      </Link>
       <div className="h-px bg-gray-200 dark:bg-gray-700 mx-2.5 my-2" />
       <FeatureViewModal />
       <div className="h-px bg-gray-200 dark:bg-gray-700 mx-2.5 my-2" />
-      <Anchor
+      <Link
         href="/logout"
         prefetch={false}
         className={cn(
@@ -78,7 +76,7 @@ export function UserSidebarMenu({
       >
         <LogoutIcon className="text-lg" />
         Log out
-      </Anchor>
+      </Link>
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { Anchor } from '@/components/Anchor';
 import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 
 const CalltoActionSection = () => {
   return (
@@ -15,7 +15,7 @@ const CalltoActionSection = () => {
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
           </div>
-          <Anchor href="/login" className="w-full md:w-fit">
+          <Link href="/login" className="w-full md:w-fit">
             <Button
               variant="default"
               size="lg"
@@ -35,7 +35,7 @@ const CalltoActionSection = () => {
                 />
               </svg>
             </Button>
-          </Anchor>
+          </Link>
         </div>
       </div>
     </section>

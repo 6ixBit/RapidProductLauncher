@@ -1,8 +1,8 @@
-import { Anchor } from '@/components/Anchor';
 import { Button } from '@/components/ui/Button';
-import Image from 'next/image';
-import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
 import { T } from '@/components/ui/Typography';
+import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type HeroSection2Props = {
   title: string;
@@ -39,7 +39,7 @@ const HeroSection2 = ({ title, description, image }: HeroSection2Props) => {
               {description}
             </p>
             <div className="flex flex-col w-full md:flex md:flex-row md:mx-auto items-center justify-center gap-y-3 md:gap-x-3 mr-0 mt-4">
-              <Anchor href="/login" className="w-full md:w-fit">
+              <Link href="/login" className="w-full md:w-fit">
                 <Button
                   variant="default"
                   size="lg"
@@ -59,8 +59,8 @@ const HeroSection2 = ({ title, description, image }: HeroSection2Props) => {
                     />
                   </svg>
                 </Button>
-              </Anchor>
-              <Anchor href="/" className="w-full md:w-fit">
+              </Link>
+              <Link href="/" className="w-full md:w-fit">
                 <Button
                   variant="outline"
                   size="lg"
@@ -69,7 +69,7 @@ const HeroSection2 = ({ title, description, image }: HeroSection2Props) => {
                   Learn More
                   <ChevronRightIcon className="ml-2 group-hover:translate-x-1 transition" />
                 </Button>
-              </Anchor>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 'use client';
-import { Anchor } from '@/components/Anchor';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { TabProps } from './types';
 
@@ -13,8 +13,8 @@ export const Tab = ({ label, href, icon }: TabProps) => {
     : 'border-transparent text-muted-foreground dark:text-slate-500 dark:hover:text-slate-400 hover:border-muted-foreground';
   const className = `${baseClassNames} ${modifierClasses}`;
   return (
-    <Anchor href={href} className={className}>
+    <Link href={href} className={className}>
       {icon} <span>{label}</span>
-    </Anchor>
+    </Link>
   );
 };

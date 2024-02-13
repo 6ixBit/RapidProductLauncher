@@ -1,16 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import acmeDarkLogo from '@public/logos/acme-logo-light.png';
-import acmeLightLogo from '@public/logos/acme-logo-dark.png';
-import { Button } from '@/components/ui/Button';
-import Menu from 'lucide-react/dist/esm/icons/menu';
-import { classNames } from '@/utils/classNames';
 import { ThemeToggle } from '@/components/presentational/tailwind/ThemeToggle';
-import { Anchor } from '@/components/Anchor';
+import { Button } from '@/components/ui/Button';
+import acmeLightLogo from '@public/logos/acme-logo-dark.png';
+import acmeDarkLogo from '@public/logos/acme-logo-light.png';
+import Menu from 'lucide-react/dist/esm/icons/menu';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 export function ExternalNavigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -50,7 +48,7 @@ export function ExternalNavigation() {
           <ThemeToggle />
           {isHome && (
             <div className="ml-6 hidden lg:block">
-              <Anchor href="/login">
+              <Link href="/login">
                 <Button variant="default" size="default" className="group">
                   Log In
                   <svg
@@ -66,7 +64,7 @@ export function ExternalNavigation() {
                     />
                   </svg>
                 </Button>
-              </Anchor>
+              </Link>
             </div>
           )}
         </div>
@@ -78,7 +76,7 @@ export function ExternalNavigation() {
       {mobileMenuOpen && (
         <ul className="md:hidden w-full shadow-2xl py-2 flex flex-col items-start font-medium pb-2">
           <hr className="w-full h-2" />
-          <Anchor href="/login" className="px-4 w-full">
+          <Link href="/login" className="px-4 w-full">
             <Button variant="default" size="default" className="group w-full">
               Log In
               <svg
@@ -94,7 +92,7 @@ export function ExternalNavigation() {
                 />
               </svg>
             </Button>
-          </Anchor>
+          </Link>
         </ul>
       )}
     </header>

@@ -1,9 +1,8 @@
-import { Anchor } from '@/components/Anchor';
+import { Label } from '@/components/ui/Label';
 import { classNames } from '@/utils/classNames';
-import { PropsOf } from '@headlessui/react/dist/types';
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '../Button';
-import { Label } from '@/components/ui/Label';
 
 export const EmailAndPassword = ({
   onSubmit,
@@ -74,32 +73,32 @@ export const EmailAndPassword = ({
         <div className="flex items-center justify-between">
           {view === 'sign-in' ? (
             <div className="text-sm">
-              <Anchor
+              <Link
                 href="/sign-up"
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 Sign up instead?
-              </Anchor>
+              </Link>
             </div>
           ) : (
             <div className="text-sm">
-              <Anchor
+              <Link
                 href="/login"
                 className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 Login instead?
-              </Anchor>
+              </Link>
             </div>
           )}
 
           {view === 'sign-in' ? (
             <div className="text-sm">
-              <Anchor
+              <Link
                 href="/forgot-password"
                 className="font-medium text-muted-foreground dark:hover:text-gray-600"
               >
                 Forgot your password?
-              </Anchor>
+              </Link>
             </div>
           ) : null}
         </div>

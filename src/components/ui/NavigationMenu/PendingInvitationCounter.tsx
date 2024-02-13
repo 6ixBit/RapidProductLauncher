@@ -1,9 +1,9 @@
 'use server';
 
 import { getPendingInvitationCountOfUser } from '@/data/user/invitation';
-import { Badge } from '../Badge';
-import { Anchor } from '@/components/Anchor';
 import FeedbackIcon from 'lucide-react/dist/esm/icons/mail';
+import Link from 'next/link';
+import { Badge } from '../Badge';
 
 export async function PendingInvitationCounter() {
   const count = await getPendingInvitationCountOfUser();
@@ -11,7 +11,7 @@ export async function PendingInvitationCounter() {
     return (
       <div className="flex items-center gap-2">
         <div className="w-px h-5 mx-2 bg-gray-300 dark:bg-slate-700" />
-        <Anchor href="/invitations">
+        <Link href="/invitations">
           <Badge
             size="lg"
             className="px-3 w-max h-fit rounded-md py-2"
@@ -20,7 +20,7 @@ export async function PendingInvitationCounter() {
             <FeedbackIcon className="h-4 w-4 mr-2" />
             {count} pending invites
           </Badge>
-        </Anchor>
+        </Link>
       </div>
     );
   }
