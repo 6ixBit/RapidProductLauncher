@@ -15,11 +15,11 @@ declare global {
       SUPABASE_JWT_SECRET: string;
       SENDGRID_API_KEY: string;
       STRIPE_WEBHOOK_SECRET: string;
-      STRIPE_WEBHOOK_SECRET_LIVE: string | undefined | null;
       ADMIN_EMAIL: string;
     }
   }
 }
 
 // eslint-disable-next-line prettier/prettier
-export {};
+export { };
+
