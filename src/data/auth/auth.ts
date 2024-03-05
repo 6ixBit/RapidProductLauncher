@@ -20,10 +20,10 @@ export const signUp = async (email: string, password: string) => {
 
 export const signInWithPassword = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
-  const { error } = await supabase.auth.signInWithPassword({
+  const {error} = await supabase.auth.signInWithPassword({
     email,
     password,
-  });
+  })
 
   if (error) {
     throw error;
@@ -73,9 +73,11 @@ export const resetPassword = async (email: string) => {
   const supabase = createSupabaseUserServerActionClient();
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   redirectToURL.searchParams.set('next', `/update-password`);
+
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: redirectToURL.toString(),
   });
+
 
   if (error) {
     throw error;
