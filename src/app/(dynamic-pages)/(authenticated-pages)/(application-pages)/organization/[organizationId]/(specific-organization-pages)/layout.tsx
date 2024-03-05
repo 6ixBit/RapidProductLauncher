@@ -26,7 +26,7 @@ export default async function Layout({
     >
       <div>
         <InternalNavbar>
-          <div className="flex w-full justify-between items-center">
+          <div className="hidden lg:flex w-full justify-between items-center">
             <Suspense>{navbar}</Suspense>
             <div className="flex items-center gap-1">
               <Link

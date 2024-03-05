@@ -7,3 +7,4 @@ export const CURRENT_ORGANIZATION_ID_COOKIE_KEY =
   process.env.SUPABASE_PROJECT_REF + '_current_organization_id';
 
 export const SIDEBAR_VISIBILITY_COOKIE_KEY = 'sidebar_visibility';
+export const MOBILE_MEDIA_QUERY_MATCHER = '(max-width: 1023px)';

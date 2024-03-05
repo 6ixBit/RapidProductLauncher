@@ -6,7 +6,7 @@ import darkLogo from 'public/logos/nextbase-dark-logo.png';
 import lightLogo from 'public/logos/nextbase-light-logo.png';
 import { SidebarClose } from './SidebarClose';
 
-export function SidebarLogo() {
+export function SidebarLogoAndToggle() {
   return (
     <div className="flex justify-between items-center w-full mb-5">
       <Link
