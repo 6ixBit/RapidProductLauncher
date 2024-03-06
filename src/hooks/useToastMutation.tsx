@@ -1,12 +1,12 @@
 'use client';
 import {
-  useMutation,
+  MutationFunction,
   UseMutationOptions,
   UseMutationResult,
-  MutationFunction,
+  useMutation,
 } from '@tanstack/react-query';
+import { useRef } from 'react';
 import { toast } from 'sonner';
-import { useEffect, useRef, useState } from 'react';
 
 type MutationFn<TData, TVariables> = MutationFunction<TData, TVariables>;
 
@@ -57,6 +57,7 @@ export function useToastMutation<
       }
     },
     onError: (error, variables, context) => {
+      console.log('[useToastMutation] error ', error);
       const errorMessage = options?.errorMessage
         ? typeof options.errorMessage === 'function'
           ? options.errorMessage(error, variables)

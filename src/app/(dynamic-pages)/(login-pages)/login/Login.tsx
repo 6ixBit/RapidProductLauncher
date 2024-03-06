@@ -49,19 +49,18 @@ export function Login({
   );
   const passwordMutation = useToastMutation(
     async ({ email, password }: { email: string; password: string }) => {
-      return await signInWithPassword(email, password)
+      return await signInWithPassword(email, password);
     },
     {
       onSuccess: redirectToDashboard,
       errorMessage(error) {
         try {
           if (error instanceof Error) {
-            return String(error.message)
-          } else
-            return 'Sign in account failed ' + String(error)
+            return String(error.message);
+          } else return 'Sign in account failed ' + String(error);
         } catch (_err) {
           console.warn(_err);
-          return 'Sign in account failed'
+          return 'Sign in account failed';
         }
       },
       loadingMessage: 'Logging in...',

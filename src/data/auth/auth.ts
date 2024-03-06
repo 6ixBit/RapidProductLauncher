@@ -5,26 +5,29 @@ import { toSiteURL } from '@/utils/helpers';
 
 export const signUp = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
-  
-   const {error} = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: toSiteURL('/auth/callback'),
-      },
-    });
-    if (error) throw error
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: toSiteURL('/auth/callback'),
+    },
+  });
+  if (error) throw new Error(error.message);
 };
 
 export const signInWithPassword = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
 
-    const {error} = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) throw error
-
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  console.log('cause', error?.cause);
+  console.log('message', error?.message);
+  console.log('details', error?.name);
+  console.log('status', error?.status);
+  if (error) throw new Error(error.message);
 };
 
 export const signInWithMagicLink = async (email: string, next?: string) => {
@@ -40,9 +43,7 @@ export const signInWithMagicLink = async (email: string, next?: string) => {
     },
   });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw new Error(error.message);
 };
 
 export const signInWithProvider = async (
@@ -61,9 +62,7 @@ export const signInWithProvider = async (
     },
   });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw new Error(error.message);
 };
 
 export const resetPassword = async (email: string) => {
@@ -71,11 +70,9 @@ export const resetPassword = async (email: string) => {
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   redirectToURL.searchParams.set('next', `/update-password`);
 
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: redirectToURL.toString(),
+  });
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: redirectToURL.toString(),
-    });
-
-    if (error) throw error
-
+  if (error) throw new Error(error.message);
 };

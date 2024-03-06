@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/hover-card';
 import { T } from '@/components/ui/Typography';
 import { AuthProvider } from '@/types';
+import { Fragment } from 'react';
 
 function capitalize(word: string) {
   const lower = word.toLowerCase();
@@ -34,7 +35,6 @@ export const RenderProviders = ({
             size="default"
             disabled={isLoading || isDemo}
             onClick={() => onProviderLoginRequested(provider)}
-            key={provider}
             className="bg-white dark:bg-white text-black dark:text-black border h-10 border-gray-400 dark:border-gray-600 rounded-lg"
           >
             <div className="mr-2">
@@ -44,7 +44,7 @@ export const RenderProviders = ({
           </Button>
         );
         return (
-          <>
+          <Fragment key={provider}>
             {isDemo ? (
               <HoverCard>
                 <HoverCardTrigger asChild>
@@ -62,7 +62,7 @@ export const RenderProviders = ({
             ) : (
               component
             )}
-          </>
+          </Fragment>
         );
       })}
     </div>
