@@ -2,12 +2,12 @@
 import { Email } from '@/components/Auth/Email';
 import { T } from '@/components/ui/Typography';
 import { resetPassword } from '@/data/auth/auth';
-import { useToastMutation } from '@/hooks/useToastMutation';
+import { useSAToastMutation } from '@/hooks/useSAToastMutation';
 import { useState } from 'react';
 
 export function ForgotPassword() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const magicLinkMutation = useToastMutation(
+  const magicLinkMutation = useSAToastMutation(
     async (email: string) => {
       return await resetPassword(email);
     },
@@ -15,12 +15,12 @@ export function ForgotPassword() {
       loadingMessage: 'Sending password reset link...',
       errorMessage(error) {
         try {
-           if (error instanceof Error) {
-              return String(error.message)
-           } else return "Failed to send password reset link " + String(error)
-        } catch(_err){
-           console.warn(_err);
-           return `Failed to send password reset link`
+          if (error instanceof Error) {
+            return String(error.message);
+          } else return 'Failed to send password reset link ' + String(error);
+        } catch (_err) {
+          console.warn(_err);
+          return `Failed to send password reset link`;
         }
       },
       successMessage: 'Password reset link sent!',

@@ -133,3 +133,13 @@ export type NormalizedSubscription =
   | IncompleteSubscription
   | IncompleteExpiredSubscription
   | UnpaidSubscription;
+
+export type ValidSAPayload<TData = undefined> =
+  | {
+    status: 'success';
+    data?: TData;
+  }
+  | {
+    status: 'error';
+    message: string;
+  };

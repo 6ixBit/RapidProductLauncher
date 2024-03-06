@@ -1,9 +1,12 @@
 'use server';
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
-import { AuthProvider } from '@/types';
+import { AuthProvider, ValidSAPayload } from '@/types';
 import { toSiteURL } from '@/utils/helpers';
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (
+  email: string,
+  password: string,
+): Promise<ValidSAPayload> => {
   const supabase = createSupabaseUserServerActionClient();
 
   const { error } = await supabase.auth.signUp({
@@ -13,10 +16,22 @@ export const signUp = async (email: string, password: string) => {
       emailRedirectTo: toSiteURL('/auth/callback'),
     },
   });
-  if (error) throw new Error(error.message);
+  if (error) {
+    return {
+      status: 'error',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 'success',
+  };
 };
 
-export const signInWithPassword = async (email: string, password: string) => {
+export const signInWithPassword = async (
+  email: string,
+  password: string,
+): Promise<ValidSAPayload> => {
   const supabase = createSupabaseUserServerActionClient();
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -24,10 +39,22 @@ export const signInWithPassword = async (email: string, password: string) => {
     password,
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    return {
+      status: 'error',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 'success',
+  };
 };
 
-export const signInWithMagicLink = async (email: string, next?: string) => {
+export const signInWithMagicLink = async (
+  email: string,
+  next?: string,
+): Promise<ValidSAPayload> => {
   const supabase = createSupabaseUserServerActionClient();
   const redirectUrl = new URL(toSiteURL('/auth/callback'));
   if (next) {
@@ -40,13 +67,22 @@ export const signInWithMagicLink = async (email: string, next?: string) => {
     },
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    return {
+      status: 'error',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 'success',
+  };
 };
 
 export const signInWithProvider = async (
   provider: AuthProvider,
   next?: string,
-) => {
+): Promise<ValidSAPayload> => {
   const supabase = createSupabaseUserServerActionClient();
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   if (next) {
@@ -59,10 +95,19 @@ export const signInWithProvider = async (
     },
   });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    return {
+      status: 'error',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 'success',
+  };
 };
 
-export const resetPassword = async (email: string) => {
+export const resetPassword = async (email: string): Promise<ValidSAPayload> => {
   const supabase = createSupabaseUserServerActionClient();
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   redirectToURL.searchParams.set('next', `/update-password`);
@@ -70,6 +115,14 @@ export const resetPassword = async (email: string) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: redirectToURL.toString(),
   });
+  if (error) {
+    return {
+      status: 'error',
+      message: error.message,
+    };
+  }
 
-  if (error) throw new Error(error.message);
+  return {
+    status: 'success',
+  };
 };
