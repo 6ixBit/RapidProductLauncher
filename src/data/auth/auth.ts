@@ -16,7 +16,7 @@ export const signUp = async (email: string, password: string) => {
     });
     if (error) throw error
   } catch (err) {
-      throw new Error("Failed to " + err);
+      throw new Error(err.message);
   }
 
 };
@@ -29,9 +29,9 @@ export const signInWithPassword = async (email: string, password: string) => {
       email,
       password,
     })
-    if (error) throw error;
+    if (error) throw error
   } catch (err) {
-      throw new Error("Failed to " + err);
+      throw new Error(err.message);
   }
 
 };
@@ -87,12 +87,8 @@ export const resetPassword = async (email: string) => {
       redirectTo: redirectToURL.toString(),
     });
 
-    if (error) throw error;
+    if (error) throw error
   } catch (err) {
-    throw new Error("Failed to " + err);
+      throw new Error(err.message);
   }
-
-
-
-
 };
