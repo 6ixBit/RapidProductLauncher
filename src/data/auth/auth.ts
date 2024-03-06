@@ -5,8 +5,7 @@ import { toSiteURL } from '@/utils/helpers';
 
 export const signUp = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
-
-  try {
+  
    const {error} = await supabase.auth.signUp({
       email,
       password,
@@ -15,24 +14,16 @@ export const signUp = async (email: string, password: string) => {
       },
     });
     if (error) throw error
-  } catch (err) {
-      throw new Error(err.message);
-  }
-
 };
 
 export const signInWithPassword = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
 
-  try {
     const {error} = await supabase.auth.signInWithPassword({
       email,
       password,
     })
     if (error) throw error
-  } catch (err) {
-      throw new Error(err.message);
-  }
 
 };
 
@@ -80,13 +71,11 @@ export const resetPassword = async (email: string) => {
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   redirectToURL.searchParams.set('next', `/update-password`);
 
-  try {
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectToURL.toString(),
     });
 
     if (error) throw error
-  } catch (err) {
-      throw new Error(err.message);
-  }
+
 };
