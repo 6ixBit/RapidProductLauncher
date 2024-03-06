@@ -5,29 +5,35 @@ import { toSiteURL } from '@/utils/helpers';
 
 export const signUp = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: toSiteURL('/auth/callback'),
-    },
-  });
 
-  if (error) {
-    throw error;
+  try {
+   const {error} = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: toSiteURL('/auth/callback'),
+      },
+    });
+    if (error) throw error
+  } catch (err) {
+      throw new Error("Failed to " + err);
   }
+
 };
 
 export const signInWithPassword = async (email: string, password: string) => {
   const supabase = createSupabaseUserServerActionClient();
-  const {error} = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
 
-  if (error) {
-    throw error;
+  try {
+    const {error} = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    if (error) throw error;
+  } catch (err) {
+      throw new Error("Failed to " + err);
   }
+
 };
 
 export const signInWithMagicLink = async (email: string, next?: string) => {
@@ -74,12 +80,19 @@ export const resetPassword = async (email: string) => {
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   redirectToURL.searchParams.set('next', `/update-password`);
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: redirectToURL.toString(),
-  });
+  const teste = await supabase.from("user_private_info")
 
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectToURL.toString(),
+    });
 
-  if (error) {
-    throw error;
+    if (error) throw error;
+  } catch (err) {
+    throw new Error("Failed to " + err);
   }
+
+
+
+
 };
