@@ -23,10 +23,7 @@ export const signInWithPassword = async (email: string, password: string) => {
     email,
     password,
   });
-  console.log('cause', error?.cause);
-  console.log('message', error?.message);
-  console.log('details', error?.name);
-  console.log('status', error?.status);
+
   if (error) throw new Error(error.message);
 };
 

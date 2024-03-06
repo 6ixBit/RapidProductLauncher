@@ -57,7 +57,6 @@ export function useToastMutation<
       }
     },
     onError: (error, variables, context) => {
-      console.log('[useToastMutation] error ', error);
       const errorMessage = options?.errorMessage
         ? typeof options.errorMessage === 'function'
           ? options.errorMessage(error, variables)
