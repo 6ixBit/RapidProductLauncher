@@ -80,8 +80,6 @@ export const resetPassword = async (email: string) => {
   const redirectToURL = new URL(toSiteURL('/auth/callback'));
   redirectToURL.searchParams.set('next', `/update-password`);
 
-  const teste = await supabase.from("user_private_info")
-
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectToURL.toString(),
