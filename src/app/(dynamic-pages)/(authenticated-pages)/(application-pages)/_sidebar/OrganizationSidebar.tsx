@@ -1,8 +1,10 @@
+import { ProFeatureGateDialog } from '@/components/ProFeatureGateDialog';
 import { SubscriptionCardSmall } from '@/components/SubscriptionCardSmall';
 import { T } from '@/components/ui/Typography';
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { cn } from '@/utils/cn';
 import DollarIcon from 'lucide-react/dist/esm/icons/dollar-sign';
+import FileBoxIcon from 'lucide-react/dist/esm/icons/file-box';
 import HomeIcon from 'lucide-react/dist/esm/icons/home';
 import SettingsIcon from 'lucide-react/dist/esm/icons/settings';
 import UserIcon from 'lucide-react/dist/esm/icons/user-2';
@@ -51,6 +53,13 @@ async function OrganizationSidebarInternal({
               href={`/organization/${organizationId}/settings/billing`}
               icon={<DollarIcon className="h-5 w-5" />}
             />
+            <Suspense>
+              <ProFeatureGateDialog
+                organizationId={organizationId}
+                label="Feature Pro"
+                icon={<FileBoxIcon className="h-5 w-5" />}
+              />
+            </Suspense>
           </div>
           {/* <TeamsList organizationId={organizationId} /> */}
         </div>
