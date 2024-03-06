@@ -57,7 +57,16 @@ export function SignUp({
     {
       onSuccess: redirectToDashboard,
       loadingMessage: 'Creating account...',
-      errorMessage: 'Failed to create account',
+      errorMessage(error) {
+        try {
+          if (error instanceof Error) {
+            return String(error.message)
+          } else return 'Create account failed ' + String(error)
+        } catch (_err) {
+          console.warn(_err);
+          return 'Create account failed '
+        }
+      },
       successMessage: 'Account created!',
     },
   );
