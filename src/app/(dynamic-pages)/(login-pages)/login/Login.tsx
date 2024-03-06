@@ -54,9 +54,15 @@ export function Login({
     {
       onSuccess: redirectToDashboard,
       errorMessage(error) {
-        if (error instanceof Error) {
-          return String(error.message)
-        } else return "Error: " + error
+        try {
+          if (error instanceof Error) {
+            return String(error.message)
+          } else
+            return 'Sign in account failed ' + String(error)
+        } catch (_err) {
+          console.warn(_err);
+          return 'Sign in account failed'
+        }
       },
       loadingMessage: 'Logging in...',
       successMessage: 'Logged in!',
