@@ -14,9 +14,14 @@ export function ForgotPassword() {
     {
       loadingMessage: 'Sending password reset link...',
       errorMessage(error) {
-        if (error instanceof Error) {
-          return String(error.message)
-        } else return "Error: " + error
+        try {
+           if (error instanceof Error) {
+              return String(error.message)
+           } else return "Failed to send password reset link " + String(error)
+        } catch(_err){
+           console.warn(_err);
+           return `Failed to send password reset link`
+        }
       },
       successMessage: 'Password reset link sent!',
       onSuccess: () => {
