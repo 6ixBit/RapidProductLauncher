@@ -70,7 +70,7 @@ export function useSAToastMutation<
               new Error(baseErrorMessage) as TError,
               variables,
             )
-            : options.errorMessage
+            : `${options.errorMessage ?? 'Error!'}: ${baseErrorMessage}`
           : 'Error!';
         toast.error(errorMessage, {
           id: toastIdRef.current ?? undefined,
@@ -97,6 +97,7 @@ export function useSAToastMutation<
           ? options.errorMessage(error, variables)
           : options.errorMessage
         : 'Error!';
+      console.warn('[useSAToastMutation]', errorMessage);
       toast.error(errorMessage, {
         id: toastIdRef.current ?? undefined,
       });
