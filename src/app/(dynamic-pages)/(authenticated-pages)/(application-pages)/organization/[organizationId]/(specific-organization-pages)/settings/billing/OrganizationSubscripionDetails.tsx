@@ -3,6 +3,7 @@ import { PageHeading } from '@/components/PageHeading';
 import { T } from '@/components/ui/Typography';
 import { getActiveProductsWithPrices } from '@/data/user/organizations';
 import { Enum, NormalizedSubscription, UnwrapPromise } from '@/types';
+import { cn } from '@/utils/cn';
 import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscription';
 import CheckIcon from 'lucide-react/dist/esm/icons/check';
 import XIcon from 'lucide-react/dist/esm/icons/x';
@@ -16,27 +17,25 @@ function getProductsSortedByPrice(
   activeProducts: UnwrapPromise<ReturnType<typeof getActiveProductsWithPrices>>,
 ) {
   if (!activeProducts) return [];
-  const products = activeProducts
-    .map((product) => {
-      const prices = Array.isArray(product.prices)
-        ? product.prices
-        : [product.prices];
+  const products = activeProducts.flatMap((product) => {
+    const prices = Array.isArray(product.prices)
+      ? product.prices
+      : [product.prices];
 
-      const pricesForProduct = prices.map((price) => {
-        const priceString = new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: price?.currency ?? undefined,
-          minimumFractionDigits: 0,
-        }).format((price?.unit_amount || 0) / 100);
-        return {
-          ...product,
-          price,
-          priceString,
-        };
-      });
-      return pricesForProduct;
-    })
-    .flat();
+    const pricesForProduct = prices.map((price) => {
+      const priceString = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: price?.currency ?? undefined,
+        minimumFractionDigits: 0,
+      }).format((price?.unit_amount || 0) / 100);
+      return {
+        ...product,
+        price,
+        priceString,
+      };
+    });
+    return pricesForProduct;
+  });
 
   return products
     .sort((a, b) => (a?.price?.unit_amount ?? 0) - (b?.price?.unit_amount ?? 0))
@@ -45,8 +44,10 @@ function getProductsSortedByPrice(
 
 async function ChoosePricingTable({
   organizationId,
+  isOrganizationAdmin,
 }: {
   organizationId: string;
+  isOrganizationAdmin: boolean;
 }) {
   const activeProducts = await getActiveProductsWithPrices();
 
@@ -78,18 +79,28 @@ async function ChoosePricingTable({
               <>
                 <div
                   key={product.id + priceId}
-                  className="w-full flex flex-col justify-between mt-3 order-2 dark:bg-slate-900 bg-gray-200/10 shadow-none overflow-hidden rounded-xl hover:shadow-xl transition sm:w-96 lg:w-full lg:order-1 border mb-2  hover:border-gray-400 dark:hover:border-gray-700 "
+                  className={cn(
+                    'w-full',
+                    'flex flex-col justify-between',
+                    'mt-3 order-2 shadow-none overflow-hidden rounded-xl',
+                    'hover:shadow-xl transition',
+                    'sm:w-96 lg:w-full lg:order-1',
+                    'border mb-2',
+                  )}
                 >
                   <div>
-                    <div className="mb-6 p-7 pt-6 flex items-center border-b bg-gray-200/40 dark:bg-slate-800">
+                    <div className="mb-6 p-7 pt-6 flex items-center border-b">
                       <div>
                         <T.H4 className="mt-0 mb-4 dark:text-slate-300">
+                          {' '}
                           {product.name}
                         </T.H4>
                         <span>
                           <T.H1 className="dark:text-slate-50" key={priceId}>
+                            {' '}
                             {product.priceString}
                             <span className="text-base tracking-normal text-muted-foreground font-medium">
+                              {' '}
                               per {product.price.interval}
                             </span>
                           </T.H1>
@@ -130,16 +141,22 @@ async function ChoosePricingTable({
                   </div>
 
                   <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-white text-xl space-y-2">
-                    <>
-                      <StartFreeTrialButton
-                        organizationId={organizationId}
-                        priceId={priceId}
-                      />
-                      <CreateSubscriptionButton
-                        organizationId={organizationId}
-                        priceId={priceId}
-                      />
-                    </>
+                    {isOrganizationAdmin ? (
+                      <>
+                        <StartFreeTrialButton
+                          organizationId={organizationId}
+                          priceId={priceId}
+                        />
+                        <CreateSubscriptionButton
+                          organizationId={organizationId}
+                          priceId={priceId}
+                        />
+                      </>
+                    ) : (
+                      <T.P className=" py-2 px-4 bg-gray-100 dark:bg-slate-400/20 text-sm text-gray-900 dark:text-slate-100 rounded-lg">
+                        Contact your administrator to upgrade plan
+                      </T.P>
+                    )}
                   </div>
                 </div>
               </>
@@ -160,6 +177,9 @@ export async function OrganizationSubscripionDetails({
   organizationId: string;
   organizationRole: Enum<'organization_member_role'>;
 }) {
+  const isOrganizationAdmin =
+    organizationRole === 'admin' || organizationRole === 'owner';
+
   const subscriptionDetails = formatNormalizedSubscription(
     normalizedSubscription,
   );
@@ -174,7 +194,10 @@ export async function OrganizationSubscripionDetails({
           title="Subscription"
           subTitle="This organization doesn't have any plan at the moment"
         />
-        <ChoosePricingTable organizationId={organizationId} />
+        <ChoosePricingTable
+          organizationId={organizationId}
+          isOrganizationAdmin={isOrganizationAdmin}
+        />
       </>
     );
   }
