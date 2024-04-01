@@ -14,6 +14,9 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.51.2)
+  '@next/env':
+    specifier: ^14.1.4
+    version: 14.1.4
   '@radix-ui/react-accordion':
     specifier: ^1.1.2
     version: 1.1.2(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
@@ -192,7 +195,7 @@ dependencies:
     specifier: ^0.2.1
     version: 0.2.1(next@14.1.4)(react-dom@18.2.0)(react@18.2.0)
   nodemailer:
-    specifier: ^6.9.8
+    specifier: ^6.9.13
     version: 6.9.13
   nprogress:
     specifier: ^0.2.0
@@ -289,6 +292,12 @@ devDependencies:
   '@types/jsonwebtoken':
     specifier: ^9.0.0
     version: 9.0.6
+  '@types/mdx':
+    specifier: ^2.0.12
+    version: 2.0.12
+  '@types/nodemailer':
+    specifier: ^6.4.14
+    version: 6.4.14
   '@types/nprogress':
     specifier: ^0.2.0
     version: 0.2.3
@@ -331,6 +340,9 @@ devDependencies:
   jsdom:
     specifier: ^22.0.0
     version: 22.1.0
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   postcss:
     specifier: ^8.4.20
     version: 8.4.38
@@ -3740,6 +3752,10 @@ packages:
       '@types/node': 20.11.30
     dev: true
 
+  /@types/mdx@2.0.12:
+    resolution: {integrity: sha512-H9VZ9YqE+H28FQVchC83RCs5xQ2J7mAAv6qdDEaWmXEVl3OpdH+xfrSUzQ1lp7U7oSTRZ0RvW08ASPJsYBi7Cw==}
+    dev: true
+
   /@types/minimist@1.2.5:
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
     dev: false
@@ -3748,6 +3764,12 @@ packages:
     resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
     dependencies:
       undici-types: 5.26.5
+
+  /@types/nodemailer@6.4.14:
+    resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
+    dependencies:
+      '@types/node': 20.11.30
+    dev: true
 
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
