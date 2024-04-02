@@ -3,7 +3,7 @@ import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/cr
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
 import { SupabaseFileUploadOptions, Table } from '@/types';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
-import { User } from '@supabase/supabase-js';
+import slugify from 'slugify';
 import urlJoin from 'url-join';
 
 export const getUserProfile = async (
@@ -87,7 +87,7 @@ export const getUserPendingInvitationsById = async (userId: string) => {
 };
 
 export const uploadPublicUserAvatar = async (
-  file: File,
+  formData: FormData,
   fileName: string,
   fileOptions?: SupabaseFileUploadOptions | undefined,
 ): Promise<string> => {
@@ -95,11 +95,23 @@ export const uploadPublicUserAvatar = async (
   const supabaseClient = createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
   const userId = user.id;
-  const userImagesPath = `${userId}/images/${fileName}`;
+  const file = formData.get('file');
+
+  if (!file) {
+    throw new Error('File is empty');
+  }
+
+  const slugifiedFilename = slugify(fileName, {
+    lower: true,
+    strict: true,
+    replacement: '-',
+  });
+
+  const userImagePath = `${userId}/images/${slugifiedFilename}`;
 
   const { data, error } = await supabaseClient.storage
     .from('public-user-assets')
-    .upload(userImagesPath, file, fileOptions);
+    .upload(userImagePath, file, fileOptions);
 
   if (error) {
     throw new Error(error.message);
@@ -113,6 +125,18 @@ export const uploadPublicUserAvatar = async (
     '/storage/v1/object/public/public-user-assets',
     filePath,
   );
+
+  const { error: updateProfileError } = await supabaseClient
+    .from('user_profiles')
+    .update({
+      avatar_url: supabaseFileUrl,
+    })
+    .eq('id', userId);
+
+  if (updateProfileError) {
+    throw updateProfileError;
+  }
+
   return supabaseFileUrl;
 };
 

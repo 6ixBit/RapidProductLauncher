@@ -38,9 +38,15 @@ export function AccountSettings({
   const [isNewAvatarImageLoading, setIsNewAvatarImageLoading] =
     useState<boolean>(false);
 
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    userProfile.avatar_url ?? undefined,
+  );
+
   const { mutate: upload, isLoading: isUploading } = useToastMutation(
     async (file: File) => {
-      return await uploadPublicUserAvatar(file, file.name, {
+      const formData = new FormData();
+      formData.append('file', file);
+      return await uploadPublicUserAvatar(formData, file.name, {
         upsert: true,
       });
     },
@@ -48,8 +54,8 @@ export function AccountSettings({
       loadingMessage: 'Uploading avatar...',
       errorMessage: 'Failed to upload avatar',
       successMessage: 'Avatar uploaded!',
-      onSuccess: () => {
-        setIsNewAvatarImageLoading(true);
+      onSuccess(data) {
+        setAvatarUrl(data);
       },
     },
   );
@@ -63,13 +69,14 @@ export function AccountSettings({
           });
         }}
         onFileUpload={(file: File) => {
+          console.log('file', file);
           upload(file);
         }}
         isNewAvatarImageLoading={isNewAvatarImageLoading}
         setIsNewAvatarImageLoading={setIsNewAvatarImageLoading}
         isUploading={isUploading}
         isLoading={isLoading ?? isUploading}
-        profileAvatarUrl={userProfile.avatar_url ?? undefined}
+        profileAvatarUrl={avatarUrl}
         profileFullname={userProfile.full_name ?? undefined}
       />
     </div>
