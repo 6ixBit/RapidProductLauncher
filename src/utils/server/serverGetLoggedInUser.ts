@@ -3,18 +3,16 @@ import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user
 
 export const serverGetLoggedInUser = async () => {
   const supabase = createSupabaseUserServerComponentClient();
-  const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
+
+  const { data: { user }, error: sessionError, } = await supabase.auth.getUser();
 
   if (sessionError) {
     throw sessionError;
   }
 
-  if (!session?.user) {
+  if (!user) {
     throw new Error('serverGetLoggedInUser: Not logged in');
   }
 
-  return session.user;
+  return user;
 };
