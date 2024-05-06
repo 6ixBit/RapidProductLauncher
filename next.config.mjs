@@ -2,10 +2,6 @@
 
 export default {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-  experimental: {
-    esmExternals: 'loose',
-    serverComponentsExternalPackages: ['@tremor/react'],
-  },
   images: {
     remotePatterns: [
       {

@@ -4,6 +4,7 @@ import {
   updateUserProfileNameAndAvatar,
   uploadPublicUserAvatar,
 } from '@/data/user/user';
+
 import { useToastMutation } from '@/hooks/useToastMutation';
 import { Table } from '@/types';
 import { useState } from 'react';
@@ -40,7 +41,9 @@ export function AccountSettings({
 
   const { mutate: upload, isLoading: isUploading } = useToastMutation(
     async (file: File) => {
-      return await uploadPublicUserAvatar(file, file.name, {
+      const formData = new FormData();
+      formData.append('file', file);
+      return await uploadPublicUserAvatar(formData, file.name, {
         upsert: true,
       });
     },

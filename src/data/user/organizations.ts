@@ -1,30 +1,88 @@
 'use server';
+import { supabaseAdminClient } from '@/supabase-clients/admin/supabaseAdminClient';
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
-import { Enum, NormalizedSubscription, Table, UnwrapPromise } from '@/types';
+import type {
+  Enum,
+  NormalizedSubscription,
+  Table,
+  ValidSAPayload,
+} from '@/types';
+import { toSiteURL } from '@/utils/helpers';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { stripe } from '@/utils/stripe';
-import { toSiteURL } from '@/utils/helpers';
-import { createOrRetrieveCustomer } from '../admin/stripe';
+import type { AuthUserMetadata } from '@/utils/zod-schemas/authUserMetadata';
 import { revalidatePath } from 'next/cache';
-
-export const createOrganization = async (name: string) => {
-  const supabase = createSupabaseUserServerComponentClient();
+import { v4 as uuid } from 'uuid';
+import { createOrRetrieveCustomer } from '../admin/stripe';
+import { refreshSessionAction } from './session';
+export const createOrganization = async (
+  name: string,
+  { isOnboardingFlow = false }: { isOnboardingFlow?: boolean } = {},
+): Promise<ValidSAPayload<string>> => {
+  const supabaseClient = createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
-  const { data, error } = await supabase
-    .from('organizations')
-    .insert({
-      title: name,
-      created_by: user.id,
-    })
-    .select('*')
-    .single();
+
+  const organizationId = uuid();
+
+  const { error } = await supabaseClient.from('organizations').insert({
+    title: name,
+    id: organizationId,
+  });
 
   if (error) {
-    throw error;
+    return { status: 'error', message: error.message };
   }
 
-  return data;
+  const { error: orgMemberErrors } = await supabaseAdminClient
+    .from('organization_members')
+    .insert([
+      {
+        member_id: user.id,
+        organization_id: organizationId,
+        member_role: 'owner',
+      },
+    ]);
+
+  if (orgMemberErrors) {
+    return { status: 'error', message: orgMemberErrors.message };
+  }
+
+  if (isOnboardingFlow) {
+    const { error: updateError } = await supabaseClient
+      .from('user_private_info')
+      .update({ default_organization: organizationId })
+      .eq('id', user.id);
+
+    if (updateError) {
+      return { status: 'error', message: updateError.message };
+    }
+
+    const updateUserMetadataPayload: Partial<AuthUserMetadata> = {
+      onboardingHasCreatedOrganization: true,
+    };
+
+    const updateUserMetadataResponse = await supabaseClient.auth.updateUser({
+      data: updateUserMetadataPayload,
+    });
+
+    if (updateUserMetadataResponse.error) {
+      return {
+        status: 'error',
+        message: updateUserMetadataResponse.error.message,
+      };
+    }
+
+    const refreshSessionResponse = await refreshSessionAction();
+    if (refreshSessionResponse.status === 'error') {
+      return refreshSessionResponse;
+    }
+  }
+
+  return {
+    status: 'success',
+    data: organizationId,
+  };
 };
 
 export async function fetchSlimOrganizations() {

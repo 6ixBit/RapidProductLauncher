@@ -2,11 +2,11 @@
 
 import { InviteOrganizationMemberDialog } from '@/app/(dynamic-pages)/(authenticated-pages)/(application-pages)/organization/[organizationId]/(specific-organization-pages)/settings/members/InviteOrganizationMemberDialog';
 import { createInvitationHandler } from '@/data/user/invitation';
-import { useToastMutation } from '@/hooks/useToastMutation';
-import { Enum } from '@/types';
+import { useSAToastMutation } from '@/hooks/useSAToastMutation';
+import type { Enum } from '@/types';
 
 export function InviteUser({ organizationId }: { organizationId: string }) {
-  const { mutate, isLoading } = useToastMutation(
+  const { mutate, isLoading } = useSAToastMutation(
     async ({
       email,
       role,
@@ -22,7 +22,17 @@ export function InviteUser({ organizationId }: { organizationId: string }) {
     },
     {
       loadingMessage: 'Inviting user...',
-      errorMessage: 'Failed to invite user',
+      errorMessage(error) {
+        try {
+          if (error instanceof Error) {
+            return String(error.message);
+          }
+          return `Failed to invite user ${String(error)}`;
+        } catch (_err) {
+          console.warn(_err);
+          return 'Failed to invite user';
+        }
+      },
       successMessage: 'User invited!',
     },
   );

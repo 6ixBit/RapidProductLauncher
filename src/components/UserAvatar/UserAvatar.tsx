@@ -1,5 +1,6 @@
 'use server';
-import { getUserAvatarUrl, getUserProfile } from '@/data/user/user';
+
+import { getUserAvatarUrl } from '@/data/user/user';
 import { getPublicUserAvatarUrl } from '@/utils/helpers';
 import Image from 'next/image';
 
