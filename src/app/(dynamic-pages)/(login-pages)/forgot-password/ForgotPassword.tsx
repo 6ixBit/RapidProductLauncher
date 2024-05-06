@@ -43,7 +43,7 @@ export function ForgotPassword() {
           resetSuccessMessage={setSuccessMessage}
         />
       ) : (
-        <Card className="container h-full grid items-center text-left max-w-lg mx-auto overflow-auto">
+        <Card className="container h-full grid items-center text-left max-w-lg mx-auto overflow-auto p-4">
           <div className="space-y-4">
             {/* <Auth providers={['twitter']} supabaseClient={supabase} /> */}
             <T.H4>Forgot Password</T.H4>
