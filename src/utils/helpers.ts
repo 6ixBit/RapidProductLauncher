@@ -1,6 +1,6 @@
-import urlJoin from 'url-join';
-import MD5 from 'crypto-js/md5';
 import { DEV_PORT } from '@/constants';
+import MD5 from 'crypto-js/md5';
+import urlJoin from 'url-join';
 
 export const getURL = () => {
   let url =
@@ -29,10 +29,11 @@ export const getUserAvatarUrl = ({
   email,
   profileAvatarUrl,
 }: {
-  email: string;
+  email: string | undefined;
   profileAvatarUrl?: string | null | undefined;
 }) => {
   const placeholderAvatarUrl = `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp`;
+  if (!email) return placeholderAvatarUrl;
   const fallbackAvatarUrl = `https://www.gravatar.com/avatar/${MD5(
     email,
   )}?d=mp`;

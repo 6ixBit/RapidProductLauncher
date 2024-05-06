@@ -1,10 +1,10 @@
-import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/ApplicationLayoutShell';
-import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
-import SettingsIcon from 'lucide-react/dist/esm/icons/settings';
-import Link from 'next/link';
-import { ReactNode, Suspense } from 'react';
-import { z } from 'zod';
-import { OrganizationSidebar } from '../../../_sidebar/OrganizationSidebar';
+import { ApplicationLayoutShell } from "@/components/ApplicationLayoutShell/ApplicationLayoutShell";
+import { InternalNavbar } from "@/components/NavigationMenu/InternalNavbar";
+import SettingsIcon from "lucide-react/dist/esm/icons/settings";
+import Link from "next/link";
+import { type ReactNode, Suspense } from "react";
+import { z } from "zod";
+import { OrganizationSidebar } from "../../../_sidebar/OrganizationSidebar";
 
 const paramsSchema = z.object({
   organizationId: z.string(),

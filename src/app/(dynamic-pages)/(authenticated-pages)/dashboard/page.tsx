@@ -1,7 +1,6 @@
 import {
   fetchSlimOrganizations,
   getDefaultOrganization,
-  setDefaultOrganization,
 } from '@/data/user/organizations';
 import { notFound, redirect } from 'next/navigation';
 
@@ -16,16 +15,20 @@ async function getOrganizationToRedirectTo(): Promise<string> {
     return defaultOrganizationId;
   }
 
+  // this condition is unreachable as the parent ../layout component ensures at least
+  // one organization exists
   if (!firstOrganization) {
     return notFound();
   }
 
-  await setDefaultOrganization(firstOrganization.id);
-
   return firstOrganization.id;
 }
 
-export default async function DashboardPage() {
+async function RedirectToDefaultOrg() {
   const firstOrganizationId = await getOrganizationToRedirectTo();
   return redirect(`/organization/${firstOrganizationId}`);
+}
+
+export default async function DashboardPage() {
+  return <RedirectToDefaultOrg />;
 }
