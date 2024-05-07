@@ -8,7 +8,7 @@ import {
 import { getNormalizedOrganizationSubscription } from '@/data/user/organizations';
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
 import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscription';
-import ArrowUpRightIcon from 'lucide-react/dist/esm/icons/arrow-up-right';
+import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 export async function SubscriptionCardSmall({
@@ -51,7 +51,7 @@ export async function SubscriptionCardSmall({
             href={`/organization/${organizationId}/settings/billing`}
           >
             <Button variant="default" className="w-full">
-              <ArrowUpRightIcon className="h-5 w-5 mr-2 " />
+              <ArrowUpRight className="h-5 w-5 mr-2 " />
               {sidenote}
             </Button>
           </Link>

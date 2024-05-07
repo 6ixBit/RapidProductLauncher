@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { acceptInvitationAction } from '@/data/user/invitation';
 import { useToastMutation } from '@/hooks/useToastMutation';
-import Check from 'lucide-react/dist/esm/icons/check';
+import { Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

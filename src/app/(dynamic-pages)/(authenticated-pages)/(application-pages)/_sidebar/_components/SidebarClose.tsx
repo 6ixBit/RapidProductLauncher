@@ -3,7 +3,7 @@ import { SidebarVisibilityContext } from '@/contexts/SidebarVisibilityContext';
 import { setSidebarVisibility } from '@/data/user/ui';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
-import PanelLeftClose from 'lucide-react/dist/esm/icons/panel-left-close';
+import { PanelLeftClose } from 'lucide-react';
 import { useContext } from 'react';
 import { toast } from 'sonner';
 

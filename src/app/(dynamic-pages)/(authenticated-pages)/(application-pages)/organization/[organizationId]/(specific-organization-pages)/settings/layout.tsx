@@ -1,7 +1,5 @@
 import { TabsNavigation } from '@/components/TabsNavigation';
-import DollarSignIcon from 'lucide-react/dist/esm/icons/dollar-sign';
-import EditIcon from 'lucide-react/dist/esm/icons/edit';
-import UserIcon from 'lucide-react/dist/esm/icons/user-2';
+import { DollarSign, SquarePen, UserRound } from 'lucide-react';
 import { z } from 'zod';
 
 const paramsSchema = z.object({
@@ -20,17 +18,17 @@ export default function OrganizationSettingsLayout({
     {
       label: 'General',
       href: `/organization/${organizationId}/settings`,
-      icon: <EditIcon />,
+      icon: <SquarePen />,
     },
     {
       label: 'Organization Members',
       href: `/organization/${organizationId}/settings/members`,
-      icon: <UserIcon />,
+      icon: <UserRound />,
     },
     {
       label: 'Billing',
       href: `/organization/${organizationId}/settings/billing`,
-      icon: <DollarSignIcon />,
+      icon: <DollarSign />,
     },
   ];
 

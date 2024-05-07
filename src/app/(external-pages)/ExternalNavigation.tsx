@@ -4,7 +4,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import acmeLightLogo from '@public/logos/acme-logo-dark.png';
 import acmeDarkLogo from '@public/logos/acme-logo-light.png';
-import Menu from 'lucide-react/dist/esm/icons/menu';
+import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

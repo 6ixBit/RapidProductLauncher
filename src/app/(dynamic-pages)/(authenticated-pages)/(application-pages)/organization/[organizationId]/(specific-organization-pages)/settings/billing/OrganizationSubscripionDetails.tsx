@@ -5,8 +5,7 @@ import { getActiveProductsWithPrices } from '@/data/user/organizations';
 import { Enum, NormalizedSubscription, UnwrapPromise } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscription';
-import CheckIcon from 'lucide-react/dist/esm/icons/check';
-import XIcon from 'lucide-react/dist/esm/icons/x';
+import { Check, X } from 'lucide-react';
 import {
   CreateSubscriptionButton,
   ManageSubscriptionButton,
@@ -111,26 +110,26 @@ async function ChoosePricingTable({
                     <div className="px-5 pl-6 pt-0 mb-8">
                       <ul className="font-medium text-muted-foreground">
                         <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          <CheckIcon className="text-green-600 w-6 h-6" />
+                          <Check className="text-green-600 w-6 h-6" />
                           <T.P className="leading-6 ml-3">
                             {product.description}
                           </T.P>
                         </li>
                         <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          <CheckIcon className="text-green-600 w-6 h-6" />
+                          <Check className="text-green-600 w-6 h-6" />
                           <T.P className="leading-6 ml-3">A nice feature</T.P>
                         </li>
                         <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          <CheckIcon className="text-green-600 w-6 h-6" />
+                          <Check className="text-green-600 w-6 h-6" />
                           <T.P className="leading-6 ml-3">
                             Another nice feature
                           </T.P>
                         </li>
                         <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
                           {product.price.unit_amount > 0 ? (
-                            <CheckIcon className="text-green-600 w-6 h-6" />
+                            <Check className="text-green-600 w-6 h-6" />
                           ) : (
-                            <XIcon className="text-red-500" />
+                            <X className="text-red-500" />
                           )}
                           <T.P className="leading-6 ml-3">
                             A premium feature
