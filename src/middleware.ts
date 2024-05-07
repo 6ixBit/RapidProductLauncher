@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { Database } from './lib/database.types';
 import { toSiteURL } from './utils/helpers';
-// const matchAppAdmin = match('/app_admin_preview/(.*)?');
 import { match } from 'path-to-regexp';
 import { authUserMetadataSchema } from './utils/zod-schemas/authUserMetadata';
 
@@ -17,11 +16,9 @@ const onboardingPaths = `/onboarding/(.*)?`;
 const protectedPagePrefixes = [
   `/organization(/.*)?`, // matches /organization and any sub route of /organization
   `/project(/.*)?`, // matches /project and any sub route of /project
-  `/app_admin(/.*)?`, // matches /app_admin and any sub route of /app_admin
   `/dashboard`,
   `/settings(/.*)?`,
   `/invitations`,
-  `/app_admin_preview(/.*)?`,
   `/render/(.*)?`,
   onboardingPaths,
 ];
@@ -76,20 +73,6 @@ export async function middleware(req: NextRequest) {
   }
   if (isProtectedPage(req.nextUrl.pathname) && !maybeUser) {
     return NextResponse.redirect(toSiteURL('/login'));
-  }
-  if (
-    !req.nextUrl.pathname.startsWith(`/app_admin_preview`) &&
-    req.nextUrl.pathname.startsWith('/app_admin')
-  ) {
-    if (
-      !(
-        maybeUser &&
-        'user_role' in maybeUser &&
-        maybeUser.user_role === 'admin'
-      )
-    ) {
-      return NextResponse.redirect(toSiteURL('/dashboard'));
-    }
   }
   return res;
 }
