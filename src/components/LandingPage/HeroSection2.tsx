@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { T } from '@/components/ui/Typography';
-import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
+import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -28,7 +28,7 @@ const HeroSection2 = ({ title, description, image }: HeroSection2Props) => {
                   <T.Small className="text-xs md:text-sm text-gray-600 dark:text-slate-400">
                     New Feature now available
                   </T.Small>
-                  <ChevronRightIcon className="w-5 h-5 group-hover:translate-x-1 transition" />
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                 </div>
               </div>
               <h1 className="font-semibold text-4xl leading-[44px] sm:text-4xl md:text-5xl md:leading-[60px] xl:text-7xl 2xl:text-7xl xl:leading-[90px] max-w-2xl tracking-tighter text-gray-900 dark:text-white md:text-center">
@@ -67,7 +67,7 @@ const HeroSection2 = ({ title, description, image }: HeroSection2Props) => {
                   className="px-4 group w-full md:w-fit"
                 >
                   Learn More
-                  <ChevronRightIcon className="ml-2 group-hover:translate-x-1 transition" />
+                  <ChevronRight className="ml-2 group-hover:translate-x-1 transition" />
                 </Button>
               </Link>
             </div>

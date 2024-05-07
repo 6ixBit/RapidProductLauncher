@@ -3,7 +3,7 @@
 import { T } from '@/components/ui/Typography';
 import { Button } from '@/components/ui/button';
 import { getDefaultOrganization } from '@/data/user/organizations';
-import Check from 'lucide-react/dist/esm/icons/check';
+import { Check } from 'lucide-react';
 import { SetDefaultOrganizationButton } from './SetDefaultOrganizationButton';
 
 function Wrapper({ children }: { children: React.ReactNode }) {

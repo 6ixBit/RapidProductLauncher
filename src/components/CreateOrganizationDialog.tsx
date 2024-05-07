@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import OrganizationIcon from 'lucide-react/dist/esm/icons/network';
-import PlusIcon from 'lucide-react/dist/esm/icons/plus';
+import { Network, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 type CreateOrganizationDialogProps = {
@@ -51,14 +50,14 @@ export function CreateOrganizationDialog({
             size="default"
             className="w-full flex space-x-1"
           >
-            <PlusIcon />
+            <Plus />
             <span>New Organization</span>
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
-              <OrganizationIcon className=" w-6 h-6" />
+              <Network className=" w-6 h-6" />
             </div>
             <div className="p-1">
               <DialogTitle className="text-lg">Create Organization</DialogTitle>

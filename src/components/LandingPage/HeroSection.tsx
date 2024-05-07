@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { T } from '@/components/ui/Typography';
-import ChevronRightIcon from 'lucide-react/dist/esm/icons/chevron-right';
+import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -31,7 +31,7 @@ export default function HeroSection({
                 <T.Small className="text-xs md:text-sm text-gray-600 dark:text-slate-400">
                   New Feature now available
                 </T.Small>
-                <ChevronRightIcon className="w-5 h-5 group-hover:translate-x-1 transition" />
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
               </div>
             </div>
             <h1 className="font-semibold max-w-2xl tracking-tight text-4xl leading-[44px] md:text-5xl xl:text-6xl xl:leading-[72px] text-gray-900 dark:text-slate-50">
@@ -70,7 +70,7 @@ export default function HeroSection({
                 className="group mt-3 px-6 w-full md:w-fit"
               >
                 Learn More
-                <ChevronRightIcon className="ml-2 group-hover:translate-x-1 transition" />
+                <ChevronRight className="ml-2 group-hover:translate-x-1 transition" />
               </Button>
             </Link>
           </div>

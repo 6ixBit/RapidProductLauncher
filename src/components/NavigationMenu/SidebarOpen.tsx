@@ -3,8 +3,7 @@ import { SidebarVisibilityContext } from '@/contexts/SidebarVisibilityContext';
 import { setSidebarVisibility } from '@/data/user/ui';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
-import HambugerMenu from 'lucide-react/dist/esm/icons/menu';
-import PanelLeftOpen from 'lucide-react/dist/esm/icons/panel-left-open';
+import { Menu, PanelLeftOpen } from 'lucide-react';
 import Image from 'next/image';
 import darkLogo from 'public/logos/nextbase-dark-logo.png';
 import lightLogo from 'public/logos/nextbase-light-logo.png';
@@ -70,7 +69,7 @@ export function SidebarOpen() {
             className="group cursor-pointer border flex items-center p-1.5 h-[30px] hover:bg-neutral-50 dark:hover:bg-white/5 rounded-md"
             onClick={openSidebar}
           >
-            <HambugerMenu className="h-4 w-4 text-neutral-500 group-hover:text-neutral-700 dark:text-slate-400 group-hover:dark:text-slate-300" />
+            <Menu className="h-4 w-4 text-neutral-500 group-hover:text-neutral-700 dark:text-slate-400 group-hover:dark:text-slate-300" />
           </div>
         </div>
       </div>
