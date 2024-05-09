@@ -49,6 +49,8 @@ export const createOrganization = async (
   }
 
   if (isOnboardingFlow) {
+
+
     const { error: updateError } = await supabaseClient
       .from('user_private_info')
       .update({ default_organization: organizationId })

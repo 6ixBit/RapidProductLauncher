@@ -107,7 +107,7 @@ export function ProfileUpdate({
   const [hasImageLoaded, setHasImageLoaded] = useState(false);
 
   const avatarUrlWithFallback = getUserAvatarUrl({
-    profileAvatarUrl: userProfile.avatar_url,
+    profileAvatarUrl: avatarUrl ?? userProfile.avatar_url,
     email: userEmail,
   });
 
@@ -130,7 +130,6 @@ export function ProfileUpdate({
 
   const { mutate: uploadAvatar } = useSAToastMutation(
     async (file: File) => {
-      setIsUploading(true);
       const formData = new FormData();
       formData.append('file', file);
 
@@ -138,13 +137,16 @@ export function ProfileUpdate({
         upsert: true,
       });
 
-      setIsUploading(false);
       return newAvatarUrl;
     },
     {
+      onMutate: () => {
+        setIsUploading(true);
+      },
       successMessage: 'Avatar uploaded!',
       errorMessage: 'Error uploading avatar',
       onSuccess: (response) => {
+        setIsUploading(false);
         if (response.status === 'success') {
           setAvatarUrl(response.data);
         }
