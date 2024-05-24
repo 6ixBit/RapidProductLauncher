@@ -1,20 +1,20 @@
-'use server';
+"use server";
 
-import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
-import type { ValidSAPayload } from '@/types';
+import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
+import type { SAPayload } from "@/types";
 
-export async function refreshSessionAction(): Promise<ValidSAPayload<void>> {
-  const supabaseClient = createSupabaseUserServerActionClient();
-  const refreshSessionResponse = await supabaseClient.auth.refreshSession();
+export async function refreshSessionAction(): Promise<SAPayload> {
+	const supabaseClient = createSupabaseUserServerActionClient();
+	const refreshSessionResponse = await supabaseClient.auth.refreshSession();
 
-  if (refreshSessionResponse.error) {
-    return {
-      status: 'error',
-      message: refreshSessionResponse.error.message,
-    };
-  }
+	if (refreshSessionResponse.error) {
+		return {
+			status: "error",
+			message: refreshSessionResponse.error.message,
+		};
+	}
 
-  return {
-    status: 'success',
-  };
+	return {
+		status: "success",
+	};
 }
