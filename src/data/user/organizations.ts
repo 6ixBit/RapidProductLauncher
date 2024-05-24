@@ -5,8 +5,8 @@ import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user
 import type {
   Enum,
   NormalizedSubscription,
+  SAPayload,
   Table,
-  ValidSAPayload,
 } from '@/types';
 import { toSiteURL } from '@/utils/helpers';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
@@ -19,7 +19,7 @@ import { refreshSessionAction } from './session';
 export const createOrganization = async (
   name: string,
   { isOnboardingFlow = false }: { isOnboardingFlow?: boolean } = {},
-): Promise<ValidSAPayload<string>> => {
+): Promise<SAPayload<string>> => {
   const supabaseClient = createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
 
