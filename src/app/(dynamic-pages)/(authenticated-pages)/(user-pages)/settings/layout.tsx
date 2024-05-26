@@ -1,8 +1,7 @@
 'use client';
 import { PageHeading } from '@/components/PageHeading';
 import { TabsNavigation } from '@/components/TabsNavigation';
-import LockIcon from 'lucide-react/dist/esm/icons/lock';
-import UserIcon from 'lucide-react/dist/esm/icons/user';
+import { Lock, User } from 'lucide-react';
 import { useMemo } from 'react';
 
 export default function UserSettingsClientLayout({
@@ -15,12 +14,12 @@ export default function UserSettingsClientLayout({
       {
         label: 'Account Settings',
         href: `/settings`,
-        icon: <UserIcon />,
+        icon: <User />,
       },
       {
         label: 'Security',
         href: `/settings/security`,
-        icon: <LockIcon />,
+        icon: <Lock />,
       },
     ];
   }, []);

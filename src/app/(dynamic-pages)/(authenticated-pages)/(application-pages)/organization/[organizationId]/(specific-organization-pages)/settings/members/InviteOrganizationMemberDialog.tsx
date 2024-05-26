@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Enum } from '@/types';
-import AddUserIcon from 'lucide-react/dist/esm/icons/user-plus';
+import { UserPlus } from 'lucide-react';
 import { useState } from 'react';
 
 type Props = {
@@ -36,14 +36,14 @@ export const InviteOrganizationMemberDialog = ({
           size="default"
           data-testid="invite-user-button"
         >
-          <AddUserIcon className="mr-2 w-5 h-5" />
+          <UserPlus className="mr-2 w-5 h-5" />
           Invite user{' '}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
-            <AddUserIcon className=" w-6 h-6" />
+            <UserPlus className=" w-6 h-6" />
           </div>
           <div className="p-1">
             <DialogTitle className="text-lg">Invite user</DialogTitle>

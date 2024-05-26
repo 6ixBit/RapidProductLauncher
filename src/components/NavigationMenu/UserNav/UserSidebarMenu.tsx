@@ -1,7 +1,5 @@
 import { cn } from '@/utils/cn';
-import SecurityIcon from 'lucide-react/dist/esm/icons/lock';
-import LogoutIcon from 'lucide-react/dist/esm/icons/log-out';
-import AccountsIcon from 'lucide-react/dist/esm/icons/user';
+import { Lock, LogOut, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FeatureViewModal } from './FeatureViewModal';
@@ -51,7 +49,7 @@ export function UserSidebarMenu({
           'flex px-3 gap-2 items-center py-2 text-sm',
         )}
       >
-        <AccountsIcon className="text-lg" /> Account settings
+        <User className="text-lg" /> Account settings
       </Link>
 
       <Link
@@ -61,7 +59,7 @@ export function UserSidebarMenu({
           'flex px-3 gap-2 items-center py-2 text-sm',
         )}
       >
-        <SecurityIcon className="text-lg" /> Security Settings
+        <Lock className="text-lg" /> Security Settings
       </Link>
       <div className="h-px bg-gray-200 dark:bg-gray-700 mx-2.5 my-2" />
       <FeatureViewModal />
@@ -74,7 +72,7 @@ export function UserSidebarMenu({
           'flex px-3 gap-2 items-center py-2 text-sm',
         )}
       >
-        <LogoutIcon className="text-lg" />
+        <LogOut className="text-lg" />
         Log out
       </Link>
     </div>

@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/utils/cn';
-import GuideIcon from 'lucide-react/dist/esm/icons/help-circle';
+import { HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import { ReactNode, useState } from 'react';
 
@@ -52,7 +52,7 @@ export function OnboardingModal({
             'flex px-3 gap-2 items-center py-2 text-sm',
           )}
         >
-          <GuideIcon />
+          <HelpCircle />
           Help
         </div>
       </DialogTrigger>

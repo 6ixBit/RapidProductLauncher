@@ -1,13 +1,13 @@
-'use client';
-import { ValidSAPayload } from '@/types';
+"use client";
+import type { SAPayload, SASuccessPayload } from "@/types";
 import {
-  MutationFunction,
-  UseMutationOptions,
-  UseMutationResult,
   useMutation,
-} from '@tanstack/react-query';
-import { useRef } from 'react';
-import { toast } from 'sonner';
+  type MutationFunction,
+  type UseMutationOptions,
+  type UseMutationResult,
+} from "@tanstack/react-query";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 type MutationFn<TData, TVariables> = MutationFunction<TData, TVariables>;
 
@@ -23,7 +23,7 @@ interface ToastMutationOptions<TData, TError extends Error, TVariables>
  * It leverages the `useMutation` hook from `@tanstack/react-query` to perform the mutation operation.
  * This hook enhances user experience by providing immediate visual feedback during the mutation process.
  *
- * @param mutationFn The mutation function to be executed. It should return a promise that resolves to a `ValidSAPayload<TData>`.
+ * @param mutationFn The mutation function to be executed. It should return a promise that resolves to a `SAPayload<TData>`.
  * @param options An optional configuration object that extends `UseMutationOptions` from `@tanstack/react-query` with additional properties:
  *  - `loadingMessage`: A string or a function returning a string to display as a toast message during the loading state.
  *  - `successMessage`: A string or a function returning a string to display as a toast message when the mutation succeeds.
@@ -39,18 +39,28 @@ export function useSAToastMutation<
   TError extends Error = Error,
   TVariables = void,
 >(
-  mutationFn: MutationFn<ValidSAPayload<TData>, TVariables>,
-  options?: ToastMutationOptions<ValidSAPayload<TData>, TError, TVariables>,
-): UseMutationResult<ValidSAPayload<TData>, TError, TVariables> {
+  mutationFn: MutationFn<SAPayload<TData>, TVariables>,
+  options?: Omit<
+    ToastMutationOptions<SAPayload<TData>, TError, TVariables>,
+    "onSuccess" | "onError"
+  > & {
+    onSuccess?: (
+      data: SASuccessPayload<TData>,
+      variables: TVariables,
+      context: unknown,
+    ) => void;
+    onError?: (error: Error, variables: TVariables, context: unknown) => void;
+  },
+): UseMutationResult<SAPayload<TData>, TError, TVariables> {
   const toastIdRef = useRef<string | number | null>(null);
-  return useMutation<ValidSAPayload<TData>, TError, TVariables>(mutationFn, {
+  return useMutation<SAPayload<TData>, TError, TVariables>(mutationFn, {
     ...options,
     onMutate: async (variables) => {
       const loadingMessage = options?.loadingMessage
-        ? typeof options.loadingMessage === 'function'
+        ? typeof options.loadingMessage === "function"
           ? options.loadingMessage(variables)
           : options.loadingMessage
-        : 'Loading...';
+        : "Loading...";
 
       toastIdRef.current = toast.loading(loadingMessage);
 
@@ -60,18 +70,18 @@ export function useSAToastMutation<
     },
     onSuccess: (data, variables, context) => {
       // router.refresh();
-      const isHandledError = data.status === 'error';
+      const isHandledError = data.status === "error";
       // error scenario
       if (isHandledError) {
         const baseErrorMessage = data.message;
         const errorMessage = options?.errorMessage
-          ? typeof options.errorMessage === 'function'
+          ? typeof options.errorMessage === "function"
             ? options.errorMessage(
               new Error(baseErrorMessage) as TError,
               variables,
             )
-            : `${options.errorMessage ?? 'Error!'}: ${baseErrorMessage}`
-          : 'Error!';
+            : `${options.errorMessage ?? "Error!"}: ${baseErrorMessage}`
+          : "Error!";
         toast.error(errorMessage, {
           id: toastIdRef.current ?? undefined,
         });
@@ -79,10 +89,10 @@ export function useSAToastMutation<
       }
       // success scenario
       const successMessage = options?.successMessage
-        ? typeof options.successMessage === 'function'
+        ? typeof options.successMessage === "function"
           ? options.successMessage(data, variables)
           : options.successMessage
-        : 'Success!';
+        : "Success!";
       toast.success(successMessage, {
         id: toastIdRef.current ?? undefined,
       });
@@ -93,11 +103,11 @@ export function useSAToastMutation<
     },
     onError: (error, variables, context) => {
       const errorMessage = options?.errorMessage
-        ? typeof options.errorMessage === 'function'
+        ? typeof options.errorMessage === "function"
           ? options.errorMessage(error, variables)
           : options.errorMessage
-        : 'Error!';
-      console.warn('[useSAToastMutation]', errorMessage);
+        : "Error!";
+      console.warn("[useSAToastMutation]", errorMessage);
       toast.error(errorMessage, {
         id: toastIdRef.current ?? undefined,
       });

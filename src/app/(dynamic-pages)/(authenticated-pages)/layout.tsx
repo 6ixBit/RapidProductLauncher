@@ -1,14 +1,12 @@
+import { Skeleton } from '@/components/ui/skeleton';
 import { SIDEBAR_VISIBILITY_COOKIE_KEY } from '@/constants';
 import { LoggedInUserProvider } from '@/contexts/LoggedInUserContext';
 import { SidebarVisibilityProvider } from '@/contexts/SidebarVisibilityContext';
-import { getUserProfile } from '@/data/user/user';
-import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
-import { AppSupabaseClient } from '@/types';
 import { errors } from '@/utils/errors';
-import { User } from '@supabase/supabase-js';
+
+import { verifySession } from '@/utils/server/verifySession';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 import { ClientLayout } from './ClientLayout';
 
 function getSidebarVisibility() {
@@ -20,31 +18,16 @@ function getSidebarVisibility() {
   return true;
 }
 
-async function fetchData(supabaseClient: AppSupabaseClient, authUser: User) {
-  const [userProfile] = await Promise.all([getUserProfile(authUser.id)]);
-  return { userProfile };
-}
-
-export default async function Layout({ children }: { children: ReactNode }) {
-  const supabaseClient = createSupabaseUserServerComponentClient();
-  const { data, error } = await supabaseClient.auth.getUser();
-  const { user } = data;
-
-  if (!user) {
-    // This is unreachable because the user is authenticated
-    // But we need to check for it anyway for TypeScript.
-    return redirect('/login');
-  } else if (error) {
-    return <p>Error: An error occurred.</p>;
-  }
+async function AuthenticatedLayout({ children }: { children: ReactNode }) {
+  const user = await verifySession();
 
   try {
-    const { userProfile } = await fetchData(supabaseClient, data.user);
     const sidebarVisibility = getSidebarVisibility();
+
     return (
       <SidebarVisibilityProvider initialValue={sidebarVisibility}>
         <LoggedInUserProvider user={user}>
-          <ClientLayout userProfile={userProfile}>{children}</ClientLayout>
+          <ClientLayout>{children}</ClientLayout>
         </LoggedInUserProvider>
       </SidebarVisibilityProvider>
     );
@@ -52,4 +35,11 @@ export default async function Layout({ children }: { children: ReactNode }) {
     errors.add(fetchDataError);
     return <p>Error: An error occurred.</p>;
   }
+}
+export default async function Layout({ children }: { children: ReactNode }) {
+  return (
+    <Suspense fallback={<Skeleton className="w-16 h-6" />}>
+      <AuthenticatedLayout>{children}</AuthenticatedLayout>
+    </Suspense>
+  );
 }

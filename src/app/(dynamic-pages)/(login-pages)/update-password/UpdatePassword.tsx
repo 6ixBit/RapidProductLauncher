@@ -1,5 +1,12 @@
 'use client';
 import { Password } from '@/components/Auth/Password';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { updatePasswordAction } from '@/data/user/security';
 import { useToastMutation } from '@/hooks/useToastMutation';
 import { useRouter } from 'next/navigation';
@@ -23,20 +30,22 @@ export function UpdatePassword() {
   return (
     <div className="container h-full grid items-center text-left max-w-lg mx-auto overflow-auto">
       <div className="space-y-8 ">
-        {/* <Auth providers={['twitter']} supabaseClient={supabase} /> */}
-        <div className="flex flex-col items-start gap-0 w-[320px]">
-          <p className="text-xl font-[700]">Reset Password</p>
-          <p className="text-base text-left font-[400]">
-            Create a strong new password for your account
-          </p>
-        </div>
-
-        <Password
-          isLoading={updatePasswordMutation.isLoading}
-          onSubmit={updatePasswordMutation.mutate}
-          label="Create your new Password"
-          buttonLabel="Confirm Password"
-        />
+        <Card>
+          <CardHeader>
+            <CardTitle>Reset Password</CardTitle>
+            <CardDescription>
+              Enter your email to recieve a Magic Link to reset your password.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Password
+              isLoading={updatePasswordMutation.isLoading}
+              onSubmit={(password) => updatePasswordMutation.mutate(password)}
+              label="Create your new Password"
+              buttonLabel="Confirm Password"
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

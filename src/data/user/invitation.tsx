@@ -1,17 +1,16 @@
 'use server';
+import type { Tables } from '@/lib/database.types';
 import { supabaseAdminClient } from '@/supabase-clients/admin/supabaseAdminClient';
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
-import { Enum } from '@/types';
+import type { Enum, SAPayload } from '@/types';
 import { sendEmail } from '@/utils/api-routes/utils';
 import { toSiteURL } from '@/utils/helpers';
-import { sendEmailInbucket } from '@/utils/sendEmailInbucket';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { renderAsync } from '@react-email/render';
 import TeamInvitationEmail from 'emails/TeamInvitation';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { getUserProfile } from './user';
 
 // This function allows an application admin with service_role
 // to check if a user with a given email exists in the auth.users table
@@ -119,7 +118,7 @@ export async function createInvitationHandler({
   organizationId: string;
   email: string;
   role: Enum<'organization_member_role'>;
-}) {
+}): Promise<SAPayload<Tables<'organization_join_invitations'>>> {
   'use server';
   const supabaseClient = createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
@@ -131,7 +130,7 @@ export async function createInvitationHandler({
     .single();
 
   if (organizationResponse.error) {
-    throw organizationResponse.error;
+    return { status: 'error', message: organizationResponse.error.message };
   }
 
   const inviteeUserDetails = await setupInviteeUserDetails(email);
@@ -145,9 +144,13 @@ export async function createInvitationHandler({
     .eq('organization_id', organizationId);
 
   if (existingInvitationResponse.error) {
-    throw existingInvitationResponse.error;
-  } else if (existingInvitationResponse.data.length > 0) {
-    throw new Error('User already invited');
+    return {
+      status: 'error',
+      message: existingInvitationResponse.error.message,
+    };
+  }
+  if (existingInvitationResponse.data.length > 0) {
+    return { status: 'error', message: 'User already invited' };
   }
 
   const invitationResponse = await supabaseClient
@@ -164,7 +167,7 @@ export async function createInvitationHandler({
     .single();
 
   if (invitationResponse.error) {
-    throw invitationResponse.error;
+    return { status: 'error', message: invitationResponse.error.message };
   }
 
   const viewInvitationUrl = await getViewInvitationUrl(
@@ -180,7 +183,7 @@ export async function createInvitationHandler({
     .single();
 
   if (userProfileData.error) {
-    throw userProfileData.error;
+    return { status: 'error', message: userProfileData.error.message };
   }
 
   const inviterName = userProfileData.data?.full_name || `User [${user.email}]`;
@@ -195,31 +198,16 @@ export async function createInvitationHandler({
     />,
   );
 
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'test'
-  ) {
-    console.log({
-      viewInvitationUrl,
-    });
-    await sendEmailInbucket({
-      to: email,
-      subject: `Invitation to join ${organizationResponse.data.title}`,
-      html: invitationEmailHTML,
-      from: process.env.ADMIN_EMAIL,
-    });
-  } else {
-    await sendEmail({
-      to: email,
-      subject: `Invitation to join ${organizationResponse.data.title}`,
-      html: invitationEmailHTML,
-      from: process.env.ADMIN_EMAIL,
-    });
-  }
+  await sendEmail({
+    to: email,
+    subject: `Invitation to join ${organizationResponse.data.title}`,
+    html: invitationEmailHTML,
+    from: process.env.ADMIN_EMAIL,
+  });
 
   revalidatePath('/organization/[organizationId]');
 
-  return invitationResponse.data;
+  return { status: 'success', data: invitationResponse.data };
 }
 
 export async function acceptInvitationAction(

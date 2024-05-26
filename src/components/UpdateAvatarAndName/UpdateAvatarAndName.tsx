@@ -6,7 +6,7 @@ import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
 import { classNames } from '@/utils/classNames';
 import { getUserAvatarUrl } from '@/utils/helpers';
 import { motion } from 'framer-motion';
-import CameraIcon from 'lucide-react/dist/esm/icons/camera';
+import { Camera } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '../Button';
 import { PageHeading } from '../PageHeading';
@@ -69,10 +69,10 @@ export function UpdateAvatarAndNameBody({
                     /* eslint-disable */
                     isNewAvatarImageLoading
                       ? {
-                          duration: 1,
-                          repeat: Infinity,
-                          repeatType: 'reverse',
-                        }
+                        duration: 1,
+                        repeat: Infinity,
+                        repeatType: 'reverse',
+                      }
                       : undefined
                     /* eslint-enable */
                   }
@@ -105,7 +105,7 @@ export function UpdateAvatarAndNameBody({
                   accept="image/*"
                 />
                 <div className="bg-gray-900 group-hover:bg-gray-800  absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)]  border border-muted-foreground rounded-full p-1">
-                  <CameraIcon className="h-4 w-4 group-hover:fill-white/30 text-white" />
+                  <Camera className="h-4 w-4 group-hover:fill-white/30 text-white" />
                 </div>
               </Label>
             </div>

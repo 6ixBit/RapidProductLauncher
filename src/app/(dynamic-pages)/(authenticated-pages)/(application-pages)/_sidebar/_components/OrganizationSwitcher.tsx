@@ -10,16 +10,14 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { createOrganization } from '@/data/user/organizations';
-import { useToastMutation } from '@/hooks/useToastMutation';
+import { useSAToastMutation } from '@/hooks/useSAToastMutation';
 import { cn } from '@/utils/cn';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@radix-ui/react-popover';
-import CheckIcon from 'lucide-react/dist/esm/icons/check';
-import ChevronUpDown from 'lucide-react/dist/esm/icons/chevrons-up-down';
-import UsersIcon from 'lucide-react/dist/esm/icons/users-2';
+import { Check, ChevronsUpDown, UsersRound } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -39,7 +37,7 @@ export function OrganizationSwitcher({
   const currentOrganization = slimOrganizations.find(
     (organization) => organization.id === currentOrganizationId,
   );
-  const { mutate, isLoading } = useToastMutation(
+  const { mutate, isLoading } = useSAToastMutation(
     async (organizationTitle: string) => {
       return await createOrganization(organizationTitle);
     },
@@ -47,8 +45,10 @@ export function OrganizationSwitcher({
       loadingMessage: 'Creating organization...',
       errorMessage: 'Failed to create organization',
       successMessage: 'Organization created!',
-      onSuccess: (organization) => {
-        router.push(`/organization/${organization.id}`);
+      onSuccess: (response) => {
+        if (response.status === 'success') {
+          router.push(`/organization/${response.data}`);
+        }
       },
     },
   );
@@ -75,10 +75,10 @@ export function OrganizationSwitcher({
           className="mx-0 px-2 py-5 border hover:border-neutral-700 dark:hover:border-gray-500 hover:bg-transparent rounded-sm font-normal text-gray-500 dark:text-gray-300 text-sm justify-between truncate w-full "
         >
           <div className="flex items-center gap-1">
-            <UsersIcon className="mr-2 h-4 w-4 mt-0.5" />
+            <UsersRound className="mr-2 h-4 w-4 mt-0.5" />
             {currentOrganization?.title ?? 'Select Organization'}
           </div>
-          <ChevronUpDown className=" h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className=" h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -101,7 +101,7 @@ export function OrganizationSwitcher({
                 >
                   {/* <UsersIcon className="mr-2 h-4 w-4 mt-0.5" /> */}
                   {organization.title}
-                  <CheckIcon
+                  <Check
                     className={cn(
                       'ml-auto h-4 w-4',
                       organization.id === currentOrganizationId

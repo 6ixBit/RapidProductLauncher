@@ -1,12 +1,12 @@
 'use server';
-import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
+import { cache } from 'react';
+import { getSession } from './verifySession';
 
-export const serverGetLoggedInUser = async () => {
-  const supabase = createSupabaseUserServerComponentClient();
+export const serverGetLoggedInUser = cache(async () => {
   const {
     data: { session },
     error: sessionError,
-  } = await supabase.auth.getSession();
+  } = await getSession();
 
   if (sessionError) {
     throw sessionError;
@@ -17,4 +17,4 @@ export const serverGetLoggedInUser = async () => {
   }
 
   return session.user;
-};
+});

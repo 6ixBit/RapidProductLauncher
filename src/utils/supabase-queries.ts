@@ -1,4 +1,4 @@
-import { AppSupabaseClient, AuthProvider, Table } from '@/types';
+import { AppSupabaseClient } from '@/types';
 import { User } from '@supabase/supabase-js';
 import { errors } from './errors';
 import { toSiteURL } from './helpers';
@@ -219,30 +219,4 @@ export const updatePassword = async (
     errors.add(error.message);
     throw error;
   }
-};
-
-/* ==================== */
-/* Teams */
-/* ==================== */
-
-export const createTeam = async (
-  supabase: AppSupabaseClient,
-  organizationId: string,
-  name: string,
-) => {
-  const { data, error } = await supabase
-    .from('teams')
-    .insert({
-      name,
-      organization_id: organizationId,
-    })
-    .select('*')
-    .single();
-
-  if (error) {
-    errors.add(error.message);
-    throw error;
-  }
-
-  return data;
 };
