@@ -2,8 +2,8 @@
 ALTER TABLE "public"."organizations" DROP CONSTRAINT "organizations_created_by_fkey";
 
 -- We need to drop the policies that refer to the 'created_by' column
-DROP POLICY "All team members can read organizations" ON "public"."organizations";
-DROP POLICY "All organization members can read organizations" ON "public"."organizations";
+DROP POLICY IF EXISTS "All team members can read organizations" ON "public"."organizations";
+DROP POLICY IF EXISTS "All organization members can read organizations" ON "public"."organizations";
 
 BEGIN;
 
