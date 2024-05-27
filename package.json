@@ -142,5 +142,6 @@
     "tailwindcss-cli": "^0.1.2",
     "typescript": "^5.0.0",
     "vitest": "^0.34.0"
-  }
+  },
+  "packageManager": "pnpm@9.0.6"
 }
