@@ -2,15 +2,12 @@ import { useRef, useState } from 'react';
 
 import { T } from '@/components/ui/Typography';
 import { Label } from '@/components/ui/label';
-import { useLoggedInUserEmail } from '@/hooks/useLoggedInUserEmail';
-import { classNames } from '@/utils/classNames';
 import { getUserAvatarUrl } from '@/utils/helpers';
 import { motion } from 'framer-motion';
 import { Camera } from 'lucide-react';
 import Image from 'next/image';
-import { Button } from '../Button';
 import { PageHeading } from '../PageHeading';
-import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 const MotionImage = motion(Image);
 
 export function UpdateAvatarAndNameBody({
@@ -22,6 +19,8 @@ export function UpdateAvatarAndNameBody({
   profileFullname,
   isNewAvatarImageLoading,
   setIsNewAvatarImageLoading,
+  userEmail,
+  userId,
 }: {
   profileAvatarUrl: string | undefined;
   isUploading: boolean;
@@ -31,13 +30,16 @@ export function UpdateAvatarAndNameBody({
   profileFullname: string | undefined;
   isNewAvatarImageLoading: boolean;
   setIsNewAvatarImageLoading: (value: boolean) => void;
+  userEmail: string | undefined;
+  userId: string;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const email = useLoggedInUserEmail();
-  const [fullName, setFullName] = useState(profileFullname ?? email);
+  const [fullName, setFullName] = useState(
+    profileFullname ?? userEmail ?? `User ${userId}`,
+  );
   const avatarURL = getUserAvatarUrl({
     profileAvatarUrl,
-    email,
+    email: userEmail,
   });
   return (
     <div className="space-y-6 max-w-sm">
@@ -76,7 +78,7 @@ export function UpdateAvatarAndNameBody({
                       : undefined
                     /* eslint-enable */
                   }
-                  onLoadingComplete={() => {
+                  onLoad={() => {
                     setIsNewAvatarImageLoading(false);
                   }}
                   onError={() => {
@@ -115,9 +117,9 @@ export function UpdateAvatarAndNameBody({
               Name
             </Label>
             <div className="flex space-x-2 ">
-              <Input
+              <input
                 disabled={isLoading}
-                className="block"
+                className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                 id="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -129,12 +131,8 @@ export function UpdateAvatarAndNameBody({
           </div>
           <div className="flex justify-start space-x-2">
             <Button
-              className={classNames(
-                'flex w-full justify-center rounded-lg border border-transparent py-2 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
-                isLoading
-                  ? 'bg-yellow-300 dark:bg-yellow-700 '
-                  : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  ',
-              )}
+              className="w-full"
+              variant={'default'}
               type="submit"
               disabled={isLoading}
             >
