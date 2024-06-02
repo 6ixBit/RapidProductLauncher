@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const Footer = () => {
   return (
-    <footer className="p-4 bg-gray-50 sm:p-6 dark:bg-slate-800">
+    <footer className="p-4 bg-background sm:p-6 ">
       <div className="mx-auto md:container pt-16 md:pt-24">
         <div className="md:flex md:justify-between pb-16 md:pb-24">
           <div className="mb-6 md:mb-0">
@@ -23,30 +23,30 @@ const Footer = () => {
                 height={32}
                 alt="NextBase Logo"
               />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              <span className="self-center text-2xl font-semibold whitespace-nowrap text-foreground">
                 Acme
               </span>
             </a>
 
-            <p className="mt-4 mb-8 text-gray-600 dark:text-gray-400">
+            <p className="mt-4 mb-8 text-muted-foreground">
               Acme Inc. 123 Acme Street, London, UK, SW1A 1AA
             </p>
             <div className="mt-4 space-x-4 pt-4 border-t dark:border-slate-700 ">
               <a
                 href="https://discord.com/invite/RxNDVewS74"
-                className="text-gray-600 dark:text-gray-400 hover:underline"
+                className="text-muted-foreground hover:underline"
               >
                 Discord
               </a>
               <a
                 href="https://twitter.com/usenextbase"
-                className="text-gray-600 dark:text-gray-400 hover:underline"
+                className="text-muted-foreground hover:underline"
               >
                 Twitter
               </a>
               <a
                 href="https://www.linkedin.com/in/codewithbhargav/"
-                className="text-gray-600 dark:text-gray-400 hover:underline"
+                className="text-muted-foreground hover:underline"
               >
                 LinkedIn
               </a>
@@ -54,10 +54,10 @@ const Footer = () => {
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
-              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+              <h2 className="mb-6 text-sm font-semibold text-foreground">
                 Resources
               </h2>
-              <ul className="text-gray-600 dark:text-gray-400">
+              <ul className="text-muted-foreground">
                 <li className="mb-4">
                   <a href="https://usenextbase.com" className="hover:underline">
                     NextBase
@@ -66,10 +66,10 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+              <h2 className="mb-6 text-sm font-semibold text-foreground">
                 Follow us
               </h2>
-              <ul className="text-gray-600 dark:text-gray-400">
+              <ul className="text-muted-foreground">
                 <li className="mb-4">
                   <a
                     href="https://github.com/imbhargav5"
@@ -89,10 +89,10 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+              <h2 className="mb-6 text-sm font-semibold text-foreground">
                 Legal
               </h2>
-              <ul className="text-gray-600 dark:text-gray-400">
+              <ul className="text-muted-foreground">
                 <li className="mb-4">
                   <a href="/login" className="hover:underline">
                     Privacy Policy
@@ -107,9 +107,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <hr className="my-6 sm:mx-auto border-border lg:my-8" />
         <div className="sm:flex sm:items-center sm:justify-between">
-          <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+          <span className="text-sm sm:text-center text-muted-foreground">
             © 2023{' '}
             <a href="https://usenextbase.com" className="hover:underline">
               Arni Creative Private Limited
@@ -119,7 +119,7 @@ const Footer = () => {
           <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
             <a
               href="/login"
-              className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <svg
                 className="w-5 h-5"
@@ -136,7 +136,7 @@ const Footer = () => {
             </a>
             <a
               href="/login"
-              className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <svg
                 className="w-5 h-5"
@@ -153,7 +153,7 @@ const Footer = () => {
             </a>
             <a
               href="/login"
-              className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <svg
                 className="w-5 h-5"
@@ -166,7 +166,7 @@ const Footer = () => {
             </a>
             <a
               href="/login"
-              className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <svg
                 className="w-5 h-5"
@@ -183,7 +183,7 @@ const Footer = () => {
             </a>
             <a
               href="/login"
-              className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <svg
                 className="w-5 h-5"

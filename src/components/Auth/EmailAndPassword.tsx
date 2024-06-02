@@ -2,7 +2,7 @@ import { Label } from '@/components/ui/label';
 import { classNames } from '@/utils/classNames';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Button } from '../Button';
+import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 export const EmailAndPassword = ({
@@ -76,7 +76,7 @@ export const EmailAndPassword = ({
             <div className="text-sm">
               <Link
                 href="/sign-up"
-                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
+                className="font-medium text-muted-foreground hover:text-foreground"
               >
                 Sign up instead?
               </Link>
@@ -85,7 +85,7 @@ export const EmailAndPassword = ({
             <div className="text-sm">
               <Link
                 href="/login"
-                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
+                className="font-medium text-muted-foreground hover:text-foreground"
               >
                 Login instead?
               </Link>
@@ -96,7 +96,7 @@ export const EmailAndPassword = ({
             <div className="text-sm">
               <Link
                 href="/forgot-password"
-                className="font-medium text-muted-foreground dark:hover:text-gray-600"
+                className="font-medium text-muted-foreground"
               >
                 Forgot your password?
               </Link>
@@ -108,11 +108,9 @@ export const EmailAndPassword = ({
             <Button
               disabled
               type="submit"
+              variant={'default'}
               className={classNames(
-                'flex w-full justify-center rounded-lg border border-transparent py-3 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
-                isLoading
-                  ? 'bg-yellow-300 dark:bg-yellow-700 '
-                  : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  ',
+                'flex w-full justify-center rounded-lg border border-transparent py-3 text-foreground px-4 text-sm font-medium  shadow-sm',
               )}
             >
               Loading...
@@ -120,11 +118,9 @@ export const EmailAndPassword = ({
           ) : (
             <Button
               type="submit"
+              variant={'default'}
               className={classNames(
-                'flex w-full justify-center rounded-lg border border-transparent py-2 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
-                isLoading
-                  ? 'bg-yellow-300 dark:bg-yellow-700 '
-                  : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  ',
+                'flex w-full justify-center rounded-lg border border-transparent py-2 text-foreground px-4 text-sm font-medium  shadow-sm',
               )}
             >
               {view === 'sign-in' ? 'Login' : 'Sign up'}

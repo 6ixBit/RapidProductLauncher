@@ -10,7 +10,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <T.H3 className="dark:text-white">Default Organization</T.H3>
+        <T.H3 className="text-foreground">Default Organization</T.H3>
         <T.Subtle className="text-sm text-muted-foreground max-w-lg">
           If you have multiple organizations, you can set a default
           organization, which will be the organization that you are first taken

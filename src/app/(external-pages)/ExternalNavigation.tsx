@@ -17,7 +17,7 @@ export function ExternalNavigation() {
   const isHome = pathname ? pathname === '/' : false;
 
   return (
-    <header className="sticky inset-x-0 w-full top-0 bg-white/80 dark:bg-slate-900/90  z-50 border-b border-gray-200/20 dark:border-gray-700/40 backdrop-blur">
+    <header className="sticky inset-x-0 w-full top-0 bg-background  z-50 border-b border-border backdrop-blur">
       <div className="inset-0" onClick={() => setMobileMenuOpen(false)} />
       <nav
         className="flex items-center w-full h-[54px] md:container justify-between px-6 md:px-8"
@@ -25,7 +25,7 @@ export function ExternalNavigation() {
       >
         <div className="flex space-x-8">
           <Link href="/" className="font-bold text-xl ">
-            <div className="relative flex space-x-2 w-10 h-10 md:w-fit items-center justify-center text-black dark:text-white dark:-ml-4 -ml-2">
+            <div className="relative flex space-x-2 w-10 h-10 md:w-fit items-center justify-center text-foreground dark:-ml-4 -ml-2">
               <Image
                 src={acmeLightLogo}
                 width={40}

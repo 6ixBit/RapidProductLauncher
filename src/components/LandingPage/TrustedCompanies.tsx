@@ -2,13 +2,13 @@ const TrustedCompanies = () => {
   return (
     <section className="md:container my-24">
       <div className="mx-auto">
-        <h2 className="mb-8 text-base font-medium text-center text-gray-900 dark:text-slate-400">
+        <h2 className="mb-8 text-base font-medium text-center text-muted-foreground">
           You’ll be in good company
         </h2>
         <div className="grid grid-cols-2 gap-4 w-full xl:flex xl:flex-row xl:justify-between xl:items-center md:grid md:grid-cols-4 lg:grid-cols-6 md:gap-12 text-gray-500 dark:text-gray-400">
           <a href="/login" className="flex justify-center items-center h-12">
             <svg
-              className="h-9 hover:text-gray-900 dark:hover:text-white"
+              className="h-9 hover:text-foreground"
               viewBox="0 0 125 35"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ const TrustedCompanies = () => {
           </a>
           <a href="/login" className="flex justify-center items-center">
             <svg
-              className="h-9 hover:text-gray-900 dark:hover:text-white"
+              className="h-9 text-foreground"
               viewBox="0 0 86 29"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,7 @@ const TrustedCompanies = () => {
           </a>
           <a href="/login" className="flex justify-center items-center">
             <svg
-              className="h-8 hover:text-gray-900 dark:hover:text-white"
+              className="h-8 text-foreground"
               viewBox="0 0 151 34"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@ const TrustedCompanies = () => {
           </a>
           <a href="/login" className="flex justify-center items-center">
             <svg
-              className="h-9 hover:text-gray-900 dark:hover:text-white"
+              className="h-9 text-foreground"
               viewBox="0 0 124 38"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ const TrustedCompanies = () => {
           </a>
           <a href="/login" className="flex justify-center items-center">
             <svg
-              className="h-9 hover:text-gray-900 dark:hover:text-white"
+              className="h-9 text-foreground"
               viewBox="0 0 137 37"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +157,7 @@ const TrustedCompanies = () => {
           </a>
           <a href="/login" className="flex justify-center items-center">
             <svg
-              className="h-6 hover:text-gray-900 dark:hover:text-white"
+              className="h-6 text-foreground"
               viewBox="0 0 124 21"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"

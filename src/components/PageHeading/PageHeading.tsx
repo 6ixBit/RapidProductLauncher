@@ -26,7 +26,7 @@ export function PageHeading({
       className={cn(
         '',
         titleClassName,
-        isLoading ? '!text-slate-100 !dark:text-slate-800' : '',
+        isLoading ? 'text-muted-foreground text-4xl' : '',
       )}
     >
       {title}

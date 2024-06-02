@@ -27,7 +27,7 @@ export const ConfirmSendLoginLinkDialog = ({ onConfirm }: Props) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
+          <div className="p-3 w-fit bg-muted mb-2 rounded-lg">
             <Send className=" w-6 h-6" />
           </div>
           <div className="p-1">

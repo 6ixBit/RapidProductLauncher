@@ -20,8 +20,12 @@ type OnboardingFeature = {
 
 export function OnboardingModal({
   featureList,
+  className,
+  children
 }: {
   featureList: OnboardingFeature[];
+  children?: React.ReactNode;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
@@ -45,16 +49,14 @@ export function OnboardingModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <div
-          className={cn(
-            'hover:bg-gray-100 hover:text-gray-900 cursor-pointer text-gray-700 rounded-sm dark:text-gray-400 dark:hover:bg-gray-700/50',
-            'flex px-3 gap-2 items-center py-2 text-sm',
-          )}
+      <DialogTrigger asChild className={cn('w-full', className)}>
+        {children ? children : <Button
+          variant={'secondary'}
+          className='rounded-sm flex gap-2 items-center py-2 text-sm'
         >
           <HelpCircle />
           Help
-        </div>
+        </Button>}
       </DialogTrigger>
       <DialogContent className="p-8">
         <div className="object-fit ">

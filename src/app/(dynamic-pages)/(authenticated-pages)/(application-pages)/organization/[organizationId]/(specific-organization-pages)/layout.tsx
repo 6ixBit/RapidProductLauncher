@@ -1,10 +1,10 @@
 import { ApplicationLayoutShell } from "@/components/ApplicationLayoutShell/ApplicationLayoutShell";
 import { InternalNavbar } from "@/components/NavigationMenu/InternalNavbar";
+import { Settings } from "lucide-react";
 import Link from "next/link";
 import { Suspense, type ReactNode } from "react";
 import { z } from "zod";
 import { OrganizationSidebar } from "../../../_sidebar/OrganizationSidebar";
-import { Settings } from "lucide-react";
 
 const paramsSchema = z.object({
   organizationId: z.string(),
@@ -30,11 +30,11 @@ export default async function Layout({
             <Suspense>{navbar}</Suspense>
             <div className="flex items-center gap-1">
               <Link
-                className="flex gap-1.5 py-1.5 px-3 cursor-pointer items-center group rounded-md transition hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800"
+                className="flex gap-1.5 py-1.5 px-3 cursor-pointer items-center group rounded-md transition hover:cursor-pointer hover:text-foreground"
                 href={`/organization/${organizationId}/settings`}
               >
-                <Settings className="w-4 h-4 text-gray-500 dark:text-slate-400 group-hover:text-gray-700 dark:group-hover:text-slate-300" />
-                <p className="text-gray-500 dark:text-slate-400 group-hover:text-gray-700 dark:group-hover:text-slate-300 text-sm font-normal">
+                <Settings className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
+                <p className="text-muted-foreground group-hover:text-foreground text-sm font-normal">
                   Organization settings
                 </p>
               </Link>

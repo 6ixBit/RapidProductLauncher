@@ -2,7 +2,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { getUserProfile } from '@/data/user/user';
 import { getUserAvatarUrl } from '@/utils/helpers';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
-import { UserNavPopover } from './UserNavPopover';
+import { UserNavDropDownMenu } from './UserNavDropDownMenu';
 
 export async function UserNav() {
   const user = await serverGetLoggedInUser();
@@ -17,7 +17,7 @@ export async function UserNav() {
     <>
       <ThemeToggle />
 
-      <UserNavPopover
+      <UserNavDropDownMenu
         avatarUrl={getUserAvatarUrl({
           email,
           profileAvatarUrl: userProfile.avatar_url,

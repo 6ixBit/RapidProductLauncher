@@ -2,13 +2,11 @@
 
 import { T } from '@/components/ui/Typography';
 import { Transition } from '@headlessui/react';
-import { useEffect, useState } from 'react';
-import acmeDarkLogo from '@public/logos/acme-logo-dark.png';
-import acmeLightLogo from '@public/logos/acme-logo-light.png';
-import Image from 'next/image';
 import Avatar1 from '@public/assets/avatar_1.jpg';
 import Avatar2 from '@public/assets/avatar_2.jpg';
 import Avatar3 from '@public/assets/avatar_3.jpg';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const Testimonials = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -41,11 +39,11 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="bg-gray-50 dark:bg-slate-800 my-24 mt-40">
+    <section className="bg-background my-24 mt-40">
       <div className="max-w-screen-lg mx-auto text-center py-16 sm:py-20 px-4 lg:py-24">
         <figure className=" mx-auto">
           <svg
-            className="h-12 mx-auto mb-3 text-gray-400 dark:text-slate-600"
+            className="h-12 mx-auto mb-3 text-muted-foreground"
             viewBox="0 0 24 27"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +66,7 @@ const Testimonials = () => {
           >
             <Transition.Child unmount>
               <blockquote>
-                <T.P className="text-3xl leading-[38px] font-medium text-gray-900 md:text-4xl md:leading-[44px] tracking-normal md:tracking-tight dark:text-slate-50">
+                <T.P className="text-3xl leading-[38px] font-medium md:text-4xl md:leading-[44px] tracking-normal md:tracking-tight text-foreground">
                   {testimonials[activeTestimonial].text}
                 </T.P>
               </blockquote>
@@ -81,11 +79,11 @@ const Testimonials = () => {
                     alt="profile picture"
                   />
                 </div>
-                <div className="flex items-center divide-x-2 divide-gray-500 dark:divide-slate-700">
-                  <T.P className="pr-3 font-medium text-gray-600 dark:text-slate-400">
+                <div className="flex items-center divide-x-2 divide-border">
+                  <T.P className="pr-3 font-medium text-muted-foreground">
                     {testimonials[activeTestimonial].name}
                   </T.P>
-                  <T.P className="pl-3 text-sm font-light text-gray-500 dark:text-slate-400">
+                  <T.P className="pl-3 text-sm font-light text-muted-foreground">
                     {testimonials[activeTestimonial].position}
                   </T.P>
                 </div>
@@ -98,11 +96,10 @@ const Testimonials = () => {
               <div
                 key={index}
                 onClick={() => setActiveTestimonial(index)}
-                className={`w-3 h-3 rounded-full cursor-pointer ${
-                  activeTestimonial === index
-                    ? 'bg-gray-500 dark:bg-slate-400'
-                    : 'bg-gray-300 dark:bg-slate-700'
-                }`}
+                className={`w-3 h-3 rounded-full cursor-pointer ${activeTestimonial === index
+                  ? 'bg-secondary/40'
+                  : 'bg-secondary'
+                  }`}
               ></div>
             ))}
           </div>

@@ -90,12 +90,12 @@ async function ChoosePricingTable({
                   <div>
                     <div className="mb-6 p-7 pt-6 flex items-center border-b">
                       <div>
-                        <T.H4 className="mt-0 mb-4 dark:text-slate-300">
+                        <T.H4 className="mt-0 mb-4 text-foreground">
                           {' '}
                           {product.name}
                         </T.H4>
                         <span>
-                          <T.H1 className="dark:text-slate-50" key={priceId}>
+                          <T.H1 className="text-foreground" key={priceId}>
                             {' '}
                             {product.priceString}
                             <span className="text-base tracking-normal text-muted-foreground font-medium">
@@ -129,7 +129,7 @@ async function ChoosePricingTable({
                           {product.price.unit_amount > 0 ? (
                             <Check className="text-green-600 w-6 h-6" />
                           ) : (
-                            <X className="text-red-500" />
+                            <X className="text-destructive" />
                           )}
                           <T.P className="leading-6 ml-3">
                             A premium feature
@@ -139,7 +139,7 @@ async function ChoosePricingTable({
                     </div>
                   </div>
 
-                  <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-white text-xl space-y-2">
+                  <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-foreground text-xl space-y-2">
                     {isOrganizationAdmin ? (
                       <>
                         <StartFreeTrialButton
@@ -152,7 +152,7 @@ async function ChoosePricingTable({
                         />
                       </>
                     ) : (
-                      <T.P className=" py-2 px-4 bg-gray-100 dark:bg-slate-400/20 text-sm text-gray-900 dark:text-slate-100 rounded-lg">
+                      <T.P className=" py-2 px-4 bg-primary-background dark:bg-dark-primary-background text-sm text-primary-text dark:text-dark-primary-text rounded-lg">
                         Contact your administrator to upgrade plan
                       </T.P>
                     )}

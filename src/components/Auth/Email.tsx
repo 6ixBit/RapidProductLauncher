@@ -2,10 +2,9 @@
 import { T } from '@/components/ui/Typography';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { classNames } from '@/utils/classNames';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Button } from '../Button';
+import { Button } from '../ui/button';
 
 export const Email = ({
   onSubmit,
@@ -70,7 +69,7 @@ export const Email = ({
             <div className="text-sm">
               <Link
                 href="/login"
-                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500"
+                className="font-medium text-muted-foreground hover:underline hover:text-foreground"
               >
                 Log in instead?
               </Link>
@@ -78,21 +77,13 @@ export const Email = ({
           ) : null}
         </div>
         <div>
-          <Button
-            type="submit"
-            className={classNames(
-              'flex w-full justify-center rounded-lg border border-transparent py-2 text-white dark:text-black px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
-              isLoading
-                ? 'bg-yellow-300 dark:bg-yellow-700 '
-                : 'bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100  ',
-            )}
-          >
+          <Button className="w-full" type="submit">
             {buttonLabelText}
           </Button>
         </div>
         <div>
           {successMessage ? (
-            <T.P className="text-green-500 dark:text-green-400 text-center">
+            <T.P className="text-foreground text-center">
               {successMessage}
             </T.P>
           ) : null}

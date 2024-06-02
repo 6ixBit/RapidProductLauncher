@@ -172,7 +172,7 @@ export function ProfileUpdate({
       >
         <CardHeader>
           <div className="space-y-0">
-            <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
+            <div className="p-3 w-fit bg-muted mb-2 rounded-lg">
               <AddUserIcon className=" w-6 h-6" />
             </div>
             <div className="p-1">
