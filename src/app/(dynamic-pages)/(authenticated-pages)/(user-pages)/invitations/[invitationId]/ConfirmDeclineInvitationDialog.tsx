@@ -34,7 +34,7 @@ export const ConfirmDeclineInvitationDialog = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 rounded-lg">
+          <div className="p-3 w-fit bg-muted rounded-lg">
             <X className="w-6 h-6" />
           </div>
           <div className="p-1">

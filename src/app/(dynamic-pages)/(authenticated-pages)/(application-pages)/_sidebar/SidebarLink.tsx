@@ -10,13 +10,13 @@ export function SidebarLink({ label, href, icon }: SidebarLinkProps) {
   return (
     <div
       key={href}
-      className="text-gray-500 hover:cursor-pointer dark:text-slate-400 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800 group w-full flex items-center"
+      className="text-muted-foreground hover:cursor-pointer rounded-md hover:bg-secondary group w-full flex items-center"
     >
-      <div className="p-2 group-hover:text-gray-800 dark:group-hover:text-slate-300">
+      <div className="p-2 group-hover:text-muted-foreground">
         {icon}
       </div>
       <Link
-        className="p-2 w-full text-sm group-hover:text-gray-800 dark:group-hover:text-slate-300"
+        className="p-2 w-full text-sm group-hover:text-foreground"
         href={href}
       >
         {label}

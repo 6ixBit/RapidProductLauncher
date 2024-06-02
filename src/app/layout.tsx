@@ -33,7 +33,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={GeistSans.className}>
       <head></head>
-      <body className="bg-white dark:bg-slate-900">
+      <body className="bg-background">
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

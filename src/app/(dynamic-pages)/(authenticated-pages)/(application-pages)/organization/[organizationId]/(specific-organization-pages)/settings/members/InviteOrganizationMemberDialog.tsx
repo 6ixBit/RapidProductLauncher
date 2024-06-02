@@ -42,7 +42,7 @@ export const InviteOrganizationMemberDialog = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
+          <div className="p-3 w-fit bg-muted mb-2 rounded-lg">
             <UserPlus className=" w-6 h-6" />
           </div>
           <div className="p-1">
@@ -64,7 +64,7 @@ export const InviteOrganizationMemberDialog = ({
           <div className="mb-8">
             <Label className="text-muted-foreground">Enter Email</Label>
             <Input
-              className="mt-1.5 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
+              className="mt-1.5 shadow appearance-none border h-11 rounded-lg w-full py-2 px-3 focus:ring-0 text-muted-foreground leading-tight focus:outline-none focus:shadow-outline text-base"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

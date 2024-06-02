@@ -32,7 +32,7 @@ export function TermsDetailDialog({
         </DialogHeader>
         <div className="ring-1 ring-foreground/10 rounded-md">
           <div className="overflow-auto max-h-80 flex flex-col  space-y-2 p-2">
-            <p className="text-sm bg-gray-200 dark:bg-slate-800 rounded-lg p-4 text-foreground/70">
+            <p className="text-sm bg-muted rounded-lg p-4 text-foreground/70">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed
               lorem placerat, finibus nulla vitae, molestie ligula. Praesent
               viverra elit luctus metus sagittis viverra. In eleifend lacus ut
@@ -50,7 +50,7 @@ export function TermsDetailDialog({
               ante ipsum primis in faucibus orci luctus et ultrices posuere
               cubilia curae; Sed eu blandit justo. Sed dapibus tempor luctus.
             </p>
-            <p className="text-sm bg-gray-200 dark:bg-slate-800 p-4 rounded-lg text-foreground/70">
+            <p className="text-sm  bg-muted p-4 rounded-lg text-foreground/70">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed
               lorem placerat, finibus nulla vitae, molestie ligula. Praesent
               viverra elit luctus metus sagittis viverra. In eleifend lacus ut

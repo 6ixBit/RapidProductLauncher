@@ -18,24 +18,24 @@ const HeroSection2 = ({ title, description, image }: HeroSection2Props) => {
         <div className="px-4 md:px-4 relative lg:px-24 flex flex-col items-center">
           <div className="flex flex-col items-center gap-y-6 max-w-5xl mb-16 ">
             <div className=" flex  flex-col gap-4 mt-24 md:items-center">
-              <div className="flex gap-x-4 border group w-fit items-center pr-2 mb-2 border-gray-300 dark:border-gray-700 rounded-xl shadow-sm p-[2px]">
-                <div className="flex items-center border border-gray-300 bg-muted dark:bg-slate-800 dark:border-gray-700 rounded-lg shadow-sm px-2 py-[2px]">
-                  <T.Small className="text-xs md:text-sm text-gray-600 dark:text-slate-400">
+              <div className="flex gap-x-4 border group w-fit items-center pr-2 mb-2 border-border rounded-xl shadow-sm p-[2px]">
+                <div className="flex items-center border  border-border bg-muted rounded-lg shadow-sm px-2 py-[2px]">
+                  <T.Small className="text-xs md:text-sm text-muted-foreground">
                     What's new?
                   </T.Small>
                 </div>
                 <div className="flex items-center">
-                  <T.Small className="text-xs md:text-sm text-gray-600 dark:text-slate-400">
+                  <T.Small className="text-xs md:text-sm text-muted-foreground">
                     New Feature now available
                   </T.Small>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                 </div>
               </div>
-              <h1 className="font-semibold text-4xl leading-[44px] sm:text-4xl md:text-5xl md:leading-[60px] xl:text-7xl 2xl:text-7xl xl:leading-[90px] max-w-2xl tracking-tighter text-gray-900 dark:text-white md:text-center">
+              <h1 className="font-semibold text-4xl leading-[44px] sm:text-4xl md:text-5xl md:leading-[60px] xl:text-7xl 2xl:text-7xl xl:leading-[90px] max-w-2xl tracking-tighter text-foreground md:text-center">
                 {title}
               </h1>
             </div>
-            <p className="md:text-center text-gray-600 dark:text-slate-400 text-xl leading-[30px] max-w-xl font-normal md:text-xl">
+            <p className="md:text-center text-muted-foreground text-xl leading-[30px] max-w-xl font-normal md:text-xl">
               {description}
             </p>
             <div className="flex flex-col w-full md:flex md:flex-row md:mx-auto items-center justify-center gap-y-3 md:gap-x-3 mr-0 mt-4">

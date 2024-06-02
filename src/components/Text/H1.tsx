@@ -5,7 +5,7 @@ export default function H1({
   children: React.ReactNode;
   className?: string;
 }) {
-  const classes = ['text-3xl font-semibold text-gray-900'];
+  const classes = ['text-3xl font-semibold text-foreground'];
   if (className) {
     classes.push(className);
   }

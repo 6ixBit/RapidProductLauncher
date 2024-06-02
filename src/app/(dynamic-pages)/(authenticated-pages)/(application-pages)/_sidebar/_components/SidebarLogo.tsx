@@ -32,7 +32,7 @@ export function SidebarLogoAndToggle() {
           )}
         />
 
-        <T.P className="text-sm font-medium text-neutral-600 dark:text-slate-300">
+        <T.P className="text-sm font-medium text-foreground">
           Nextbase
         </T.P>
       </Link>

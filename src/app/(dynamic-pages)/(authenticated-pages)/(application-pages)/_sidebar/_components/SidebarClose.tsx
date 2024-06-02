@@ -24,12 +24,12 @@ export function SidebarClose() {
   return (
     <div
       className={cn(
-        'group border cursor-pointer flex items-center p-1.5 h-fit hover:bg-neutral-50 dark:hover:bg-white/5 rounded-md',
+        'group border cursor-pointer flex items-center p-1.5 h-fit bg-background hover:bg-secondary rounded-md',
         'hidden lg:block',
       )}
       onClick={closeSidebar}
     >
-      <PanelLeftClose className="h-4 w-4 text-neutral-500 group-hover:text-neutral-700 dark:text-slate-400 group-hover:dark:text-slate-300" />
+      <PanelLeftClose className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
     </div>
   );
 }

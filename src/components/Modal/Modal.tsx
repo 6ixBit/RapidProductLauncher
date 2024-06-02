@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ButtonHTMLAttributes } from 'react';
-import { Button } from '../Button';
+import { Button } from '../ui/button';
+
 
 export const ModalHeader = ({
   children,
@@ -10,7 +11,7 @@ export const ModalHeader = ({
   className?: string;
 }) => {
   return (
-    <div className={`px-4 pt-4 pb-3 bg-white sm:px-6 ${className}`}>
+    <div className={`px-4 pt-4 pb-3 bg-background sm:px-6 ${className}`}>
       {children}
     </div>
   );
@@ -24,7 +25,7 @@ export const ModalBody = ({
   className?: string;
 }) => {
   return (
-    <div className={`px-4 py-3 mb-2 bg-white sm:px-6 ${className}`}>
+    <div className={`px-4 py-3 mb-2 bg-background sm:px-6 ${className}`}>
       {children}
     </div>
   );
@@ -38,7 +39,7 @@ export const ModalFooter = ({
   className?: string;
 }) => {
   return (
-    <div className={`px-4 py-3 bg-gray-50 sm:px-6 ${className}`}>
+    <div className={`px-4 py-3 bg-secondary sm:px-6 ${className}`}>
       {children}
     </div>
   );
@@ -94,7 +95,7 @@ export const Modal = ({
               className="fixed inset-0 transition-opacity"
               aria-hidden="true"
             >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              <div className="absolute inset-0 bg-secondary opacity-75"></div>
             </div>
             <span
               className="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -104,7 +105,7 @@ export const Modal = ({
             </span>
             <motion.div
               variants={modalVariants}
-              className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ${className}`}
+              className={`inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ${className}`}
             >
               {children}
             </motion.div>
@@ -128,7 +129,8 @@ export const ModalSuccessButton = ({
   return (
     <Button
       type={type ?? 'button'}
-      className={`inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500 ${className}`}
+      variant={'default'}
+      className={`inline-flex justify-center px-4 py-2 text-sm font-medium ${className}`}
       onClick={onClick}
     >
       {children}
@@ -142,12 +144,13 @@ export const ModalCancelButton = ({
   onClick,
 }: ButtonProps) => {
   return (
-    <button
+    <Button
       type="button"
-      className={`inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500 ${className}`}
+      variant={'secondary'}
+      className={`inline-flex justify-center px-4 py-2 text-sm ${className}`}
       onClick={onClick}
     >
       {children}
-    </button>
+    </Button>
   );
 };

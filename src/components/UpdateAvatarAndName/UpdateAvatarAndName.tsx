@@ -8,6 +8,7 @@ import { Camera } from 'lucide-react';
 import Image from 'next/image';
 import { PageHeading } from '../PageHeading';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 const MotionImage = motion(Image);
 
 export function UpdateAvatarAndNameBody({
@@ -87,7 +88,7 @@ export function UpdateAvatarAndNameBody({
                   loading="eager"
                   width={64}
                   height={64}
-                  className="h-16 object-center object-cover w-16 border-2 border-gray-200 rounded-full"
+                  className="h-16 object-center object-cover w-16 border-2 border-border rounded-full"
                   src={avatarURL}
                   alt="avatarUrl"
                 />
@@ -106,8 +107,8 @@ export function UpdateAvatarAndNameBody({
                   hidden
                   accept="image/*"
                 />
-                <div className="bg-gray-900 group-hover:bg-gray-800  absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)]  border border-muted-foreground rounded-full p-1">
-                  <Camera className="h-4 w-4 group-hover:fill-white/30 text-white" />
+                <div className="bg-background group-hover:bg-secondary absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)]  border border-muted-foreground rounded-full p-1">
+                  <Camera className="h-4 w-4 group-hover:fill-foreground text-muted-foreground" />
                 </div>
               </Label>
             </div>
@@ -117,9 +118,9 @@ export function UpdateAvatarAndNameBody({
               Name
             </Label>
             <div className="flex space-x-2 ">
-              <input
+              <Input
                 disabled={isLoading}
-                className="block w-full appearance-none rounded-md border bg-gray-50/10 dark:bg-gray-800/20 h-10 px-3 py-3 placeholder-muted-foreground shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                className="block w-full appearance-none rounded-md h-10 px-3 py-3 placeholder-muted-foreground shadow-sm sm:text-sm"
                 id="name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}

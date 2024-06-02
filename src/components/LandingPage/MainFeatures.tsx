@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
-import { Transition } from '@headlessui/react';
-import { useEffect, useRef, useState } from 'react';
 import { T } from '@/components/ui/Typography';
 import { classNames } from '@/utils/classNames';
+import { Transition } from '@headlessui/react';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 
 const MainFeatures = () => {
   const [tab, setTab] = useState<number>(1);
@@ -26,15 +26,15 @@ const MainFeatures = () => {
         <div className="pt-12 md:pt-20">
           {/* Section header */}
           <div className="max-w-3xl pb-12 md:pb-16">
-            <div className="mb-4 w-fit px-2 py-[2px]  border border-gray-300 bg-muted dark:bg-slate-800 dark:border-gray-700 rounded-lg shadow-sm ">
-              <T.Small className="text-gray-600 dark:text-slate-400">
+            <div className="mb-4 w-fit px-2 py-[2px]  border border-border rounded-lg shadow-sm ">
+              <T.Small className="text-muted-foreground">
                 Main features
               </T.Small>
             </div>
-            <h2 className="mb-5 text-4xl leading-[44px]  font-semibold text-gray-900 dark:text-white">
+            <h2 className="mb-5 text-4xl leading-[44px]  font-semibold text-foreground">
               Lorem ipsum dolor sit amets
             </h2>
-            <p className="text-gray-500 sm:text-xl sm:leading-[30px] dark:text-slate-400">
+            <p className="sm:text-xl sm:leading-[30px] text-muted-foreground">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
               ipsum suspendisse ultrices gravida. Risus commodo
@@ -63,10 +63,10 @@ const MainFeatures = () => {
                       'px-6 py-6 max-w-4xl md:max-w-xl rounded-xl transition duration-300 ease-in-out',
                       tab !== 1
                         ? 'group-hover:cursor-pointer'
-                        : 'bg-gray-100 dark:bg-slate-800',
+                        : 'bg-secondary',
                     )}
                   >
-                    <div className="flex items-center justify-center border border-gray-300 dark:border-slate-700 bg-muted dark:bg-slate-800 w-10 h-10 rounded-lg mb-4 bg-primary-100 dark:bg-primary-900">
+                    <div className="flex items-center justify-center border border-border bg-secondary w-10 h-10 rounded-lg mb-4 bg-primary-100 dark:bg-primary-900">
                       <svg
                         className="w-3 h-3 fill-current"
                         viewBox="0 0 12 12"
@@ -78,7 +78,7 @@ const MainFeatures = () => {
                     <T.P className="font-semibold text-xl leading-[30px] mb-2">
                       Lorem ipsum dolor sit amet
                     </T.P>
-                    <T.P className="text-gray-600 dark:text-slate-400 text-base">
+                    <T.P className="text-muted-foreground text-base">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.
@@ -98,10 +98,10 @@ const MainFeatures = () => {
                       'px-6 py-6 max-w-4xl md:max-w-xl rounded-xl transition duration-300 ease-in-out',
                       tab !== 2
                         ? 'group-hover:cursor-pointer'
-                        : 'bg-gray-100 dark:bg-slate-800',
+                        : 'bg-secondary',
                     )}
                   >
-                    <div className="flex items-center justify-center border border-gray-300 dark:border-slate-700 bg-muted dark:bg-slate-800 w-10 h-10 rounded-lg mb-4 bg-primary-100 dark:bg-primary-900">
+                    <div className="flex items-center justify-center border border-border bg-secondary w-10 h-10 rounded-lg mb-4 bg-primary-100 dark:bg-primary-900">
                       <svg
                         className="w-3 h-3 fill-current"
                         viewBox="0 0 12 12"
@@ -116,7 +116,7 @@ const MainFeatures = () => {
                     <T.P className="font-semibold text-xl leading-[30px] mb-2">
                       Lorem ipsum dolor sit amet
                     </T.P>
-                    <T.P className="text-gray-600 dark:text-slate-400 text-base">
+                    <T.P className="text-muted-foreground text-base">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.
@@ -136,10 +136,10 @@ const MainFeatures = () => {
                       'px-6 py-6 max-w-4xl md:max-w-xl rounded-xl transition duration-300 ease-in-out',
                       tab !== 3
                         ? 'group-hover:cursor-pointer'
-                        : 'bg-gray-100 dark:bg-slate-800',
+                        : 'bg-secondary',
                     )}
                   >
-                    <div className="flex items-center justify-center border border-gray-300 dark:border-slate-700 bg-muted dark:bg-slate-800 w-10 h-10 rounded-lg mb-4 bg-primary-100 dark:bg-primary-900">
+                    <div className="flex items-center justify-center border border-border bg-muted w-10 h-10 rounded-lg mb-4 bg-primary-100 dark:bg-primary-900">
                       <svg
                         className="w-3 h-3 fill-current"
                         viewBox="0 0 12 12"
@@ -155,7 +155,7 @@ const MainFeatures = () => {
                     <T.P className="font-semibold text-xl leading-[30px] mb-2">
                       Lorem ipsum dolor sit amet
                     </T.P>
-                    <T.P className="text-gray-600 dark:text-slate-400 text-base">
+                    <T.P className="text-muted-foreground text-base">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.

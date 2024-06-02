@@ -13,7 +13,7 @@ function DesktopShell({ children }: { children: React.ReactNode }) {
   }
   return (
     <>
-      <div className="hidden lg:block h-full w-[264px] border-r dark:border-gray-700/50 select-none">
+      <div className="hidden lg:block h-full w-[264px] border-r border-border select-none">
         {isVisible ? children : null}
       </div>
     </>

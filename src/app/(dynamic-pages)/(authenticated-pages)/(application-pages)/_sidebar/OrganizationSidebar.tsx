@@ -66,7 +66,7 @@ async function OrganizationSidebarInternal({
         </Suspense>
 
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-normal text-gray-500 dark:text-slate-400">
+          <p className="text-sm font-normal text-muted-foreground">
             Select organization
           </p>
           <OrganizationSwitcher

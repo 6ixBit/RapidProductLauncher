@@ -17,28 +17,28 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const imageSrc = image ? image : '/mockups/laptop.jpeg';
   return (
-    <section className="bg-white dark:bg-gray-900 mt-20">
+    <section className="bg-background mt-20">
       <div className="px-4 md:px-6 grid mx-auto md:container lg:gap-8 xl:gap-0 lg:grid-cols-12">
         <div className="place-self-center max-w-2xl space-y-6 mr-auto mb-16 lg:col-span-7">
           <div className="flex flex-col gap-4 items-start justify-start">
-            <div className="flex gap-x-2 md:gap-x-3 border group items-center pr-2 border-gray-300 dark:border-gray-700 rounded-xl shadow-sm p-[2px]">
-              <div className="flex items-center border border-gray-300 bg-muted dark:bg-slate-800 dark:border-gray-700 rounded-lg shadow-sm px-2 py-[2px]">
-                <T.Small className="text-xs md:text-sm text-gray-600 dark:text-slate-400">
+            <div className="flex gap-x-2 md:gap-x-3 border group items-center pr-2 border-border rounded-xl shadow-sm p-[2px]">
+              <div className="flex items-center border  border-border bg-muted rounded-lg shadow-sm px-2 py-[2px]">
+                <T.Small className="text-xs md:text-sm text-muted-foreground">
                   What's new?
                 </T.Small>
               </div>
               <div className="flex items-center">
-                <T.Small className="text-xs md:text-sm text-gray-600 dark:text-slate-400">
+                <T.Small className="text-xs md:text-sm text-muted-foreground">
                   New Feature now available
                 </T.Small>
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
               </div>
             </div>
-            <h1 className="font-semibold max-w-2xl tracking-tight text-4xl leading-[44px] md:text-5xl xl:text-6xl xl:leading-[72px] text-gray-900 dark:text-slate-50">
+            <h1 className="font-semibold max-w-2xl tracking-tight text-4xl leading-[44px] md:text-5xl xl:text-6xl xl:leading-[72px] text-foreground">
               {title}
             </h1>
           </div>
-          <p className="max-w-xl font-normal text-gray-600 lg:mb-8 md:text-lg lg:text-xl dark:text-slate-400">
+          <p className="max-w-xl font-normal text-muted-foreground lg:mb-8 md:text-lg lg:text-xl">
             {description}
           </p>
           <div className="space-y-3 md:space-x-3">

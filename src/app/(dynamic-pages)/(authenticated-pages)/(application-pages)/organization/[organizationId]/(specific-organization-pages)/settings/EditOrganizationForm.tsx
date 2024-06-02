@@ -63,7 +63,7 @@ export function EditOrganizationForm({
             id="update-organization-title-button"
             className={classNames(
               'flex w-full justify-center rounded-lg border border-transparent py-3 px-4 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
-              'bg-gray-900 hover:bg-gray-700 dark:bg-gray-50 hover:dark:bg-gray-200 text-white dark:text-black',
+              'bg-secondary text-foreground hover:bg-secondary/80',
             )}
           >
             {isLoading ? 'Updating...' : 'Update'}
