@@ -63,8 +63,8 @@ function TermsAcceptance({ onSuccess }: TermsAcceptanceProps) {
       <CardHeader>
         <CardTitle>🎉 Welcome Aboard!</CardTitle>
         <CardDescription>
-          Before diving into Nextbase Ultimate starter kit, please take a moment
-          to go through our updated Terms of Service.
+          Before diving into Nextbase Essential starter kit, please take a
+          moment to go through our updated Terms of Service.
         </CardDescription>
       </CardHeader>
       <CardContent>
