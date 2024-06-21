@@ -1,88 +1,47 @@
 import { Button } from '@/components/ui/button';
-import { T } from '@/components/ui/Typography';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronRight, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import HeroImage from '/public/images/hero.jpeg';
 
-type HeroSectionProps = {
-  title: string;
-  description: string;
-  image?: string;
-};
-
-export default function HeroSection({
-  title,
-  description,
-  image,
-}: HeroSectionProps) {
-  const imageSrc = image ? image : '/mockups/laptop.jpeg';
+export default function HeroSection() {
   return (
-    <section className="bg-background mt-20">
-      <div className="px-4 md:px-6 grid mx-auto md:container lg:gap-8 xl:gap-0 lg:grid-cols-12">
-        <div className="place-self-center max-w-2xl space-y-6 mr-auto mb-16 lg:col-span-7">
-          <div className="flex flex-col gap-4 items-start justify-start">
-            <div className="flex gap-x-2 md:gap-x-3 border group items-center pr-2 border-border rounded-xl shadow-sm p-[2px]">
-              <div className="flex items-center border  border-border bg-muted rounded-lg shadow-sm px-2 py-[2px]">
-                <T.Small className="text-xs md:text-sm text-muted-foreground">
-                  What's new?
-                </T.Small>
-              </div>
-              <div className="flex items-center">
-                <T.Small className="text-xs md:text-sm text-muted-foreground">
-                  New Feature now available
-                </T.Small>
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
-              </div>
+    <section className=" py-10 lg:py-20 text-left px-6 lg:text-center max-w-5xl mx-auto">
+      <div className="flex flex-col  gap-10 w-full">
+        <div className="space-y-4 flex flex-col  lg:items-center  flex-1">
+          <Link href={'#'}>
+            <div className="flex items-center  gap-2 py-1 px-3 w-fit rounded-full border border-border dark:border-none bg-secondary">
+              <Sparkles size={16} />
+              <span className="text-md font-medium lg:text-base">
+                Introducing
+              </span>
+              <ArrowRight size={16} />
             </div>
-            <h1 className="font-semibold max-w-2xl tracking-tight text-4xl leading-[44px] md:text-5xl xl:text-6xl xl:leading-[72px] text-foreground">
-              {title}
-            </h1>
-          </div>
-          <p className="max-w-xl font-normal text-muted-foreground lg:mb-8 md:text-lg lg:text-xl">
-            {description}
+          </Link>
+          <h1 className="font-semibold text-3xl lg:text-5xl">
+            Nextbase Essential Landing Page
+          </h1>
+          <p className="text-slate-500 dark:text-slate-400 leading-loose lg:text-lg lg:leading-relaxed max-w-4xl">
+            Welcome to Nextbase Essential Landing Page: Your Gateway to
+            Innovation. Discover the Future of Excellence and Elevate Your
+            Experience.
           </p>
-          <div className="space-y-3 md:space-x-3">
-            <Link href="/login" className="w-full lg:w-fit">
-              <Button
-                variant="default"
-                size="lg"
-                className="group mt-3 w-full md:w-fit "
-              >
-                Log In
-                <svg
-                  className="ml-2 -mr-1 w-5 h-5 group-hover:translate-x-1 transition"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Button>
-            </Link>
-            <Link href="/">
-              <Button
-                variant="outline"
-                size="lg"
-                className="group mt-3 px-6 w-full md:w-fit"
-              >
-                Learn More
-                <ChevronRight className="ml-2 group-hover:translate-x-1 transition" />
-              </Button>
-            </Link>
+          <div className="flex flex-col md:flex-row items-center max-w-md w-full  gap-3 pt-2 ">
+            <Button className="w-full">
+              Log In
+              <ArrowRight size={16} className="ml-2" />
+            </Button>
+            <Button className="w-full" variant={'secondary'}>
+              Learn More
+              <ChevronRight size={16} className="ml-2" />
+            </Button>
           </div>
         </div>
-        <div className="lg:mt-0 lg:col-span-5 rounded-lg overflow-hidden h-[320px] md:h-[640px] md:w-full lg:flex">
+        <div className="rounded-md border-2 flex-1 overflow-hidden border-border shadow-sm">
           <Image
-            src={imageSrc}
-            layout="responsive"
-            width={640}
-            height={960}
-            alt="mockup"
-            className="object-cover object-center"
+            alt="Hero Image"
+            src={HeroImage}
+            className="overflow-hidden h-[500px] max-h-[500px]  object-cover"
           />
         </div>
       </div>
