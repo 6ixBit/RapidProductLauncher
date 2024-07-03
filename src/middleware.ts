@@ -1,9 +1,9 @@
 import { User, createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { match } from 'path-to-regexp';
 import { Database } from './lib/database.types';
 import { toSiteURL } from './utils/helpers';
-import { match } from 'path-to-regexp';
 import { authUserMetadataSchema } from './utils/zod-schemas/authUserMetadata';
 
 const onboardingPaths = `/onboarding/(.*)?`;
@@ -84,8 +84,9 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - /api (API routes)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
