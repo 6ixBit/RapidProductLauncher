@@ -1,102 +1,101 @@
 'use client';
 
+import { AreaChartComponent } from '@/components/AreaChart';
 import { GraphContainer } from '@/components/GraphContainer';
-import { customTooltip } from '@/components/GraphCustomToolTip';
 import { PageHeading } from '@/components/PageHeading';
-import { AreaChart } from '@tremor/react';
 
 const chartDataForMonth = [
   {
-    Month: 'January',
-    'Time Spent': 2890,
+    name: 'January',
+    value: 2890,
   },
   {
-    Month: 'February',
-    'Time Spent': 2756,
+    name: 'February',
+    value: 2756,
   },
   {
-    Month: 'March',
-    'Time Spent': 3322,
+    name: 'March',
+    value: 3322,
   },
   {
-    Month: 'April',
-    'Time Spent': 3470,
+    name: 'April',
+    value: 3470,
   },
   {
-    Month: 'May',
-    'Time Spent': 3475,
+    name: 'May',
+    value: 3475,
   },
   {
-    Month: 'June',
-    'Time Spent': 3129,
+    name: 'June',
+    value: 3129,
   },
   {
-    Month: 'July',
-    'Time Spent': 3482,
+    name: 'July',
+    value: 3482,
   },
   {
-    Month: 'August',
-    'Time Spent': 2412,
+    name: 'August',
+    value: 2412,
   },
   {
-    Month: 'September',
-    'Time Spent': 2678,
+    name: 'September',
+    value: 2678,
   },
   {
-    Month: 'October',
-    'Time Spent': 2190,
+    name: 'October',
+    value: 2190,
   },
   {
-    Month: 'November',
-    'Time Spent': 2498,
+    name: 'November',
+    value: 2498,
   },
   {
-    Month: 'December',
-    'Time Spent': 2598,
+    name: 'December',
+    value: 2598,
   },
 ];
 
 const chartDataForWeek = [
   {
-    week: 1,
-    'Time Spent': 2890,
+    name: '1',
+    value: 2890,
   },
   {
-    week: 2,
-    'Time Spent': 2756,
+    name: '2',
+    value: 2756,
   },
   {
-    week: 3,
-    'Time Spent': 3322,
+    name: '3',
+    value: 3322,
   },
   {
-    week: 4,
-    'Time Spent': 3470,
+    name: '4',
+    value: 3470,
   },
 ];
 
 const chartDataForYears = [
   {
-    year: 2018,
-    'Time Spent': 2890,
+    name: '2018',
+    value: 2890,
   },
   {
-    year: 2019,
-    'Time Spent': 2756,
+    name: '2019',
+    value: 2756,
   },
   {
-    year: 2020,
-    'Time Spent': 3322,
+    name: '2020',
+    value: 3322,
   },
   {
-    year: 2021,
-    'Time Spent': 4302,
+    name: '2021',
+    value: 4302,
   },
 ];
 
 const calculateBadgeValue = (data) => {
-  const lastMonth = data[data.length - 1]['Time Spent'];
-  const secondLastMonth = data[data.length - 2]['Time Spent'];
+  const lastMonth = data[data.length - 1].value;
+  const secondLastMonth = data[data.length - 2].value;
   const percentageChange =
     ((lastMonth - secondLastMonth) / secondLastMonth) * 100;
   return {
@@ -174,38 +173,14 @@ export function OrganizationGraphs() {
             subTitle="Detailed analysis of stock price for the week"
             badgeValue={badgeValueforWeek}
           >
-            <AreaChart
-              className="h-72 mt-8"
-              data={chartDataForWeek}
-              index="date"
-              categories={['Time Spent']}
-              colors={['blue-700']}
-              curveType="natural"
-              customTooltip={customTooltip}
-              showAnimation={true}
-              showGridLines={false}
-              showXAxis={false}
-              showYAxis={false}
-            />
+            <AreaChartComponent chartData={chartDataForWeek} />
           </GraphContainer>
           <GraphContainer
             title="Time spent per month"
             subTitle="Detailed analysis on time spent  in a month "
             badgeValue={badgeValueForMonth}
           >
-            <AreaChart
-              className="h-72 mt-8"
-              data={chartDataForMonth}
-              index="date"
-              categories={['Time Spent']}
-              colors={['blue-700']}
-              curveType="natural"
-              customTooltip={customTooltip}
-              showAnimation={true}
-              showGridLines={false}
-              showXAxis={false}
-              showYAxis={false}
-            />
+            <AreaChartComponent chartData={chartDataForMonth} />
           </GraphContainer>
 
           <GraphContainer
@@ -213,19 +188,7 @@ export function OrganizationGraphs() {
             subTitle="Detailed analysis on revenue per year"
             badgeValue={badgeValueForYear}
           >
-            <AreaChart
-              className="h-72 mt-8"
-              data={chartDataForYears}
-              index="date"
-              categories={['Time Spent']}
-              colors={['blue-700']}
-              curveType="natural"
-              customTooltip={customTooltip}
-              showAnimation={true}
-              showGridLines={false}
-              showXAxis={false}
-              showYAxis={false}
-            />
+            <AreaChartComponent chartData={chartDataForYears} />
           </GraphContainer>
           {/* <GraphContainer
             title="Time spent all time"
