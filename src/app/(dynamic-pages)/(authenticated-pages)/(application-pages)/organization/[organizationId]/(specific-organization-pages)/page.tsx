@@ -1,8 +1,8 @@
 import { PageHeading } from '@/components/PageHeading';
 import { Suspense } from 'react';
 import { z } from 'zod';
-import { OrganizationGraphs } from './OrganizationGraphs';
 import { OrganizationPageHeading } from './OrganizationPageHeading';
+import { OrganizationGraphs } from './_graphs/OrganizationGraphs';
 const paramsSchema = z.object({
   organizationId: z.coerce.string(),
 });

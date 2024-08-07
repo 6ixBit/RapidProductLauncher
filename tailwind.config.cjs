@@ -1,12 +1,13 @@
-const colors = require('tailwindcss/colors');
+/** @type {import('tailwindcss').Config} */
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   darkMode: ['class'],
-  content: ['./src/**/*.tsx', './node_modules/@tremor/**/*.{js,ts,jsx,tsx}'],
-
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   prefix: '',
   theme: {
+    transparent: 'transparent',
+    current: 'currentColor',
     container: {
       center: true,
       padding: '2rem',
@@ -60,13 +61,13 @@ module.exports = {
         display: ['Lexend', ...defaultTheme.fontFamily.sans],
       },
       keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
+        accordionDown: {
+          from: { height: 0 },
           to: { height: 'var(--radix-accordion-content-height)' },
         },
-        'accordion-up': {
+        accordionUp: {
           from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
+          to: { height: 0 },
         },
         marquee: {
           from: { transform: 'translateX(0)' },
@@ -84,8 +85,8 @@ module.exports = {
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+        accordionDown: 'accordion-down 0.2s ease-out',
+        accordionUp: 'accordion-up 0.2s ease-out',
         marquee: 'marquee 30s linear infinite',
         orbit: 'orbit calc(var(--duration)*1s) linear infinite',
       },
@@ -94,39 +95,10 @@ module.exports = {
       },
     },
   },
-  safelist: [
-    {
-      pattern:
-        /^(bg-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
-      variants: ['hover', 'ui-selected'],
-    },
-    {
-      pattern:
-        /^(text-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
-      variants: ['hover', 'ui-selected'],
-    },
-    {
-      pattern:
-        /^(border-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
-      variants: ['hover', 'ui-selected'],
-    },
-    {
-      pattern:
-        /^(ring-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
-    },
-    {
-      pattern:
-        /^(stroke-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
-    },
-    {
-      pattern:
-        /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
-    },
-  ],
+
   plugins: [
     require('tailwindcss-animate'),
-    require('tailwindcss/defaultTheme'),
-    require('@headlessui/tailwindcss'),
+    require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
   ],
 };
