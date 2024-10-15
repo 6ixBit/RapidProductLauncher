@@ -1,7 +1,8 @@
 // GenerateProductModal.tsx
-import { Modal, ModalBody, ModalFooter, ModalHeader, ModalSuccessButton } from '@/components/Modal/Modal';
+import { Modal, ModalBody, ModalCancelButton, ModalFooter, ModalHeader, ModalSuccessButton } from '@/components/Modal/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import React, { useState } from 'react';
 
 interface GenerateProductModalProps {
@@ -23,7 +24,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({ isOpen, onC
     return (
         <Modal isOpen={isOpen} className="w-full max-w-md">
             <ModalHeader>
-                <h3 className="text-lg font-medium leading-6 text-gray-400">Select Source</h3>
+                <h3 className="text-lg font-medium leading-6 text-gray-500">Select Source</h3>
             </ModalHeader>
             <ModalBody>
                 <div className="space-y-4">
@@ -44,8 +45,8 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({ isOpen, onC
                         </Button>
                     </div>
                     <div>
-                        <label htmlFor="prompt" className="block text-sm font-medium text-gray-400">
-                            Product URL
+                        <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">
+                            Prompt
                         </label>
                         <Input
                             type="text"
@@ -60,11 +61,24 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({ isOpen, onC
                         <label htmlFor="language" className="block text-sm font-medium text-gray-700">
                             Language
                         </label>
-
+                        <Select value={language} onValueChange={setLanguage}>
+                            <SelectTrigger className="w-full mt-1">
+                                <SelectValue placeholder="Select a language" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="English">English</SelectItem>
+                                <SelectItem value="Spanish">Spanish</SelectItem>
+                                <SelectItem value="French">French</SelectItem>
+                                <SelectItem value="German">German</SelectItem>
+                                <SelectItem value="Italian">Italian</SelectItem>
+                                {/* Add more languages as needed */}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             </ModalBody>
-            <ModalFooter className="flex justify-center">
+            <ModalFooter>
+                <ModalCancelButton onClick={onClose}>Cancel</ModalCancelButton>
                 <ModalSuccessButton onClick={handleGenerate} disabled={!source || !prompt}>
                     Generate
                 </ModalSuccessButton>
