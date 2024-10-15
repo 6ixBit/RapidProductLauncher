@@ -10,16 +10,32 @@ interface WelcomeHeaderProps {
 export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ userName, userEmail }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleGenerateProduct = (source: string, prompt: string, language: string) => {
-        // Handle the generation logic here
-        console.log('Generating product with:', { source, prompt, language });
+    const handleGenerateProduct = async (source: string, url: string, language: string) => {
+        try {
+            const response = await fetch('/api/fetch-aliexpress', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ source, url, language }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            const data = await response.json();
+            console.log('Response from fetch-aliexpress:', data);
+        } catch (error) {
+            console.error('Error generating product:', error);
+        }
     };
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-bold">Test Products Faster Than Your Competition</h1>
+                    <h1 className="text-2xl font-bold">Outpace Your Competition with Rapid Launches</h1>
                     <p className="text-sm text-gray-500">{userEmail}</p>
                 </div>
                 <button
