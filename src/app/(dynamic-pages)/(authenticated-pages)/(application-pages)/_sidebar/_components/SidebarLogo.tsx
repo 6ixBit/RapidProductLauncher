@@ -33,7 +33,7 @@ export function SidebarLogoAndToggle() {
         />
 
         <T.P className="text-sm font-medium text-foreground">
-          Nextbase
+          Rapid Product Launcher
         </T.P>
       </Link>
 

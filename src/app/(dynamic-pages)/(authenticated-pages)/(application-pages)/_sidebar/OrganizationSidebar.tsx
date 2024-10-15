@@ -1,12 +1,8 @@
-import { ProFeatureGateDialog } from '@/components/ProFeatureGateDialog';
-import { SubscriptionCardSmall } from '@/components/SubscriptionCardSmall';
-import { T } from '@/components/ui/Typography';
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { cn } from '@/utils/cn';
-import { DollarSign, FileBox, Home, Settings, UserRound } from 'lucide-react';
+import { DollarSign, Home, Plug, Settings, UserRound } from 'lucide-react';
 import { Suspense } from 'react';
 import { SidebarLink } from './SidebarLink';
-import { OrganizationSwitcher } from './_components/OrganizationSwitcher';
 import { DesktopSidebarFallback } from './_components/SidebarFallback';
 import { SidebarLogoAndToggle } from './_components/SidebarLogo';
 
@@ -30,37 +26,45 @@ async function OrganizationSidebarInternal({
         <div className="flex flex-col gap-6 h-full overflow-y-auto">
           <div>
             <SidebarLink
-              label="Organization Home"
+              label="Launch Products"
               href={`/organization/${organizationId}`}
               icon={<Home className="h-5 w-5" />}
             />
+
             <SidebarLink
-              label="Organization Settings"
-              href={`/organization/${organizationId}/settings`}
-              icon={<Settings className="h-5 w-5" />}
+              label="Store Integrations"
+              href={`/organization/${organizationId}`}
+              icon={<Plug className="h-5 w-5" />}
             />
-            <SidebarLink
-              label="Organization Members"
-              href={`/organization/${organizationId}/settings/members`}
-              icon={<UserRound className="h-5 w-5" />}
-            />
-            <SidebarLink
-              label="Billing"
-              href={`/organization/${organizationId}/settings/billing`}
-              icon={<DollarSign className="h-5 w-5" />}
-            />
-            <Suspense>
-              <ProFeatureGateDialog
-                organizationId={organizationId}
-                label="Feature Pro"
-                icon={<FileBox className="h-5 w-5" />}
-              />
-            </Suspense>
           </div>
-          {/* <TeamsList organizationId={organizationId} /> */}
         </div>
       </div>
       <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 mb-2">
+          <SidebarLink
+            label="Organization Settings"
+            href={`/organization/${organizationId}/settings`}
+            icon={<Settings className="h-5 w-5" />}
+          />
+          <SidebarLink
+            label="Organization Members"
+            href={`/organization/${organizationId}/settings/members`}
+            icon={<UserRound className="h-5 w-5" />}
+          />
+          <SidebarLink
+            label="Billing"
+            href={`/organization/${organizationId}/settings/billing`}
+            icon={<DollarSign className="h-5 w-5" />}
+          />
+          {/* <Suspense>
+            <ProFeatureGateDialog
+              organizationId={organizationId}
+              label="Feature Pro"
+              icon={<FileBox className="h-5 w-5" />}
+            />
+          </Suspense> */}
+        </div>
+        {/* 
         <Suspense fallback={<T.P>Loading subscription details...</T.P>}>
           <SubscriptionCardSmall organizationId={organizationId} />
         </Suspense>
@@ -73,7 +77,7 @@ async function OrganizationSidebarInternal({
             currentOrganizationId={organizationId}
             slimOrganizations={slimOrganizations}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
