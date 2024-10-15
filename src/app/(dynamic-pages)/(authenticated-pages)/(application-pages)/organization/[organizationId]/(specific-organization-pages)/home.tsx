@@ -1,10 +1,20 @@
 'use client'
+import { useState } from 'react';
+import GenerateProductModal from './GenerateProductModal';
+
 interface WelcomeHeaderProps {
     userName: string;
     userEmail: string;
 }
 
 export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ userName, userEmail }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleGenerateProduct = (source: string, prompt: string, language: string) => {
+        // Handle the generation logic here
+        console.log('Generating product with:', { source, prompt, language });
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -14,10 +24,16 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ userName, userEmai
                 </div>
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() => console.log("Generate product clicked")}
+                    onClick={() => setIsModalOpen(true)}
                 >
                     Generate Product
                 </button>
+
+                <GenerateProductModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onGenerate={handleGenerateProduct}
+                />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16">
                 <div className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">

@@ -69,14 +69,17 @@ export const Modal = ({
   children,
   className,
   isOpen,
+  onClose, // Add onClose prop
 }: {
   children: React.ReactNode;
   className?: string;
   isOpen: boolean;
+  onClose?: () => void; // Optional onClose function
 }) => {
   const wrapperClassname = isOpen
     ? 'fixed z-10 inset-0 overflow-y-auto '
     : 'fixed z-10 inset-0 overflow-y-auto hidden';
+
   return (
     <AnimatePresence>
       {isOpen ? (
@@ -89,11 +92,18 @@ export const Modal = ({
           animate={'visible'}
           exit={'hidden'}
           className={wrapperClassname}
+          onClick={() => {
+            if (onClose) onClose(); // Close modal on overlay click
+          }}
         >
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity"
               aria-hidden="true"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent event from bubbling up
+                if (onClose) onClose(); // Close modal on overlay click
+              }}
             >
               <div className="absolute inset-0 bg-secondary opacity-75"></div>
             </div>
@@ -105,7 +115,8 @@ export const Modal = ({
             </span>
             <motion.div
               variants={modalVariants}
-              className={`inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ${className}`}
+              className={`inline-block align-bottom bg-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 relative z-50 sm:align-middle sm:w-full ${className}`}
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
             >
               {children}
             </motion.div>
