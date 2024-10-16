@@ -23,6 +23,7 @@ const ProductInfo = z.object({
     }),
   ),
 });
+
 export async function POST(req: NextRequest) {
   const openai = new OpenAI({
     apiKey:
@@ -89,18 +90,26 @@ export async function POST(req: NextRequest) {
 
     const productInfo = completion.choices[0].message.parsed;
 
-    // Return the structured data
+    // Construct the absolute URL for the generate route
+    const host = req.headers.get('host');
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const generateProductTemplateUrl = `${protocol}://${host}/api/generate/product-description-template`;
+
+    // Send the productInfo to the generate route
+    const response = await fetch(generateProductTemplateUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productInfo),
+    });
+
+    const html = cleanHTML((await response.json()).template); // Assuming the HTML is in the 'template' field
+    console.log('Generated HTML:', html);
+
+    // Return the generated HTML and product info to the client
     return NextResponse.json({
       message: 'Data received and parsed successfully',
-      productData: {
-        title: productInfo?.title,
-        price: productInfo?.price,
-        productMarkup: pdpBodyTopHtml,
-        description: productInfo?.description,
-        keyPoints: productInfo?.keyPoints,
-        subHeading: productInfo?.subHeading,
-        reviews: productInfo?.reviews,
-      },
+      html,
+      productInfo,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -112,4 +121,8 @@ export async function POST(req: NextRequest) {
     console.error('Error fetching or parsing data:', error);
     return NextResponse.json({ error: 'An error occurred' }, { status: 500 });
   }
+}
+
+function cleanHTML(html: string): string {
+  return html.replace(/\n/g, '').replace(/\s+/g, ' ').trim();
 }
