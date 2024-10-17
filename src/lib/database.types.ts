@@ -401,6 +401,48 @@ export type Database = {
           },
         ]
       }
+      html_templates: {
+        Row: {
+          id: string; // UUID
+          user_id: string; // UUID
+          organization_id: string; // UUID
+          html_code: string;
+          source_url: string;
+          created_at: string; // Timestamp with time zone
+        };
+        Insert: {
+          id?: string; // UUID, optional because of default
+          user_id: string; // UUID
+          organization_id: string; // UUID
+          html_code: string;
+          source_url: string;
+          created_at?: string; // Optional because of default
+        };
+        Update: {
+          id?: string; // UUID
+          user_id?: string; // UUID
+          organization_id?: string; // UUID
+          html_code?: string;
+          source_url?: string;
+          created_at?: string; // Optional
+        };
+        Relationships: [
+          {
+            foreignKeyName: "html_templates_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "html_templates_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      }
     }
     Views: {
       [_ in never]: never
@@ -868,4 +910,3 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
     : never
-

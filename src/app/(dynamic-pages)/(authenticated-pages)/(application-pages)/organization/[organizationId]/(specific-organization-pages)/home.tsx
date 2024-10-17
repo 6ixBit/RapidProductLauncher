@@ -1,23 +1,49 @@
 'use client'
-import { useState } from 'react';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import GenerateProductModal from './GenerateProductModal';
-
 interface WelcomeHeaderProps {
     userName: string;
     userEmail: string;
 }
-
 export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({ userName, userEmail }) => {
+    const params = useParams();
+    const organizationId = params?.organizationId as string;
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [userData, setUserData] = useState<any>(null);
+    const [userError, setUserError] = useState<any>(null);
+
+    const supabase = supabaseUserClientComponentClient;
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data, error } = await supabase.auth.getUser();
+            setUserData(data);
+            setUserError(error);
+        };
+        fetchUser();
+    }, []);
 
     const handleGenerateProduct = async (source: string, url: string, language: string) => {
+        if (!userData?.user) {
+            console.error('User data not available');
+            return;
+        }
         try {
             const response = await fetch('/api/fetch-aliexpress', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ source, url, language }),
+                body: JSON.stringify({
+                    source,
+                    url,
+                    language,
+                    user_id: userData.user.id,
+                    organization_id: organizationId
+                }),
             });
 
             if (!response.ok) {

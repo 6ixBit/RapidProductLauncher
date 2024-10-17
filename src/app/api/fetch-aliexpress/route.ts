@@ -1,3 +1,4 @@
+import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
@@ -8,6 +9,8 @@ const requestSchema = z.object({
   language: z.string(),
   url: z.string().url(),
   source: z.string(),
+  user_id: z.string(),
+  organization_id: z.string(),
 });
 
 const ProductInfo = z.object({
@@ -33,7 +36,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { language, url, source } = requestSchema.parse(body);
+    const { language, url, source, user_id, organization_id } =
+      requestSchema.parse(body);
 
     browser = await puppeteer.connect({
       browserWSEndpoint:
@@ -102,8 +106,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(productInfo),
     });
 
-    const html = cleanHTML((await response.json()).template); // Assuming the HTML is in the 'template' field
-    console.log('Generated HTML:', html);
+    const html = cleanHTML((await response.json()).template);
+    saveProductTemplate(html, productInfo, url, user_id, organization_id);
 
     // Return the generated HTML and product info to the client
     return NextResponse.json({
@@ -125,4 +129,30 @@ export async function POST(req: NextRequest) {
 
 function cleanHTML(html: string): string {
   return html.replace(/\n/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function saveProductTemplate(
+  html: string,
+  productInfo: any,
+  source_url: string,
+  user_id: string,
+  organization_id: string,
+) {
+  const supabase = createSupabaseUserServerActionClient();
+
+  const { error } = await supabase.from('html_templates').insert([
+    {
+      user_id: user_id,
+      organization_id: organization_id,
+      html_code: html,
+      //   product_info: productInfo,
+      source_url: source_url,
+    },
+  ]);
+
+  if (error) {
+    console.error('Error saving HTML to database:', error);
+  } else {
+    console.log('HTML saved to database successfully.');
+  }
 }

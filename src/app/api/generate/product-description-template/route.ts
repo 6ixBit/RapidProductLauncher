@@ -53,7 +53,7 @@ const productDescriptionTemplate = (data) => `
   <body>
     <h1>${data.title}</h1>
     <p>${data.description}</p>
-    <div class="price">Price: ${data.price}</div>
+
     <h2>Key Features</h2>
     <ul>
       ${data.keyPoints.map((point) => `<li>${point}</li>`).join('')}
