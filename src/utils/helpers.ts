@@ -41,7 +41,7 @@ export const getUserAvatarUrl = ({
     profileAvatarUrl && profileAvatarUrl.length > 0;
   return isProfileAvatarUrlValid
     ? profileAvatarUrl
-    : fallbackAvatarUrl ?? placeholderAvatarUrl;
+    : (fallbackAvatarUrl ?? placeholderAvatarUrl);
 };
 
 export const getPublicUserAvatarUrl = (

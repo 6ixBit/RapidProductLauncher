@@ -37,6 +37,6 @@ export function PricingModeToggle({
         <span className="text-sm font-medium text-foreground">Annual</span>
         <span className="text-sm text-foreground"> (save 10%)</span>
       </Switch.Label>
-    </Switch.Group >
+    </Switch.Group>
   );
 }

@@ -44,9 +44,7 @@ export const UpdatePassword = () => {
             updatePassword();
           }}
           variant={'default'}
-          className={classNames(
-            'flex w-full justify-center',
-          )}
+          className={classNames('flex w-full justify-center')}
         >
           {isLoading ? 'Updating...' : 'Update Password'}
         </Button>

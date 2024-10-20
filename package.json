@@ -116,9 +116,9 @@
     "build": "next build",
     "test:e2e": "cross-env NODE_ENV=test playwright test",
     "test": "vitest --root src",
-    "lint:eslint": "pnpm eslint --fix src",
+    "lint:eslint": "yarn eslint --fix src",
     "lint:prettier": "prettier --write src",
-    "lint": "pnpm lint:eslint && pnpm lint:prettier",
+    "lint": "yarn lint:eslint && pnpm lint:prettier",
     "tsc": "tsc"
   },
   "devDependencies": {

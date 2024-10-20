@@ -2,7 +2,7 @@ import { PageHeading } from '@/components/PageHeading';
 import { Suspense } from 'react';
 import { z } from 'zod';
 import { OrganizationPageHeading } from './OrganizationPageHeading';
-import { WelcomeHeader } from "./home";
+import { WelcomeHeader } from './home';
 
 const paramsSchema = z.object({
   organizationId: z.coerce.string(),
@@ -35,7 +35,7 @@ export default async function OrganizationPage({
         <Suspense>
           {/* <OrganizationGraphs /> */}
 
-          <WelcomeHeader userEmail={"real@real.com"} userName={"Real"} />
+          <WelcomeHeader userEmail={'real@real.com'} userName={'Real'} />
         </Suspense>
       </div>
     </div>

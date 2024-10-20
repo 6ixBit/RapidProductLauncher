@@ -1,10 +1,10 @@
-import { ApplicationLayoutShell } from "@/components/ApplicationLayoutShell/ApplicationLayoutShell";
-import { InternalNavbar } from "@/components/NavigationMenu/InternalNavbar";
-import { Settings } from "lucide-react";
-import Link from "next/link";
-import { Suspense, type ReactNode } from "react";
-import { z } from "zod";
-import { OrganizationSidebar } from "../../../_sidebar/OrganizationSidebar";
+import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/ApplicationLayoutShell';
+import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
+import { Settings } from 'lucide-react';
+import Link from 'next/link';
+import { Suspense, type ReactNode } from 'react';
+import { z } from 'zod';
+import { OrganizationSidebar } from '../../../_sidebar/OrganizationSidebar';
 
 const paramsSchema = z.object({
   organizationId: z.string(),

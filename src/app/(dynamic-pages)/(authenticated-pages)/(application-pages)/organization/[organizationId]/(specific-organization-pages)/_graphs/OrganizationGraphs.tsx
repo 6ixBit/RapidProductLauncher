@@ -1,19 +1,19 @@
-'use client'
-import { motion } from "framer-motion";
-import { AreaChartInteractiveLarge } from "./AreaChartInteractive";
-import { BarChartActive } from "./BarChartActive";
-import { BarChartInteractive } from "./BarChartInteractive";
-import { RadarChartGridCircleFilled } from "./RadarChartGridCircleFilled";
-import { RadialChartGrid } from "./RadialChartGrid";
+'use client';
+import { motion } from 'framer-motion';
+import { AreaChartInteractiveLarge } from './AreaChartInteractive';
+import { BarChartActive } from './BarChartActive';
+import { BarChartInteractive } from './BarChartInteractive';
+import { RadarChartGridCircleFilled } from './RadarChartGridCircleFilled';
+import { RadialChartGrid } from './RadialChartGrid';
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 const itemVariants = {
@@ -22,10 +22,10 @@ const itemVariants = {
     y: 0,
     opacity: 1,
     transition: {
-      type: "spring",
-      stiffness: 100
-    }
-  }
+      type: 'spring',
+      stiffness: 100,
+    },
+  },
 };
 
 export function OrganizationGraphs() {

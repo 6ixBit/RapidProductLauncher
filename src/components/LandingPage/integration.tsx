@@ -1,4 +1,3 @@
-
 import { GitForkIcon } from 'lucide-react';
 
 import darkLogo from '@public/logos/nextbase-dark-logo.png';

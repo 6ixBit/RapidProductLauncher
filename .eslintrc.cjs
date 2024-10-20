@@ -3,11 +3,13 @@ var tsConfigEmail = ['./tsconfig-emails.json'];
 
 var ruleOverrides = {
   '@typescript-eslint/no-unused-vars': 'warn',
+  '@typescript-eslint/no-explicit-any': 'off',
 };
 
 var srcRuleOverrides = {
   'prettier/prettier': 1,
   '@typescript-eslint/no-unused-vars': 'warn',
+  '@typescript-eslint/no-explicit-any': 'off',
 };
 
 module.exports = {

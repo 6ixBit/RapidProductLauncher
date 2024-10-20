@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ButtonHTMLAttributes } from 'react';
 import { Button } from '../ui/button';
 
-
 export const ModalHeader = ({
   children,
   className,

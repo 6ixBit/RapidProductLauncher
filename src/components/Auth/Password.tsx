@@ -56,7 +56,7 @@ export const Password = ({
               'flex w-full justify-center rounded-lg border border-transparent py-2 text-foreground px-4 text-sm font-medium  shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2',
             )}
           >
-            {isLoading ? "Loading..." : buttonLabel}
+            {isLoading ? 'Loading...' : buttonLabel}
           </Button>
         </div>
         <div>

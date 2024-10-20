@@ -21,7 +21,7 @@ type OnboardingFeature = {
 export function OnboardingModal({
   featureList,
   className,
-  children
+  children,
 }: {
   featureList: OnboardingFeature[];
   children?: React.ReactNode;
@@ -50,13 +50,17 @@ export function OnboardingModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className={cn('w-full', className)}>
-        {children ? children : <Button
-          variant={'secondary'}
-          className='rounded-sm flex gap-2 items-center py-2 text-sm'
-        >
-          <HelpCircle />
-          Help
-        </Button>}
+        {children ? (
+          children
+        ) : (
+          <Button
+            variant={'secondary'}
+            className="rounded-sm flex gap-2 items-center py-2 text-sm"
+          >
+            <HelpCircle />
+            Help
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="p-8">
         <div className="object-fit ">

@@ -83,9 +83,7 @@ export const Email = ({
         </div>
         <div>
           {successMessage ? (
-            <T.P className="text-foreground text-center">
-              {successMessage}
-            </T.P>
+            <T.P className="text-foreground text-center">{successMessage}</T.P>
           ) : null}
         </div>
       </div>

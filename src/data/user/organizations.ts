@@ -2,12 +2,7 @@
 import { supabaseAdminClient } from '@/supabase-clients/admin/supabaseAdminClient';
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
-import type {
-  Enum,
-  NormalizedSubscription,
-  SAPayload,
-  Table,
-} from '@/types';
+import type { Enum, NormalizedSubscription, SAPayload, Table } from '@/types';
 import { toSiteURL } from '@/utils/helpers';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { stripe } from '@/utils/stripe';
@@ -49,8 +44,6 @@ export const createOrganization = async (
   }
 
   if (isOnboardingFlow) {
-
-
     const { error: updateError } = await supabaseClient
       .from('user_private_info')
       .update({ default_organization: organizationId })
