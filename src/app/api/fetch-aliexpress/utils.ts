@@ -7,29 +7,34 @@ export async function saveProductTemplateToDB(
   source_url: string,
   user_id: string,
   organization_id: string,
-) {
+): Promise<string | null> {
   const supabase = createSupabaseUserServerActionClient();
 
-  const { error } = await supabase.from('html_templates').insert([
-    {
-      user_id: user_id,
-      organization_id: organization_id,
-      html_code: html,
-      language: language,
-      source_url: source_url,
-      product_title: productInfo.title,
-      product_price: productInfo.price,
-      product_description: productInfo.description,
-      product_sub_heading: productInfo.subHeading,
-      product_key_points: productInfo.keyPoints,
-      product_reviews: productInfo.reviews,
-    },
-  ]);
+  const { data, error } = await supabase
+    .from('html_templates')
+    .insert([
+      {
+        user_id: user_id,
+        organization_id: organization_id,
+        html_code: html,
+        language: language,
+        source_url: source_url,
+        product_title: productInfo.title,
+        product_price: productInfo.price,
+        product_description: productInfo.description,
+        product_sub_heading: productInfo.subHeading,
+        product_key_points: productInfo.keyPoints,
+        product_reviews: productInfo.reviews,
+      },
+    ])
+    .select('id');
 
   if (error) {
     console.error('Error saving HTML to database:', error);
+    return null;
   } else {
     console.log('HTML saved to database successfully.');
+    return data[0]?.id || null; // Return the ID of the inserted row
   }
 }
 

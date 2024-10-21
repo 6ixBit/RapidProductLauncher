@@ -7,6 +7,7 @@ import {
     ModalHeader,
     ModalSuccessButton,
 } from '@/components/Modal/Modal';
+import H3 from '@/components/Text/H3';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -34,6 +35,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     const [language, setLanguage] = useState<string>('English');
     const [urlError, setUrlError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     const validateAliExpressUrl = (url: string) => {
         const aliExpressRegex =
@@ -59,13 +61,16 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
             return;
         }
         setIsLoading(true);
+        setError(null); // Reset error state before starting the request
         try {
             await onGenerate(source, url, language);
         } catch (error) {
-            console.error('Error generating product:', error);
+            setError('Failed to generate product. Please try again.');
         } finally {
             setIsLoading(false);
-            onClose();
+            if (!error) {
+                onClose();
+            }
         }
     };
 
@@ -74,9 +79,10 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     return (
         <Modal isOpen={isOpen} className="w-full max-w-md">
             <ModalHeader>
-                <h3 className="text-lg font-medium leading-6 text-gray-500">
+                <H3>
+
                     {isLoading ? 'Generating Product Page' : 'Select Source'}
-                </h3>
+                </H3>
             </ModalHeader>
             <ModalBody>
                 {isLoading ? (
@@ -85,13 +91,17 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                         <p className="text-sm text-gray-500">
                             Est time: 1 minute.
                         </p>
-
                         <p className="text-sm text-gray-400 italic">
                             "Psst...Your competitor is still manually creating their product page right now..."
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-4">
+                        {error && (
+                            <p className="text-sm text-red-500">
+                                {error}
+                            </p>
+                        )}
                         <div className="flex justify-between space-x-4">
                             <Button variant="default" className="w-full">
                                 AliExpress

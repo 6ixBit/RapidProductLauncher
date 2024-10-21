@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
     });
 
     const html = cleanHTML((await response.json()).template);
-    saveProductTemplateToDB(
+    const productID = await saveProductTemplateToDB(
       html,
       productInfo,
       language,
@@ -116,11 +116,10 @@ export async function POST(req: NextRequest) {
       organization_id,
     );
 
-    // Return the generated HTML and product info to the client
     return NextResponse.json({
-      message: 'Data received and parsed successfully',
-      html,
+      productID,
       productInfo,
+      html,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
