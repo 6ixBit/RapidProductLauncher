@@ -1,9 +1,9 @@
-import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import puppeteer from 'puppeteer-core';
 import { z } from 'zod';
+import { cleanHTML, saveProductTemplateToDB } from './utils';
 
 const requestSchema = z.object({
   language: z.string(),
@@ -107,7 +107,14 @@ export async function POST(req: NextRequest) {
     });
 
     const html = cleanHTML((await response.json()).template);
-    saveProductTemplate(html, productInfo, url, user_id, organization_id);
+    saveProductTemplateToDB(
+      html,
+      productInfo,
+      language,
+      url,
+      user_id,
+      organization_id,
+    );
 
     // Return the generated HTML and product info to the client
     return NextResponse.json({
@@ -124,35 +131,5 @@ export async function POST(req: NextRequest) {
     }
     console.error('Error fetching or parsing data:', error);
     return NextResponse.json({ error: 'An error occurred' }, { status: 500 });
-  }
-}
-
-function cleanHTML(html: string): string {
-  return html.replace(/\n/g, '').replace(/\s+/g, ' ').trim();
-}
-
-async function saveProductTemplate(
-  html: string,
-  productInfo: any,
-  source_url: string,
-  user_id: string,
-  organization_id: string,
-) {
-  const supabase = createSupabaseUserServerActionClient();
-
-  const { error } = await supabase.from('html_templates').insert([
-    {
-      user_id: user_id,
-      organization_id: organization_id,
-      html_code: html,
-      //   product_info: productInfo,
-      source_url: source_url,
-    },
-  ]);
-
-  if (error) {
-    console.error('Error saving HTML to database:', error);
-  } else {
-    console.log('HTML saved to database successfully.');
   }
 }
