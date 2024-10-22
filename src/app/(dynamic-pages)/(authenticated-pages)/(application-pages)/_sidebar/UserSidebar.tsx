@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import { Home, Mail, Settings, Shield } from 'lucide-react';
+import { Home, Mail, Plug, Settings, Shield } from 'lucide-react';
 import { SidebarLink } from './SidebarLink';
 import { SidebarLogoAndToggle } from './_components/SidebarLogo';
 
@@ -7,19 +7,26 @@ export async function UserSidebar() {
   return (
     <div
       className={cn(
-        'flex flex-col justify-between h-full',
-        'lg:px-3 lg:py-4 lg:pt-2.5 ',
+        'flex flex-col h-full',
+        'lg:px-3 lg:py-1 lg:pt-2.5',
       )}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-4">
         <SidebarLogoAndToggle />
       </div>
-      <div className="">
+      <div className="flex flex-col space-y-1">
         <SidebarLink
-          label="Dashboard"
-          href="/dashboard"
+          label="Launch Products"
+          href={`/products`}
           icon={<Home className="h-5 w-5" />}
         />
+        <SidebarLink
+          label="Store Integrations"
+          href={`/integrations`}
+          icon={<Plug className="h-5 w-5" />}
+        />
+      </div>
+      <div className="flex flex-col space-y-1 mt-auto">
         <SidebarLink
           label="Account Settings"
           href="/settings"
