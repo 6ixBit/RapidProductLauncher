@@ -16,6 +16,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 interface GenerateProductModalProps {
@@ -78,10 +79,19 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     return (
         <Modal isOpen={isOpen} className="w-full max-w-md">
             <ModalHeader>
-                <H3>
-
-                    {isLoading ? 'Generating Product Page' : 'Select Source'}
-                </H3>
+                <div className="flex justify-between items-center">
+                    <H3>
+                        {isLoading ? 'Generating Product Page' : 'Select Source'}
+                    </H3>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onClose}
+                        aria-label="Close"
+                    >
+                        <X className="h-4 w-4" />
+                    </Button>
+                </div>
             </ModalHeader>
             <ModalBody>
                 {isLoading ? (
@@ -101,7 +111,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                                 {error}
                             </p>
                         )}
-                        <div className="flex justify-between space-x-4">
+                        <div className="grid grid-cols-2 gap-4">
                             <Button variant="default" className="w-full">
                                 AliExpress
                             </Button>
@@ -111,6 +121,20 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                                 disabled
                             >
                                 Shopify (Coming Soon)
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="w-full opacity-50 cursor-not-allowed"
+                                disabled
+                            >
+                                Etsy (Coming Soon)
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="w-full opacity-50 cursor-not-allowed"
+                                disabled
+                            >
+                                Amazon (Coming Soon)
                             </Button>
                         </div>
                         <div>

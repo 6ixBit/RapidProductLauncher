@@ -1,9 +1,10 @@
 'use client'
 
+import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
 import { Button } from '@/components/ui/button';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, DollarSign, SquarePen, UserRound } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -16,6 +17,29 @@ export default function ProductPage() {
     const [productData, setProductData] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const tabs = [
+        {
+            label: 'Product Preview',
+            href: `/product/${productID}/preview`,
+            icon: <SquarePen />,
+        },
+        {
+            label: 'Facebook Creatives',
+            href: `/product/${productID}/facebook-creatives`,
+            icon: <UserRound />,
+        },
+        {
+            label: 'Instagram Creatives',
+            href: `/product/${productID}/instagram-creatives`,
+            icon: <DollarSign />,
+        },
+        {
+            label: 'TikTok',
+            href: `/product/${productID}/tiktok-creatives`,
+            icon: <DollarSign />,
+        },
+    ];
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -74,7 +98,9 @@ export default function ProductPage() {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back To Products
             </button>
-            <H1>Product Preview</H1>
+            <TabsNavigation tabs={tabs} />
+
+            {/* <H1>Product Preview</H1> */}
             {productData ? (
                 <div>
                     <h2>{productData.product_title}</h2>
@@ -87,3 +113,4 @@ export default function ProductPage() {
         </div>
     );
 }
+
