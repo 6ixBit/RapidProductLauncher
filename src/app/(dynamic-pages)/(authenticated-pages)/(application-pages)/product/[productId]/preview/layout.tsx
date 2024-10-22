@@ -2,22 +2,14 @@ import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/Appl
 import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
 import { Settings } from 'lucide-react';
 import Link from 'next/link';
-import { Suspense, type ReactNode } from 'react';
-import { z } from 'zod';
+import { type ReactNode } from 'react';
 import { UserSidebar } from '../../../_sidebar/UserSidebar';
 
-const paramsSchema = z.object({
-    organizationId: z.string(),
-});
 
-export default async function Layout({
+export default function Layout({
     children,
-    params,
-    navbar,
 }: {
     children: ReactNode;
-    params: unknown;
-    navbar: ReactNode;
 }) {
     return (
         <ApplicationLayoutShell
@@ -26,7 +18,7 @@ export default async function Layout({
             <div>
                 <InternalNavbar>
                     <div className="hidden lg:flex w-full justify-between items-center">
-                        <Suspense>{navbar}</Suspense>
+                        {/* <Suspense>{navbar}</Suspense> */}
                         <div className="flex items-center gap-1">
                             <Link
                                 className="flex gap-1.5 py-1.5 px-3 cursor-pointer items-center group rounded-md transition hover:cursor-pointer hover:text-foreground"
