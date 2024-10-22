@@ -48,7 +48,7 @@ export default function ProductPage() {
             try {
                 const { data, error } = await supabase
                     .from('html_templates')
-                    .select('product_title, product_price, product_description')
+                    .select('*')
                     .eq('id', productID)
                     .single();
 
@@ -88,29 +88,45 @@ export default function ProductPage() {
             </div>
         );
     }
-
     return (
-        <div>
+        <div className="max-w-4xl mx-auto px-4 py-8">
             <button
                 onClick={() => router.push('/products')}
-                className="flex items-center mb-4 text-blue-600 hover:text-blue-800"
+                className="flex items-center mb-6 text-blue-600 hover:text-blue-800"
             >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back To Products
             </button>
             <TabsNavigation tabs={tabs} />
 
-            {/* <H1>Product Preview</H1> */}
             {productData ? (
-                <div>
-                    <h2>{productData.product_title}</h2>
-                    <p>Price: {productData.product_price}</p>
-                    <p>Description: {productData.product_description}</p>
+                <div className="mt-8 bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div className="p-6">
+                        <h1 className="text-3xl font-bold mb-4">{productData.product_title}</h1>
+                        <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p>
+                        <div className="mb-6">
+                            <p className="text-2xl font-semibold text-green-600">{productData.product_price}</p>
+                        </div>
+                        <div className="border-t pt-6">
+                            <h2 className="text-xl font-semibold mb-3">Description</h2>
+                            <p className="text-gray-700 leading-relaxed">{productData.product_description}</p>
+                        </div>
+                        <div className="mt-8">
+                            <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
+                            {productData.product_reviews && productData.product_reviews.map((review, index) => (
+                                <div key={index} className="mb-4 p-4 bg-gray-100 rounded">
+                                    <p className="font-semibold">{review.name}</p>
+                                    <p className="text-gray-700">{review.content}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             ) : (
-                <p>No product data found.</p>
+                <div className="mt-8 text-center">
+                    <p className="text-xl text-gray-600">No product data found.</p>
+                </div>
             )}
         </div>
     );
 }
-
