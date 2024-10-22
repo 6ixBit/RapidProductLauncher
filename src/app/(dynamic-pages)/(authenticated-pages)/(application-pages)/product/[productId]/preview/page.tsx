@@ -4,7 +4,7 @@ import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
 import { Button } from '@/components/ui/button';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { ArrowLeft, DollarSign, SquarePen, UserRound } from 'lucide-react';
+import { ArrowLeft, Code, DollarSign, SquarePen, UserRound } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -20,9 +20,14 @@ export default function ProductPage() {
 
     const tabs = [
         {
-            label: 'Product Preview',
+            label: 'Product Info',
             href: `/product/${productID}/preview`,
             icon: <SquarePen />,
+        },
+        {
+            label: 'Page Template',
+            href: `/product/${productID}/page-template`,
+            icon: <Code />,
         },
         {
             label: 'Facebook Creatives',
@@ -34,11 +39,7 @@ export default function ProductPage() {
             href: `/product/${productID}/instagram-creatives`,
             icon: <DollarSign />,
         },
-        {
-            label: 'TikTok',
-            href: `/product/${productID}/tiktok-creatives`,
-            icon: <DollarSign />,
-        },
+
     ];
 
     useEffect(() => {
@@ -89,7 +90,7 @@ export default function ProductPage() {
         );
     }
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto px-4 py-2">
             <button
                 onClick={() => router.push('/products')}
                 className="flex items-center mb-6 text-blue-600 hover:text-blue-800"
@@ -100,23 +101,25 @@ export default function ProductPage() {
             <TabsNavigation tabs={tabs} />
 
             {productData ? (
-                <div className="mt-8 bg-white shadow-lg rounded-lg overflow-hidden">
+                <div className="mt-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                     <div className="p-6">
-                        <h1 className="text-3xl font-bold mb-4">{productData.product_title}</h1>
-                        <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p>
-                        <div className="mb-6">
-                            <p className="text-2xl font-semibold text-green-600">{productData.product_price}</p>
+                        <H1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{productData.product_title}</H1>
+                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">{productData.product_sub_heading}</p>
+                        <div className="mb-6 mt-8">
+                            <p className="text-2xl font-semibold text-green-600 dark:text-green-400">
+                                Recommended Price: {productData.product_price}
+                            </p>
                         </div>
-                        <div className="border-t pt-6">
-                            <h2 className="text-xl font-semibold mb-3">Description</h2>
-                            <p className="text-gray-700 leading-relaxed">{productData.product_description}</p>
+                        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Description</h2>
+                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{productData.product_description}</p>
                         </div>
                         <div className="mt-8">
-                            <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
+                            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Customer Reviews</h2>
                             {productData.product_reviews && productData.product_reviews.map((review, index) => (
-                                <div key={index} className="mb-4 p-4 bg-gray-100 rounded">
-                                    <p className="font-semibold">{review.name}</p>
-                                    <p className="text-gray-700">{review.content}</p>
+                                <div key={index} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                                    <p className="font-semibold text-gray-900 dark:text-white">{review.name}</p>
+                                    <p className="text-gray-700 dark:text-gray-300">{review.content}</p>
                                 </div>
                             ))}
                         </div>
@@ -124,7 +127,7 @@ export default function ProductPage() {
                 </div>
             ) : (
                 <div className="mt-8 text-center">
-                    <p className="text-xl text-gray-600">No product data found.</p>
+                    <p className="text-xl text-gray-600 dark:text-gray-300">No product data found.</p>
                 </div>
             )}
         </div>
