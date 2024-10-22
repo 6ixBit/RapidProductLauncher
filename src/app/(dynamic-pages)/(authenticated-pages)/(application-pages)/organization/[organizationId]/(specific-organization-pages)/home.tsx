@@ -1,6 +1,6 @@
 'use client';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import GenerateProductModal from './GenerateProductModal';
 interface WelcomeHeaderProps {
@@ -12,6 +12,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
     userName,
     userEmail,
 }) => {
+    const router = useRouter();
     const params = useParams();
     const organizationId = params?.organizationId as string;
 
@@ -62,7 +63,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
 
             // Redirect to the product preview page
             if (data.productID) {
-                window.location.href = `/product/${data.productID}/preview`;
+                router.push(`/product/${data.productID}/preview`);
             } else {
                 console.error('Product ID not received in the response');
             }
