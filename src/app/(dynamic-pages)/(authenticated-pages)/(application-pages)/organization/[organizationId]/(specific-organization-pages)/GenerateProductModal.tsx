@@ -1,4 +1,3 @@
-// GenerateProductModal.tsx
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import {
     Modal,

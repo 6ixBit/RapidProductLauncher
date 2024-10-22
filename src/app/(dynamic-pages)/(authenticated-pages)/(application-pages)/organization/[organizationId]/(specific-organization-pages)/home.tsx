@@ -29,7 +29,6 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
         };
         fetchUser();
     }, []);
-
     const handleGenerateProduct = async (
         source: string,
         url: string,
@@ -60,6 +59,13 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
 
             const data = await response.json();
             console.log('Response from fetch:', data);
+
+            // Redirect to the product preview page
+            if (data.productID) {
+                window.location.href = `/product/${data.productID}/preview`;
+            } else {
+                console.error('Product ID not received in the response');
+            }
         } catch (error) {
             console.error('Error generating product:', error);
         }

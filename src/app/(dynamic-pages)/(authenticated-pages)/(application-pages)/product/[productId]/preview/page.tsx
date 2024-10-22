@@ -1,6 +1,7 @@
 'use client'
 
 import H1 from '@/components/Text/H1';
+import { Button } from '@/components/ui/button';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { ArrowLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -51,15 +52,15 @@ export default function ProductPage() {
     if (error) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
-                <H1>Whoops!</H1>
-                <p className="text-red-500 mb-4 mt-2">{error}</p>
-                <button
+                <H1>Whoops! 😅</H1>
+                <p className="text-red-500 mb-8 mt-2">{error}</p>
+                <Button
                     onClick={() => router.push('/products')}
-                    className="flex items-center text-blue-600 hover:text-blue-800"
+
                 >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back To Products
-                </button>
+                </Button>
             </div>
         );
     }
