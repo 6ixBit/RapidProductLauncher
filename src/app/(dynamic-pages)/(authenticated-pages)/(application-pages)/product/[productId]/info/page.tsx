@@ -4,7 +4,9 @@ import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
 import { Button } from '@/components/ui/button';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { ArrowLeft, Calendar, Code, DollarSign, Link as LinkIcon, SquarePen, UserRound } from 'lucide-react';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ArrowLeft, Calendar, Code, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -19,7 +21,7 @@ export default function ProductPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    //TODO: LIST PRODUCTS IN A GRID VIEW.
+
     //TODO: Add a gneerate product button to far right of Back to Products
     const tabs = [
         {
@@ -35,12 +37,12 @@ export default function ProductPage() {
         {
             label: 'Facebook Creatives',
             href: `/product/${productID}/facebook-creatives`,
-            icon: <UserRound />,
+            icon: <FontAwesomeIcon icon={faFacebook} size="lg" />,
         },
         {
             label: 'Instagram Creatives',
             href: `/product/${productID}/instagram-creatives`,
-            icon: <DollarSign />,
+            icon: <FontAwesomeIcon icon={faInstagram} size="lg" />
         },
     ];
 
@@ -95,7 +97,7 @@ export default function ProductPage() {
     };
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-2">
+        <div className="max-w-6xl mx-auto px-4 py-2">
             {/* <button
                 onClick={() => router.push('/products')}
                 className="flex items-center mb-6 text-blue-600 hover:text-blue-800"

@@ -3,6 +3,7 @@ import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/Appl
 import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
 import { type ReactNode } from 'react';
 
+
 export default function Layout({
     children,
 }: {
