@@ -3,7 +3,11 @@
 export default {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {
-    domains: ['localhost'],
+    domains: [
+      'localhost',
+      's3.us-east-2.amazonaws.com',
+      'rapid-product-launcher.ai.s3.us-east-2.amazonaws.com',
+    ],
     remotePatterns: [
       {
         protocol: 'https',

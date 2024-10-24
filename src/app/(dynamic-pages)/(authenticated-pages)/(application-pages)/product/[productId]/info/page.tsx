@@ -19,6 +19,7 @@ export default function ProductPage() {
     const [error, setError] = useState<string | null>(null);
 
     //TODO: LIST PRODUCTS IN A GRID VIEW.
+    //TODO: Add a gneerate product button to far right of Back to Products
     const tabs = [
         {
             label: 'Product Info',
