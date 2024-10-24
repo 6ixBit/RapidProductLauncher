@@ -147,11 +147,11 @@ export default function ProductPage() {
                             </div>
                         </div>
                     </div>
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <div className="border-t border-gray-200 dark:border-gray-700 p-6">
                         <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Description</h2>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{productData.product_description}</p>
                     </div>
-                    <div className="mt-8">
+                    <div className="mt-8 p-6">
                         <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Customer Reviews</h2>
                         {productData.product_reviews && productData.product_reviews.map((review, index) => (
                             <div key={index} className="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded">
