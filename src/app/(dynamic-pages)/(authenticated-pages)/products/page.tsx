@@ -108,7 +108,7 @@ export default function ProductsPage() {
             console.log('Response from fetch:', data);
 
             if (data.productID) {
-                router.push(`/product/${data.productID}/preview`);
+                router.push(`/product/${data.productID}/info`);
             } else {
                 console.error('Product ID not received in the response');
             }

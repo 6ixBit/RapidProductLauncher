@@ -63,7 +63,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
 
             // Redirect to the product preview page
             if (data.productID) {
-                router.push(`/product/${data.productID}/preview`);
+                router.push(`/product/${data.productID}/info`);
             } else {
                 console.error('Product ID not received in the response');
             }
