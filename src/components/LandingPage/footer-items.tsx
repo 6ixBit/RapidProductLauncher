@@ -11,7 +11,7 @@ export const footerItems: FooterItem[] = [
     title: 'Resources',
     items: [
       {
-        name: 'NextBase',
+        name: 'Rapid Product Launcher',
         url: '#',
       },
     ],

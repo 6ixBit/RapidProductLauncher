@@ -1,6 +1,6 @@
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/ApplicationLayoutShell';
 import { type ReactNode } from 'react';
-import { UserSidebar } from '../../../_sidebar/UserSidebar';
+import { UserSidebar } from '../../../../../../../components/_sidebar/UserSidebar';
 
 
 export default function Layout({

@@ -1,8 +1,8 @@
 'use client';
+import GenerateProductModal from '@/components/GenerateProductModal';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import GenerateProductModal from './GenerateProductModal';
 interface WelcomeHeaderProps {
     userName: string;
     userEmail: string;

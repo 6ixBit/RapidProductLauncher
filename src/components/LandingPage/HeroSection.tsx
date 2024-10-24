@@ -19,10 +19,10 @@ export default function HeroSection() {
             </div>
           </Link>
           <h1 className="font-semibold text-3xl lg:text-5xl">
-            Nextbase Essential Landing Page
+            Rapid Product Launcher
           </h1>
           <p className="text-slate-500 dark:text-slate-400 leading-loose lg:text-lg lg:leading-relaxed max-w-4xl">
-            Welcome to Nextbase Essential Landing Page: Your Gateway to
+            Welcome to Rapid Product Launcher: Your Gateway to
             Innovation. Discover the Future of Excellence and Elevate Your
             Experience.
           </p>

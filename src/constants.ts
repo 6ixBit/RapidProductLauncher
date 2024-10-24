@@ -1,6 +1,6 @@
 export const ADMIN_USER_LIST_VIEW_PAGE_SIZE = 10;
 export const ADMIN_ORGANIZATION_LIST_VIEW_PAGE_SIZE = 10;
-export const PRODUCT_NAME = 'NextBase';
+export const PRODUCT_NAME = 'RapidProductLauncher';
 export const DEV_PORT = 4000;
 
 export const CURRENT_ORGANIZATION_ID_COOKIE_KEY =

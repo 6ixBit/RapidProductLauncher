@@ -1,9 +1,13 @@
+import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { cn } from '@/utils/cn';
-import { Home, Mail, Plug, Settings, Shield } from 'lucide-react';
+import { DollarSign, Home, Layout, Plug, Settings, Shield } from 'lucide-react';
 import { SidebarLink } from './SidebarLink';
 import { SidebarLogoAndToggle } from './_components/SidebarLogo';
 
 export async function UserSidebar() {
+  const organizations = await fetchSlimOrganizations();
+  const organizationId = organizations[0]?.id;
+
   return (
     <div
       className={cn(
@@ -15,10 +19,18 @@ export async function UserSidebar() {
         <SidebarLogoAndToggle />
       </div>
       <div className="flex flex-col space-y-1">
+        {organizationId && (
+          <SidebarLink
+            label="Dashboard"
+            href={`/organization/${organizationId}`}
+            icon={<Home className="h-5 w-5" />}
+
+          />
+        )}
         <SidebarLink
-          label="Launch Products"
+          label="Products"
           href={`/products`}
-          icon={<Home className="h-5 w-5" />}
+          icon={<Layout className="h-5 w-5" />}
         />
         <SidebarLink
           label="Store Integrations"
@@ -26,7 +38,17 @@ export async function UserSidebar() {
           icon={<Plug className="h-5 w-5" />}
         />
       </div>
+
+
       <div className="flex flex-col space-y-1 mt-auto">
+
+
+
+        <SidebarLink
+          label="Billing"
+          href={`/organization/${organizationId}/settings/billing`}
+          icon={<DollarSign className="h-5 w-5" />}
+        />
         <SidebarLink
           label="Account Settings"
           href="/settings"
@@ -37,11 +59,7 @@ export async function UserSidebar() {
           href="/settings/security"
           icon={<Shield className="h-5 w-5" />}
         />
-        <SidebarLink
-          label="Invitations"
-          href="/invitations"
-          icon={<Mail className="h-5 w-5" />}
-        />
+
       </div>
     </div>
   );

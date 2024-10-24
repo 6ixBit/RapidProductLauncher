@@ -1,7 +1,7 @@
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell';
 import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
 import { ReactNode, Suspense } from 'react';
-import { UserSidebar } from '../(application-pages)/_sidebar/UserSidebar';
+import { UserSidebar } from '../../../../components/_sidebar/UserSidebar';
 
 export default async function Layout({
   children,

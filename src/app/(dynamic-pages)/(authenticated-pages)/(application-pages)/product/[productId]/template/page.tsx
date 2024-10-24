@@ -19,7 +19,9 @@ const mockData = {
         description: 'This is an example product description.',
         images: [
             { alt: 'Product Image 1', url: 'https://images.stockcake.com/public/1/3/5/1357c015-9880-4fd7-a212-20b874e97880_large/cat-enjoying-sunlight-stockcake.jpg' },
-            { alt: 'Product Image 3', url: 'https://stockcake.com/i/toddler-enjoying-sunlight_1312673_242084' }
+            { alt: 'Product Image 2', url: 'https://images.stockcake.com/public/3/5/3/35384791-8bff-43b8-aa92-009e56cd8c1a_large/jet-over-desert-stockcake.jpg' },
+            { alt: 'Product Image 3', url: 'https://images.stockcake.com/public/1/3/5/1357c015-9880-4fd7-a212-20b874e97880_large/cat-enjoying-sunlight-stockcake.jpg' },
+            { alt: 'Product Image 2', url: 'https://images.stockcake.com/public/3/5/3/35384791-8bff-43b8-aa92-009e56cd8c1a_large/jet-over-desert-stockcake.jpg' }
         ],
         available: true,
         options_with_values: [
@@ -95,3 +97,8 @@ const TemplatePage = () => {
 };
 
 export default TemplatePage;
+
+
+
+
+

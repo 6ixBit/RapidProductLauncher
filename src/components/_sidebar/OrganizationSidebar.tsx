@@ -26,14 +26,14 @@ async function OrganizationSidebarInternal({
         <div className="flex flex-col gap-6 h-full overflow-y-auto">
           <div>
             <SidebarLink
-              label="Launch Products"
-              href={`/organization/${organizationId}`}
+              label="Products"
+              href={`/products`}
               icon={<Home className="h-5 w-5" />}
             />
 
             <SidebarLink
               label="Store Integrations"
-              href={`/organization/${organizationId}`}
+              href={`/integrations`}
               icon={<Plug className="h-5 w-5" />}
             />
           </div>

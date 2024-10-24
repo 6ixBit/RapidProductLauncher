@@ -5,7 +5,6 @@ export const liquidTemplate_1_edited = `{% comment %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js" async></script>
 <script src="https://cdn.tailwindcss.com" async></script>
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -65,6 +64,78 @@ export const liquidTemplate_1_edited = `{% comment %}
         quantityInput.value = currentValue - 1;
       }
     }
+
+    const mainImage = document.getElementById('main-image').querySelector('img');
+    const thumbnails = document.querySelectorAll('#thumbnail-container img');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    let currentIndex = 0;
+
+    function updateMainImage(index) {
+      mainImage.src = thumbnails[index].src;
+      mainImage.alt = thumbnails[index].alt;
+      currentIndex = index;
+      updateThumbnailSelection();
+    }
+
+    function updateThumbnailSelection() {
+      thumbnails.forEach((thumb, index) => {
+        if (index === currentIndex) {
+          thumb.classList.add('ring-2', 'ring-blue-500');
+        } else {
+          thumb.classList.remove('ring-2', 'ring-blue-500');
+        }
+      });
+    }
+
+    function scrollToThumbnail(index) {
+      thumbnails[index].scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest'
+      });
+    }
+
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', () => {
+        updateMainImage(index);
+        scrollToThumbnail(index);
+      });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+      updateMainImage(currentIndex);
+      scrollToThumbnail(currentIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % thumbnails.length;
+      updateMainImage(currentIndex);
+      scrollToThumbnail(currentIndex);
+    });
+
+    // Swipe functionality for touch devices
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    mainImage.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    mainImage.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX) nextBtn.click();
+      if (touchEndX > touchStartX) prevBtn.click();
+    }
+
+    // Initialize the carousel
+    updateThumbnailSelection();
   });
 </script>
 
@@ -89,38 +160,30 @@ export const liquidTemplate_1_edited = `{% comment %}
 <div class="container mx-auto px-8 sm:px-6 lg:px-8 xl:max-w-7xl 2xl:max-w-full py-8">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12">
     {% comment %}Product Images{% endcomment %}
-    <div class="product-images">
-      <div class="swiper product-swiper">
-        <div class="swiper-wrapper">
+    <div class="product-images w-full max-w-2xl mx-auto mb-8 lg:mb-0">
+      <div id="main-image" class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
+        <img src="{{ product.images[0].url }}" alt="{{ product.images[0].alt }}" class="w-full h-full object-center object-cover">
+      </div>
+      
+      <div class="mt-4 relative">
+        <div id="thumbnail-container" class="flex space-x-4 overflow-x-auto snap-x scrollbar-hide">
           {% for image in product.images %}
-            <div class="swiper-slide flex items-center justify-center">
-              <img 
-                src="{{ image.url }}" 
-                alt="{{ image.alt }}" 
-                class="w-full h-auto rounded-lg"
-              >
+            <div class="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden snap-start cursor-pointer">
+              <img src="{{ image.url }}" alt="{{ image.alt }}" class="w-full h-full object-center object-cover" data-index="{{ forloop.index0 }}">
             </div>
           {% endfor %}
         </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+        <button id="prev-btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 rounded-full p-2 focus:outline-none">
+          <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button id="next-btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 rounded-full p-2 focus:outline-none">
+          <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
       </div>
-
-      {% if product.images.size > 1 %}
-        <div class="swiper product-thumbs mt-4">
-          <div class="swiper-wrapper">
-            {% for image in product.images %}
-              <div class="swiper-slide opacity-40 hover:opacity-100 transition-opacity cursor-pointer">
-                <img 
-                  src="{{ image.url }}" 
-                  alt="{{ image.alt }}" 
-                  class="w-full h-20 object-cover rounded-lg"
-                >
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
     </div>
 
     {% comment %}Product Details{% endcomment %}

@@ -24,7 +24,7 @@ export function Footer() {
                     className="block dark:hidden h-8 w-8"
                   />
                   <span className=" font-medium text-2xl text-foreground sm:inline-block">
-                    Nextbase
+                    Rapid Product Launcher
                   </span>
                 </div>
               </Link>
@@ -54,7 +54,7 @@ export function Footer() {
             <p className="text-slate-500  w-full dark:text-slate-400 text-sm">
               © 2023
               <a
-                href="https://usenextbase.com/"
+                href="https://rapidproductlauncher.ai/"
                 className="underline mx-2 decoration-slate-500 dark:decoration-slate-400 underline-offset-1 dec"
                 target="_blank"
               >

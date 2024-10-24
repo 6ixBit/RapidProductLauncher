@@ -18,6 +18,7 @@ export default function ProductPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    //TODO: LIST PRODUCTS IN A GRID VIEW.
     const tabs = [
         {
             label: 'Product Info',

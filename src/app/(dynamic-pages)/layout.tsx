@@ -7,8 +7,8 @@ export const metadata = {
   icons: {
     icon: '/images/logo-black-main.ico',
   },
-  title: 'Nextbase Essential',
-  description: 'Nextbase Essential',
+  title: 'Rapid Product Launcher',
+  description: 'Launch ecom products faster than your competitors',
 };
 
 export default async function RootLayout({

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { Button, Html, Section, Column, Text } from '@react-email/components';
+import { Button, Column, Html, Section, Text } from '@react-email/components';
 
 type SignInEmailProps = {
   signInUrl: string;
@@ -30,7 +29,7 @@ export default function SignInEmail(props: SignInEmailProps) {
         Thank you for choosing our platform, and we look forward to serving you!
       </Text>
       <Text>Warm regards,</Text>
-      <Text>Nextbase Customer Success Team</Text>
+      <Text>Rapid Product Launcher Team</Text>
     </Html>
   );
 }

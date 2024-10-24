@@ -19,7 +19,7 @@ const onboardingFeatures = [
     title: 'User Authentication built in',
     description: (
       <p>
-        Start building your app with NextBase and you'll get a full-featured
+        Start building your app with Rapid Product Launcher and you'll get a full-featured
         authentication system, out of the box. More than 15 authentication
         providers such as Google, GitHub, Twitter, Facebook, Apple, Discord etc
         are supported.
@@ -31,10 +31,7 @@ const onboardingFeatures = [
     title: 'Admin Panel',
     description: (
       <p>
-        Admin Panel is built in. This means that you can manage a secret area
-        within your app where you can manage users and organizations, etc.
-        Nextbase also comes with a maintenance mode in the admin panel.You can
-        use this mode when you are doing maintenance on your app.
+        Admin Panel
       </p>
     ),
     image: '/assets/onboardingFeatures/adminPanel.png',
