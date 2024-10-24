@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+//TODO: AWS Img URL - https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg
+
 interface Product {
     id: string;
     user_id: string;
@@ -21,6 +23,7 @@ interface Product {
     product_title: string;
     product_price: string;
     image_url: string;
+    thumbnail_url: string;
     language: string;
 }
 
@@ -30,7 +33,7 @@ const ProductCard = ({ product }: { product: Product }) => (
     <Link href={`/product/${product.id}/info`}>
         <div className="border rounded-lg p-3 shadow-md text-sm cursor-pointer hover:shadow-lg transition-shadow">
             <Image
-                src={product.thumbnail_url || '/placeholder-image.jpg'}
+                src={product.thumbnail_url || ""}
                 alt={product.product_title}
                 width={150}
                 height={150}

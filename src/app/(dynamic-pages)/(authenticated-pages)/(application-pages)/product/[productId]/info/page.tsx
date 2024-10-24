@@ -5,6 +5,7 @@ import H1 from '@/components/Text/H1';
 import { Button } from '@/components/ui/button';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { ArrowLeft, Calendar, Code, DollarSign, Link as LinkIcon, SquarePen, UserRound } from 'lucide-react';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -107,6 +108,18 @@ export default function ProductPage() {
             {productData ? (
                 <div className="mt-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                     <div className="p-6">
+                        {productData.thumbnail_url && (
+                            <div className="mb-4">
+                                <Image
+                                    src={productData.thumbnail_url || ""}
+                                    alt={productData.product_title}
+                                    width={400} // Adjust width as needed
+                                    height={300} // Adjust height as needed
+                                    className="w-full h-auto object-cover rounded"
+                                    priority // Add this line
+                                />
+                            </div>
+                        )}
                         <H1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{productData.product_title}</H1>
                         <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">{productData.product_sub_heading}</p>
                         <div className="flex justify-between items-center mb-6 mt-8">
