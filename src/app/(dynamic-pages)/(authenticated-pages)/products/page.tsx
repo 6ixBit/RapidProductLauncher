@@ -6,12 +6,13 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { faArrowsRotate, faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
 //TODO: AWS Img URL - https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg
 
 interface Product {
@@ -271,17 +272,19 @@ export default function ProductsPage() {
                     <h1 className="text-3xl font-bold">Your Products</h1>
                     <div className="flex gap-4">
                         <button
-                            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                            onClick={handleRefresh}
-                        >
-                            Refresh
-                        </button>
-                        <button
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
                             onClick={() => setIsModalOpen(true)}
                         >
-                            Generate Product
+                            <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                            Generate
                         </button>
+                        <button
+                            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
+                            onClick={handleRefresh}
+                        >
+                            <FontAwesomeIcon icon={faArrowsRotate} className="transition-transform duration-200 hover:rotate-180" />
+                        </button>
+
                     </div>
                 </div>
 

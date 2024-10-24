@@ -1,8 +1,11 @@
 'use client';
 import GenerateProductModal from '@/components/GenerateProductModal';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 interface WelcomeHeaderProps {
     userName?: string;
     userEmail?: string;
@@ -12,6 +15,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
     userName,
     userEmail,
 }) => {
+    // TODO: Add a github-like calendar below the cards so user can see their progress on sign on.
     const router = useRouter();
     const params = useParams();
     const organizationId = params?.organizationId as string;
@@ -87,6 +91,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     onClick={() => setIsModalOpen(true)}
                 >
+                    <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
                     Generate Product
                 </button>
 

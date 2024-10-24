@@ -16,7 +16,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { faAmazon, faEtsy } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { X } from 'lucide-react';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 interface GenerateProductModalProps {
@@ -112,7 +115,12 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                             </p>
                         )}
                         <div className="grid grid-cols-2 gap-4">
-                            <Button variant="default" className="w-full">
+                            <Button
+                                variant="outline"
+                                className={`w-full ${source === 'AliExpress' ? 'bg-blue-100 border-blue-500 text-blue-400' : ''}`}
+                                onClick={() => setSource('AliExpress')}
+                            >
+                                <Image src="/logos/aliexpress.svg" alt="AliExpress" width={20} height={20} className="mr-2" />
                                 AliExpress
                             </Button>
                             <Button
@@ -120,21 +128,24 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                                 className="w-full opacity-50 cursor-not-allowed"
                                 disabled
                             >
-                                Shopify (Coming Soon)
+                                <Image src="/logos/temu.svg" alt="Temu" width={20} height={20} className="mr-2" />
+                                Temu
                             </Button>
                             <Button
                                 variant="outline"
                                 className="w-full opacity-50 cursor-not-allowed"
                                 disabled
                             >
-                                Etsy (Coming Soon)
+                                <FontAwesomeIcon icon={faEtsy} className="mr-2" />
+                                <span>Etsy</span>
                             </Button>
                             <Button
                                 variant="outline"
                                 className="w-full opacity-50 cursor-not-allowed"
                                 disabled
                             >
-                                Amazon (Coming Soon)
+                                <FontAwesomeIcon icon={faAmazon} className="mr-2" />
+                                Amazon
                             </Button>
                         </div>
                         <div>
