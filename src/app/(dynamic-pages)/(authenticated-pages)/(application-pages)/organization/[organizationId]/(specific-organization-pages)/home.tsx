@@ -73,7 +73,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 py-8 px-4 container mx-auto">
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-bold">
