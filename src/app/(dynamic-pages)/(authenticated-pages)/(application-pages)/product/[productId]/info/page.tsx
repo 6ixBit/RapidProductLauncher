@@ -151,12 +151,22 @@ export default function ProductPage() {
                         <h2 className="text-xl font-semibold mb-3 text-gray-900">Description</h2>
                         <p className="text-gray-700 leading-relaxed">{productData.product_description}</p>
                     </div>
-                    <div className="mt-8 p-6">
+                    {productData.product_key_points && productData.product_key_points.length > 0 && (
+                        <div className="border-t border-gray-200 p-6">
+                            <h2 className="text-xl font-semibold mb-3 text-gray-900">Key Points</h2>
+                            <ul className="list-disc list-inside text-gray-700">
+                                {productData.product_key_points && productData.product_key_points.map((point, index) => (
+                                    <li key={index} className="mb-2 text-black">{point}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <div className="mt-2 p-6">
                         <h2 className="text-xl font-semibold mb-4 text-gray-900 ">Customer Reviews</h2>
                         {productData.product_reviews && productData.product_reviews.map((review, index) => (
                             <div key={index} className="mb-4 p-4 bg-gray-100 rounded">
                                 <p className="font-semibold text-gray-900">{review.name}</p>
-                                <p className="text-gray-700 ">{review.content}</p>
+                                <p className="text-gray-700">{review.content}</p>
                             </div>
                         ))}
                     </div>
