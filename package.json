@@ -58,6 +58,7 @@
     "@tailwindcss/typography": "^0.5.14",
     "@tanstack/react-query": "^4.20.4",
     "@tremor/react": "^3.18.3",
+    "@uiw/react-heat-map": "^2.2.2",
     "autoprefixer": "^10.4.13",
     "axios": "^1.7.7",
     "axios-cookiejar-support": "^5.0.3",

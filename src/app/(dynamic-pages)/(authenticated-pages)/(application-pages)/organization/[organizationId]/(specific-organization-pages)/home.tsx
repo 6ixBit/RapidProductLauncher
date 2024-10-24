@@ -1,11 +1,11 @@
 'use client';
 import GenerateProductModal from '@/components/GenerateProductModal';
+import UserActivityCalendar from '@/components/UserActivityCalendar';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
 interface WelcomeHeaderProps {
     userName?: string;
     userEmail?: string;
@@ -78,7 +78,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
 
     return (
         <div className="space-y-6 py-8 px-4 container mx-auto">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mb-12">
                 <div>
                     <h1 className="text-2xl font-bold">
                         Outpace Your Competition with Rapid Launches
@@ -101,11 +101,11 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                     onGenerate={handleGenerateProduct}
                 />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16">
-                <div className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                    <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+                <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-blue-500">
+                    <div className="bg-blue-100 p-3 rounded-full">
                         <svg
-                            className="w-6 h-6 text-blue-500 dark:text-blue-300"
+                            className="w-6 h-6 text-blue-500"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -120,16 +120,16 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                         </svg>
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold dark:text-white">
+                        <h2 className="text-lg font-semibold">
                             Products Tested
                         </h2>
-                        <p className="text-2xl font-bold dark:text-white">15</p>
+                        <p className="text-2xl font-bold">15</p>
                     </div>
                 </div>
-                <div className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                    <div className="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-green-500 ">
+                    <div className="bg-green-100 p-3 rounded-full">
                         <svg
-                            className="w-6 h-6 text-green-500 dark:text-green-300"
+                            className="w-6 h-6 text-green-500"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -144,16 +144,16 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                         </svg>
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold dark:text-white">
+                        <h2 className="text-lg font-semibold">
                             Time Saved
                         </h2>
-                        <p className="text-2xl font-bold dark:text-white">24h</p>
+                        <p className="text-2xl font-bold">24h</p>
                     </div>
                 </div>
-                <div className="flex items-center space-x-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                    <div className="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-full">
+                <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-yellow-500 animate-pulse">
+                    <div className="bg-yellow-100 p-3 rounded-full">
                         <svg
-                            className="w-6 h-6 text-yellow-500 dark:text-yellow-300"
+                            className="w-6 h-6 text-yellow-500"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -168,13 +168,15 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                         </svg>
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold dark:text-white">
+                        <h2 className="text-lg font-semibold">
                             Credits Left
                         </h2>
-                        <p className="text-2xl font-bold dark:text-white">50</p>
+                        <p className="text-2xl font-bold">50</p>
                     </div>
                 </div>
             </div>
+
+            <UserActivityCalendar />
         </div>
     );
 };
