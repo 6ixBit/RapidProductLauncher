@@ -4,8 +4,8 @@ import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supab
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 interface WelcomeHeaderProps {
-    userName: string;
-    userEmail: string;
+    userName?: string;
+    userEmail?: string;
 }
 
 export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
@@ -79,7 +79,9 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                     <h1 className="text-2xl font-bold">
                         Outpace Your Competition with Rapid Launches
                     </h1>
-                    <p className="text-sm text-gray-500">{userEmail}</p>
+                    {userEmail && (
+                        <p className="text-sm text-gray-500">{userEmail}</p>
+                    )}
                 </div>
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

@@ -35,7 +35,7 @@ export default async function OrganizationPage({
         <Suspense>
           {/* <OrganizationGraphs /> */}
 
-          <WelcomeHeader userEmail={'real@real.com'} userName={'Real'} />
+          <WelcomeHeader userName={'Real'} />
         </Suspense>
       </div>
     </div>

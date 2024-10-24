@@ -2,6 +2,7 @@
 
 import GenerateProductModal from '@/components/GenerateProductModal';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
@@ -28,6 +29,23 @@ interface Product {
 }
 
 const ITEMS_PER_PAGE = 8;
+const languageToEmoji = (language: string) => {
+    switch (language.toLowerCase()) {
+        case 'english':
+            return '🇬🇧';
+        case 'spanish':
+            return '🇪🇸';
+        case 'french':
+            return '🇫🇷';
+        case 'german':
+            return '🇩🇪';
+        case 'italian':
+            return '🇮🇹';
+        default:
+            return '❓'; // Default emoji for unknown languages
+    }
+};
+
 
 const ProductCard = ({ product }: { product: Product }) => (
     <Link href={`/product/${product.id}/info`}>
@@ -42,9 +60,16 @@ const ProductCard = ({ product }: { product: Product }) => (
             <h2 className="font-semibold truncate">{product.product_title}</h2>
             <p className="text-gray-600 mb-3">{product.product_price}</p>
             <div className="flex justify-between items-center text-xs">
-                <span className="bg-gray-200 px-2 py-1 rounded">
-                    {product.language || 'Unknown'}
-                </span>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className="bg-gray-200 px-2 py-1 rounded">
+                            {languageToEmoji(product.language || 'Unknown')}
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {`This product page was generated in ${product.language || 'an unknown language'}.`}
+                    </TooltipContent>
+                </Tooltip>
                 <Link
                     href={product.source_url}
                     target="_blank"
@@ -240,57 +265,59 @@ export default function ProductsPage() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold">Your Products</h1>
-                <div className="flex gap-4">
-                    <button
-                        className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                        onClick={handleRefresh}
-                    >
-                        Refresh
-                    </button>
-                    <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        Generate Product
-                    </button>
-                </div>
-            </div>
-
-            <GenerateProductModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onGenerate={handleGenerateProduct}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
-
-            <div ref={loadMoreRef} className="mt-8">
-                {isLoading && <LoadingSpinner />}
-                {error && (
-                    <div className="text-center">
-                        <p className="text-red-500 mb-2">{error}</p>
+        <TooltipProvider>
+            <div className="container mx-auto px-4 py-8">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold">Your Products</h1>
+                    <div className="flex gap-4">
                         <button
-                            onClick={handleRetry}
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                            onClick={handleRefresh}
                         >
-                            Retry
+                            Refresh
+                        </button>
+                        <button
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            Generate Product
                         </button>
                     </div>
-                )}
-                {!hasMore && products.length > 0 && !error && (
-                    <p className="text-center text-gray-500">End Of Products</p>
-                )}
-                {!hasMore && products.length === 0 && !error && (
-                    <p className="text-center text-gray-500">No products found</p>
-                )}
+                </div>
+
+                <GenerateProductModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onGenerate={handleGenerateProduct}
+                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {products.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+
+                <div ref={loadMoreRef} className="mt-8">
+                    {isLoading && <LoadingSpinner />}
+                    {error && (
+                        <div className="text-center">
+                            <p className="text-red-500 mb-2">{error}</p>
+                            <button
+                                onClick={handleRetry}
+                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    )}
+                    {!hasMore && products.length > 0 && !error && (
+                        <p className="text-center text-gray-500">End Of Products</p>
+                    )}
+                    {!hasMore && products.length === 0 && !error && (
+                        <p className="text-center text-gray-500">No products found</p>
+                    )}
+                </div>
             </div>
-        </div>
+        </TooltipProvider>
     );
 }

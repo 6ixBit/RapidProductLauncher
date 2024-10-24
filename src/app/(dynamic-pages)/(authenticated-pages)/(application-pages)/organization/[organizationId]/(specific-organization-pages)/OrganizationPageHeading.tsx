@@ -7,7 +7,6 @@ export async function OrganizationPageHeading({
   organizationId: string;
 }) {
   const organizationTitle = await getOrganizationTitle(organizationId);
-  console.log('organization title');
   return (
     <PageHeading
       title={organizationTitle}
