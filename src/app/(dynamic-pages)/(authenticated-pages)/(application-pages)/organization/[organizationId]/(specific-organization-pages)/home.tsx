@@ -3,6 +3,7 @@ import GenerateProductModal from '@/components/GenerateProductModal';
 import H1 from '@/components/Text/H1';
 import UserActivityCalendar from '@/components/UserActivityCalendar';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useParams, useRouter } from 'next/navigation';
@@ -166,7 +167,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08 .402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08-.402 2.599-1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
                             />
                         </svg>
                     </div>
@@ -182,6 +183,24 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                 <div className="overflow-x-auto">
                     <UserActivityCalendar />
                 </div>
+            </div>
+            {/* Promotional Banner */}
+            <div className="bg-gradient-to-r from-green-600 to-green-500 text-white text-center py-6 mt-12 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer px-4">
+                <a
+                    href="your-affiliate-link-here"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-4 text-lg font-semibold"
+                >
+                    <FontAwesomeIcon icon={faShopify} size='2x' />
+                    <span className="flex items-center">
+                        Click here to get a Shopify store for only
+                        <span className="text-2xl font-semibold text-white ml-2 underline decoration-white">
+                            $1
+                        </span>
+                        !
+                    </span>
+                </a>
             </div>
         </div>
     );
