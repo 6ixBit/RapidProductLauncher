@@ -23,6 +23,7 @@ export default function ProductPage() {
 
 
     //TODO: Add a gneerate product button to far right of Back to Products
+
     const tabs = [
         {
             label: 'Product Info',
@@ -37,12 +38,12 @@ export default function ProductPage() {
         {
             label: 'Facebook Creatives',
             href: `/product/${productID}/facebook-creatives`,
-            icon: <FontAwesomeIcon icon={faFacebook} size="lg" />,
+            icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
         },
         {
             label: 'Instagram Creatives',
             href: `/product/${productID}/instagram-creatives`,
-            icon: <FontAwesomeIcon icon={faInstagram} size="lg" />
+            icon: <FontAwesomeIcon icon={faInstagram} size="lg" style={{ color: '#E1306C' }} />
         },
     ];
 

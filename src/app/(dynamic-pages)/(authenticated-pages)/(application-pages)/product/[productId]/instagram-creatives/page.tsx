@@ -26,12 +26,12 @@ const InstagramCreativesPage = () => {
         {
             label: 'Facebook Creatives',
             href: `/product/${productID}/facebook-creatives`,
-            icon: <FontAwesomeIcon icon={faFacebook} size="lg" />,
+            icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
         },
         {
             label: 'Instagram Creatives',
             href: `/product/${productID}/instagram-creatives`,
-            icon: <FontAwesomeIcon icon={faInstagram} size="lg" />
+            icon: <FontAwesomeIcon icon={faInstagram} size="lg" style={{ color: '#E1306C' }} />
         },
     ];
 

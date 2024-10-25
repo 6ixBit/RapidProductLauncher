@@ -12,6 +12,7 @@ const FacebookCreativesPage = () => {
     const params = useParams();
     const productID = params?.productId as string;
 
+
     const tabs = [
         {
             label: 'Product Info',
@@ -26,15 +27,14 @@ const FacebookCreativesPage = () => {
         {
             label: 'Facebook Creatives',
             href: `/product/${productID}/facebook-creatives`,
-            icon: <FontAwesomeIcon icon={faFacebook} size="lg" />,
+            icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
         },
         {
             label: 'Instagram Creatives',
             href: `/product/${productID}/instagram-creatives`,
-            icon: <FontAwesomeIcon icon={faInstagram} size="lg" />
+            icon: <FontAwesomeIcon icon={faInstagram} size="lg" style={{ color: '#E1306C' }} />
         },
     ];
-
     const adComponents = [
         { id: 1, title: 'Ad Title 1', subheading: 'Sponsored', description: 'Discover our amazing product that will change your life!' },
         { id: 2, title: 'Ad Title 2', subheading: 'Sponsored', description: 'Limited time offer! Don\'t miss out on this incredible deal.' },
