@@ -83,8 +83,9 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
             <div className="flex justify-between items-center mb-12">
                 <div>
                     <H1 className="text-xl md:text-2xl font-bold lg:text-3xl">
+
                         🚀 Launch Faster
-                        <span className="hidden sm:inline text-lg md:text-2xl lg:text-3xl">, Succeed Sooner.</span>
+                        <span className="hidden sm:inline text-lg md:text-2xl lg:text-3xl">, Profit Sooner.</span>
                     </H1>
                     {userEmail && (
                         <p className="text-xs md:text-sm text-gray-500">{userEmail}</p>
