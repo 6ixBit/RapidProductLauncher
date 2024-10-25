@@ -55,11 +55,8 @@ async function ChoosePricingTable({
 
   return (
     <div className="max-w-7xl space-y-4">
-      {/* <Overline>Pricing table</Overline> */}
-      {/* <H3 className='border-none mt-3 mb-0'>Pricing table</H3> */}
       <div className="space-y-2">
-        {/* <PricingModeToggle mode={pricingMode} onChange={setPricingMode} /> */}
-        <div className="flex space-x-6 w-full">
+        <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0 w-full">
           {productsSortedByPrice.map((product) => {
             if (!product.price) {
               return null;
@@ -75,90 +72,98 @@ async function ChoosePricingTable({
             }
             const priceId = product.price.id;
             return (
-              <>
-                <div
-                  key={product.id + priceId}
-                  className={cn(
-                    'w-full',
-                    'flex flex-col justify-between',
-                    'mt-3 order-2 shadow-none overflow-hidden rounded-xl',
-                    'hover:shadow-xl transition',
-                    'sm:w-96 lg:w-full lg:order-1',
-                    'border mb-2',
-                  )}
-                >
-                  <div>
-                    <div className="mb-6 p-7 pt-6 flex items-center border-b">
-                      <div>
-                        <T.H4 className="mt-0 mb-4 text-foreground">
-                          {' '}
-                          {product.name}
-                        </T.H4>
-                        <span>
-                          <T.H1 className="text-foreground" key={priceId}>
+              <div
+                key={product.id + priceId}
+                className={cn(
+                  'w-full',
+                  'flex flex-col justify-between',
+                  'mt-3 shadow-none overflow-hidden rounded-xl',
+                  'hover:shadow-xl transition',
+                  'border mb-2',
+                )}
+              >
+                <div>
+                  <div className="mb-6 p-7 pt-6 flex items-center border-b">
+                    <div>
+                      <T.H4 className="mt-0 mb-4 text-foreground">
+                        {product.name}
+                      </T.H4>
+                      <span>
+                        <T.H1 className="text-foreground" key={priceId}>
+                          {product.priceString}
+                          <span className="text-base tracking-normal text-muted-foreground font-medium">
                             {' '}
-                            {product.priceString}
-                            <span className="text-base tracking-normal text-muted-foreground font-medium">
-                              {' '}
-                              per {product.price.interval}
-                            </span>
-                          </T.H1>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="px-5 pl-6 pt-0 mb-8">
-                      <ul className="font-medium text-muted-foreground">
-                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          <Check className="text-green-600 w-6 h-6" />
-                          <T.P className="leading-6 ml-3">
-                            {product.description}
-                          </T.P>
-                        </li>
-                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          <Check className="text-green-600 w-6 h-6" />
-                          <T.P className="leading-6 ml-3">A nice feature</T.P>
-                        </li>
-                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          <Check className="text-green-600 w-6 h-6" />
-                          <T.P className="leading-6 ml-3">
-                            Another nice feature
-                          </T.P>
-                        </li>
-                        <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
-                          {product.price.unit_amount > 0 ? (
-                            <Check className="text-green-600 w-6 h-6" />
-                          ) : (
-                            <X className="text-destructive" />
-                          )}
-                          <T.P className="leading-6 ml-3">
-                            A premium feature
-                          </T.P>
-                        </li>
-                      </ul>
+                            per {product.price.interval}
+                          </span>
+                        </T.H1>
+                      </span>
                     </div>
                   </div>
 
-                  <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-foreground text-xl space-y-2">
-                    {isOrganizationAdmin ? (
-                      <>
-                        <StartFreeTrialButton
-                          organizationId={organizationId}
-                          priceId={priceId}
-                        />
-                        <CreateSubscriptionButton
-                          organizationId={organizationId}
-                          priceId={priceId}
-                        />
-                      </>
-                    ) : (
-                      <T.P className=" py-2 px-4 bg-primary-background dark:bg-dark-primary-background text-sm text-primary-text dark:text-dark-primary-text rounded-lg">
-                        Contact your administrator to upgrade plan
-                      </T.P>
-                    )}
+                  <div className="px-5 pl-6 pt-0 mb-8">
+                    <ul className="font-medium text-muted-foreground">
+                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                        <Check className="text-green-600 w-6 h-6" />
+                        <T.P className="leading-6 ml-3">
+                          {product.description}
+                        </T.P>
+                      </li>
+                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                        <Check className="text-green-600 w-6 h-6" />
+                        <T.P className="leading-6 ml-3">1 Shopify Store Integration</T.P>
+                      </li>
+                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                        <Check className="text-green-600 w-6 h-6" />
+                        <T.P className="leading-6 ml-3">
+                          Generate FB Ads Copy
+                        </T.P>
+                      </li>
+                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                        <Check className="text-green-600 w-6 h-6" />
+                        <T.P className="leading-6 ml-3">
+                          Generate Instagram Ads Copy
+                        </T.P>
+                      </li>
+
+                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                        <Check className="text-green-600 w-6 h-6" />
+                        <T.P className="leading-6 ml-3">
+                          Hundreds of hours saved
+                        </T.P>
+                      </li>
+                      <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
+                        {product.price.unit_amount > 0 ? (
+                          <Check className="text-green-600 w-6 h-6" />
+                        ) : (
+                          <X className="text-destructive" />
+                        )}
+                        <T.P className="leading-6 ml-3">
+                          25+ Canva Ads Templates
+                        </T.P>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              </>
+
+                <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-foreground text-xl space-y-2">
+                  {isOrganizationAdmin ? (
+                    <>
+                      <StartFreeTrialButton
+                        organizationId={organizationId}
+                        priceId={priceId}
+                      />
+                      <CreateSubscriptionButton
+                        organizationId={organizationId}
+                        priceId={priceId}
+                      />
+                    </>
+                  ) : (
+                    <T.P className="py-2 px-4 bg-primary-background dark:bg-dark-primary-background text-sm text-primary-text dark:text-dark-primary-text rounded-lg">
+                      Contact your administrator to upgrade plan
+                    </T.P>
+                  )}
+                </div>
+              </div>
             );
           })}
         </div>
