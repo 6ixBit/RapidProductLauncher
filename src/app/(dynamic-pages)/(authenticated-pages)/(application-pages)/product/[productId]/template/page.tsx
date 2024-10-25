@@ -1,8 +1,10 @@
 'use client';
 
 import { TabsNavigation } from '@/components/TabsNavigation/TabsNavigation';
+import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Liquid } from 'liquidjs';
-import { Code, DollarSign, SquarePen, UserRound } from 'lucide-react';
+import { Code, SquarePen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { liquidTemplate_1_edited } from './templates';
@@ -60,6 +62,7 @@ const TemplatePage = () => {
     const productID = params?.productId as string;
     const [renderedHtml, setRenderedHtml] = useState('');
 
+
     const tabs = [
         {
             label: 'Product Info',
@@ -74,14 +77,16 @@ const TemplatePage = () => {
         {
             label: 'Facebook Creatives',
             href: `/product/${productID}/facebook-creatives`,
-            icon: <UserRound />,
+            icon: <FontAwesomeIcon icon={faFacebook} size="lg" />,
         },
         {
             label: 'Instagram Creatives',
             href: `/product/${productID}/instagram-creatives`,
-            icon: <DollarSign />,
+            icon: <FontAwesomeIcon icon={faInstagram} size="lg" />
         },
     ];
+
+
 
     useEffect(() => {
         engine.parseAndRender(liquidTemplate_1_edited, mockData)
@@ -97,8 +102,4 @@ const TemplatePage = () => {
 };
 
 export default TemplatePage;
-
-
-
-
 
