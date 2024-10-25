@@ -1,7 +1,6 @@
 import { PageHeading } from '@/components/PageHeading';
 import { Suspense } from 'react';
 import { z } from 'zod';
-import { OrganizationPageHeading } from './OrganizationPageHeading';
 import { WelcomeHeader } from './home';
 
 const paramsSchema = z.object({
@@ -27,7 +26,6 @@ export default async function OrganizationPage({
             />
           }
         >
-          <OrganizationPageHeading organizationId={organizationId} />
         </Suspense>
       </div>
 

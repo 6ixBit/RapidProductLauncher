@@ -1,5 +1,6 @@
 'use client';
 import GenerateProductModal from '@/components/GenerateProductModal';
+import H1 from '@/components/Text/H1';
 import UserActivityCalendar from '@/components/UserActivityCalendar';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
@@ -80,19 +81,21 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
         <div className="space-y-6 py-8 px-4 container mx-auto">
             <div className="flex justify-between items-center mb-12">
                 <div>
-                    <h1 className="text-2xl font-bold">
-                        Outpace Your Competition with Rapid Launches
-                    </h1>
+                    <H1 className="text-xl md:text-2xl font-bold lg:text-3xl">
+                        🚀 Launch Faster
+                        <span className="hidden sm:inline text-lg md:text-2xl lg:text-3xl">, Succeed Sooner.</span>
+                    </H1>
                     {userEmail && (
-                        <p className="text-sm text-gray-500">{userEmail}</p>
+                        <p className="text-xs md:text-sm text-gray-500">{userEmail}</p>
                     )}
                 </div>
                 <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="flex items-center justify-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 whitespace-nowrap"
                     onClick={() => setIsModalOpen(true)}
                 >
                     <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-                    Generate Product
+                    <span className="hidden sm:inline">Generate Product</span>
+                    <span className="inline sm:hidden">Generate</span>
                 </button>
 
                 <GenerateProductModal
@@ -175,8 +178,11 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                     </div>
                 </div>
             </div>
-
-            <UserActivityCalendar />
+            <div className="pt-12 w-full">
+                <div className="overflow-x-auto">
+                    <UserActivityCalendar />
+                </div>
+            </div>
         </div>
     );
 };
