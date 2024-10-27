@@ -28,6 +28,7 @@ function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
     const [step, setStep] = useState<number>(0);
     const user = useLoggedInUser();
     const [defaultOrganizationId, setDefaultOrganizationId] = useState<string | null>(null);
+    const totalSteps = 5;
 
     useEffect(() => {
         const fetchDefaultOrganization = async () => {
@@ -86,7 +87,6 @@ function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
                     console.error(supabaseError);
                 } else {
                     setError(null);
-                    alert('Shopify store added and saved successfully!');
                     onClose();
                 }
             } else {
@@ -105,19 +105,20 @@ function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
         switch (step) {
             case 0:
                 return (
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                         <p className="text-lg font-semibold">Step 1: Connect your Shopify store.</p>
+                        <p className="text-sm text-gray-600">
+                            Follow the instructions in the image above to connect your Shopify store.
+                        </p>
                         <div className="relative w-full h-96">
                             <Image
                                 src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step1.png"
                                 alt="Shopify Onboarding Step 1"
                                 layout="fill"
                                 objectFit="contain"
+                                className="py-4 rounded-md"
                             />
                         </div>
-                        <p className="text-sm text-gray-600">
-                            Follow the instructions in the image above to connect your Shopify store.
-                        </p>
                     </div>
                 );
             case 1:
@@ -219,13 +220,15 @@ function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
                         >
                             Add Store
                         </Button>
-                        <Button
-                            onClick={() => setStep((prev) => prev + 1)}
-                            disabled={step >= 2}
-                            className="ml-2"
-                        >
-                            Next
-                        </Button>
+                        <div className="flex items-center">
+                            <span className="mr-2 text-sm text-gray-500">{step + 1}/{totalSteps}</span>
+                            <Button
+                                onClick={() => setStep((prev) => Math.min(prev + 1, totalSteps - 1))}
+                                disabled={step >= totalSteps - 1}
+                            >
+                                Next
+                            </Button>
+                        </div>
                     </>
                 )}
             </ModalFooter>
