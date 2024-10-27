@@ -6,8 +6,10 @@ import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supab
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 interface WelcomeHeaderProps {
     userName?: string;
     userEmail?: string;
@@ -17,7 +19,6 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
     userName,
     userEmail,
 }) => {
-    // TODO: Add a github-like calendar below the cards so user can see their progress on sign on.
     const router = useRouter();
     const params = useParams();
     const organizationId = params?.organizationId as string;
@@ -36,10 +37,55 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
         };
         fetchUser();
     }, []);
+
+    // Add this query to fetch the count of generated products
+    const { data: productsCount = 0 } = useQuery({
+        queryKey: ['productsGenerated', userData?.user?.id],
+        queryFn: async () => {
+            if (!userData?.user?.id) return 0;
+
+            const { count, error } = await supabase
+                .from('html_templates')
+                .select('*', { count: 'exact', head: true })
+                .eq('user_id', userData.user.id);
+
+            if (error) {
+                console.error('Error fetching products count:', error);
+                return 0;
+            }
+
+            return count || 0;
+        },
+        enabled: !!userData?.user?.id
+    });
+
+    // Add this query to fetch the user's credits
+    const { data: userCredits } = useQuery({
+        queryKey: ['userCredits', userData?.user?.id],
+        queryFn: async () => {
+            if (!userData?.user?.id) return null;
+
+            const { data, error } = await supabase
+                .from('user_profiles')
+                .select('credits')
+                .eq('id', userData.user.id)
+                .single();
+
+            if (error) {
+                console.error('Error fetching user credits:', error);
+                return null;
+            }
+
+            return data?.credits || 0;
+        },
+        enabled: !!userData?.user?.id
+    });
+
     const handleGenerateProduct = async (
         source: string,
         url: string,
         language: string,
+        signal?: AbortSignal
     ): Promise<void> => {
         if (!userData?.user) {
             console.error('User data not available');
@@ -58,6 +104,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                     user_id: userData.user.id,
                     organization_id: organizationId,
                 }),
+                signal // Add the abort signal here
             });
 
             if (!response.ok) {
@@ -65,16 +112,17 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
             }
 
             const data = await response.json();
-            console.log('Response from fetch:', data);
 
-            // Redirect to the product preview page
-            if (data.productID) {
-                router.push(`/product/${data.productID}/info`);
-            } else {
-                console.error('Product ID not received in the response');
+            // Only redirect if the request wasn't aborted
+            if (data.productID && !signal?.aborted) {
+                await router.push(`/product/${data.productID}/info`);
             }
         } catch (error) {
-            console.error('Error generating product:', error);
+            // Only throw if it's not an abort error
+            if (error.name !== 'AbortError') {
+                console.error('Error generating product:', error);
+                throw error; // Re-throw to be handled by the modal
+            }
         }
     };
 
@@ -128,7 +176,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                         <h2 className="text-lg font-semibold">
                             Products Tested
                         </h2>
-                        <p className="text-2xl font-bold">15</p>
+                        <p className="text-2xl font-bold">{productsCount}</p>
                     </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-green-500 ">
@@ -152,7 +200,12 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                         <h2 className="text-lg font-semibold">
                             Time Saved
                         </h2>
-                        <p className="text-2xl font-bold">24h</p>
+                        <p className="text-2xl font-bold">
+                            {(() => {
+                                const { hours, minutes } = calculateTimeSaved(productsCount);
+                                return `${hours}h ${minutes > 0 ? `${minutes}m` : ''}`;
+                            })()}
+                        </p>
                     </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-yellow-500 animate-pulse">
@@ -176,7 +229,7 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
                         <h2 className="text-lg font-semibold">
                             Credits Left
                         </h2>
-                        <p className="text-2xl font-bold">50</p>
+                        <p className="text-2xl font-bold">{userCredits}</p>
                     </div>
                 </div>
             </div>
@@ -205,4 +258,22 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
             </div>
         </div>
     );
+};
+
+
+const calculateTimeSaved = (productsCount: number) => {
+    const timePerProduct = {
+        manualTime: 80, // 80 minutes for manual process
+        toolTime: 10    // 10 minutes with your tool
+    };
+
+    const totalMinutesSaved = (timePerProduct.manualTime - timePerProduct.toolTime) * productsCount;
+    const hours = Math.floor(totalMinutesSaved / 60);
+    const minutes = totalMinutesSaved % 60;
+
+    return {
+        hours,
+        minutes,
+        totalMinutesSaved
+    };
 };

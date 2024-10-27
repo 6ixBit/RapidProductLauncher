@@ -46,14 +46,29 @@ export async function POST(req: NextRequest) {
 
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(2 * 60 * 1000);
-    await page.goto(url, { waitUntil: 'domcontentloaded' });
 
-    const pdpBodyTopHtml = await page.evaluate(() => {
-      const pdpBodyTopDiv = document.querySelector('div.pdp-body-top');
-      return pdpBodyTopDiv ? pdpBodyTopDiv.outerHTML : null;
-    });
+    try {
+      console.log('Navigating to URL:', url);
+      await page.goto(url, { waitUntil: 'domcontentloaded' });
+    } catch (error) {
+      console.error('Navigation error:', error);
+      throw new Error(`Failed to navigate to URL: ${error.message}`);
+    }
 
-    console.log('PDP Body Top HTML:', pdpBodyTopHtml);
+    let pdpBodyTopHtml;
+    try {
+      pdpBodyTopHtml = await page.evaluate(() => {
+        const pdpBodyTopDiv = document.querySelector('div.pdp-body-top');
+        if (!pdpBodyTopDiv) {
+          throw new Error('Could not find product details div');
+        }
+        return pdpBodyTopDiv.outerHTML;
+      });
+      console.log('Successfully extracted PDP Body Top HTML');
+    } catch (error) {
+      console.error('Error extracting product details:', error);
+      throw new Error(`Failed to extract product details: ${error.message}`);
+    }
 
     if (!pdpBodyTopHtml) {
       return NextResponse.json(

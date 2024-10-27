@@ -21,11 +21,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-
 interface GenerateProductModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onGenerate: (source: string, prompt: string, language: string) => Promise<void>;
+    onGenerate: (source: string, prompt: string, language: string, signal?: AbortSignal) => Promise<void>;
 }
 
 const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
@@ -64,17 +63,27 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
             return;
         }
         setIsLoading(true);
-        setError(null); // Reset error state before starting the request
+        setError(null);
+
+        // Add AbortController
+        const abortController = new AbortController();
+
         try {
-            await onGenerate(source, url, language);
-        } catch (error) {
-            setError('Failed to generate product. Please try again.');
-        } finally {
-            setIsLoading(false);
-            if (!error) {
+            await onGenerate(source, url, language, abortController.signal);
+            if (!abortController.signal.aborted) {
                 onClose();
             }
+        } catch (error) {
+            if (!abortController.signal.aborted) {
+                setError('Failed to generate product. Please try again.');
+            }
+        } finally {
+            if (!abortController.signal.aborted) {
+                setIsLoading(false);
+            }
         }
+
+        return () => abortController.abort();
     };
 
     const isGenerateDisabled = !url || !!urlError || isLoading;
