@@ -6,8 +6,9 @@ import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CheckCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface StoreIntegration {
@@ -16,32 +17,43 @@ interface StoreIntegration {
     isConnected: boolean;
 }
 
-const StoreCard = ({ store, onDisconnect }: { store: StoreIntegration; onDisconnect: (id: string) => void }) => {
+const StoreCard = ({ store, onDisconnect }: { store: StoreIntegration; onDisconnect: (id: string) => Promise<void> }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStore, setSelectedStore] = useState<StoreIntegration | null>(null);
+    const queryClient = useQueryClient();
+
+    const disconnectMutation = useMutation({
+        mutationFn: async (storeId: string) => {
+            const { error } = await supabaseUserClientComponentClient
+                .from('shopify_integrations')
+                .delete()
+                .eq('id', storeId);
+
+            if (error) throw error;
+            return storeId;
+        },
+        onSuccess: (storeId) => {
+            // Invalidate both queries to ensure proper refresh
+            queryClient.invalidateQueries({ queryKey: ['getStoreIntegrations'] });
+            queryClient.invalidateQueries({ queryKey: ['storeIntegrations'] });
+            toast.success(`Store was successfully disconnected.`);
+            setIsModalOpen(false);
+        },
+        onError: (error) => {
+            console.error('Error disconnecting store:', error);
+            toast.error('Failed to disconnect store. Please try again.');
+        }
+    });
+
+    const handleConfirmDisconnect = async () => {
+        if (selectedStore) {
+            disconnectMutation.mutate(selectedStore.id);
+        }
+    };
 
     const handleDisconnectClick = (store: StoreIntegration) => {
         setSelectedStore(store);
         setIsModalOpen(true);
-    };
-
-    const handleConfirmDisconnect = async () => {
-        if (selectedStore) {
-            const { error } = await supabaseUserClientComponentClient
-                .from('shopify_integrations')
-                .delete()
-                .eq('id', selectedStore.id);
-
-            if (error) {
-                console.error('Error disconnecting store:', error);
-                toast.error('Failed to disconnect store. Please try again.');
-            } else {
-                onDisconnect(selectedStore.id);
-                toast.error(`Store ${selectedStore.name} was successfully disconnected.`);
-
-            }
-        }
-        setIsModalOpen(false);
     };
 
     return (
@@ -94,44 +106,47 @@ const StoreCard = ({ store, onDisconnect }: { store: StoreIntegration; onDisconn
 };
 
 const IntegrationsPage = () => {
+    const queryClient = useQueryClient();
     const supabaseClient = supabaseUserClientComponentClient;
     const user = useLoggedInUser();
     const [isAddShopifyStoreModalOpen, setIsAddShopifyStoreModalOpen] = useState<boolean>(false);
-    const [storeIntegrations, setStoreIntegrations] = useState<StoreIntegration[]>([]);
 
-    useEffect(() => {
-        const fetchStoreIntegrations = async () => {
-            if (!user) return;
+    const { data: storeIntegrations = [], isLoading } = useQuery({
+        queryKey: ['getStoreIntegrations', user?.id],
+        queryFn: async () => {
+            if (!user) return [];
 
             const { data, error } = await supabaseClient
                 .from('shopify_integrations')
                 .select('id, shopify_store_url, is_connected')
                 .eq('user_id', user.id);
 
-            if (error) {
-                console.error('Error fetching store integrations:', error);
-            } else {
-                const integrations = data.map((store) => ({
-                    id: store.id,
-                    name: store.shopify_store_url,
-                    isConnected: store.is_connected,
-                }));
+            if (error) throw error;
 
-                const formattedIntegrations = integrations.map(integration => ({
-                    ...integration,
-                    id: integration.id.toString(),
-                }));
+            return data.map((store) => ({
+                id: store.id.toString(),
+                name: store.shopify_store_url,
+                isConnected: store.is_connected,
+            }));
+        },
+        enabled: !!user
+    });
 
-                setStoreIntegrations(formattedIntegrations);
-            }
-        };
-
-        fetchStoreIntegrations();
-    }, [user, supabaseClient]);
-
-    const handleDisconnect = (id: string) => {
-        setStoreIntegrations(prev => prev.filter(store => store.id !== id));
+    const handleDisconnect = async (id: string) => {
+        // This is now handled by the mutation in StoreCard
     };
+
+    const handleAddStoreSuccess = () => {
+        // Invalidate both related queries
+        queryClient.invalidateQueries({ queryKey: ['getStoreIntegrations'] });
+        queryClient.invalidateQueries({ queryKey: ['storeIntegrations'] });
+        setIsAddShopifyStoreModalOpen(false);
+        toast.success('Store added successfully');
+    };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -150,6 +165,7 @@ const IntegrationsPage = () => {
             <AddShopifyStoreModal
                 isOpen={isAddShopifyStoreModalOpen}
                 onClose={() => setIsAddShopifyStoreModalOpen(false)}
+                onSuccess={handleAddStoreSuccess}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {storeIntegrations.map((store) => (

@@ -61,16 +61,6 @@ const ProductCard = ({ product }: { product: Product }) => (
             <h2 className="font-semibold truncate">{product.product_title}</h2>
             <p className="text-gray-600 mb-3">{product.product_price}</p>
             <div className="flex justify-between items-center text-xs">
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span className="bg-gray-200 px-2 py-1 rounded">
-                            {languageToEmoji(product.language || 'Unknown')}
-                        </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {`This product page was generated in ${product.language || 'an unknown language'}.`}
-                    </TooltipContent>
-                </Tooltip>
                 <Link
                     href={product.source_url}
                     target="_blank"
@@ -81,6 +71,16 @@ const ProductCard = ({ product }: { product: Product }) => (
                     <ExternalLink size={14} className="mr-1" />
                     Source URL
                 </Link>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className="bg-gray-200 px-2 py-1 rounded">
+                            {languageToEmoji(product.language || 'Unknown')}
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {`This product page was generated in ${product.language || 'an unknown language'}.`}
+                    </TooltipContent>
+                </Tooltip>
             </div>
         </div>
     </Link>

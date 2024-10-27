@@ -17,9 +17,10 @@ import { useEffect, useState } from 'react';
 interface AddShopifyStoreModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSuccess: () => void;  // Add this line
 }
 
-function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
+function AddShopifyStoreModal({ isOpen, onClose, onSuccess }: AddShopifyStoreModalProps) {
     const [url, setUrl] = useState<string>('');
     const [apiKey, setApiKey] = useState<string>('');
     const [urlError, setUrlError] = useState<string>('');
@@ -87,6 +88,7 @@ function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
                     console.error(supabaseError);
                 } else {
                     setError(null);
+                    onSuccess();  // Add this line
                     onClose();
                 }
             } else {
