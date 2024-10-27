@@ -41,7 +41,7 @@ function AddShopifyStoreModal({ isOpen, onClose, onSuccess }: AddShopifyStoreMod
     }, []); // Empty dependency array to run once on mount
 
     const validateUrl = (url: string) => {
-        const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
+        const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
         return urlRegex.test(url);
     };
 

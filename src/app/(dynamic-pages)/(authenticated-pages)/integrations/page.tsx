@@ -57,7 +57,7 @@ const StoreCard = ({ store, onDisconnect }: { store: StoreIntegration; onDisconn
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+        <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center border-4 border-blue-100">
             <div className="flex items-center mb-4">
                 <FontAwesomeIcon icon={faShopify} className="w-12 h-12 text-green-500 mr-2" />
             </div>

@@ -10,12 +10,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-interface WelcomeHeaderProps {
+interface HomeProps {
     userName?: string;
     userEmail?: string;
 }
 
-export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
+export const Home: React.FC<HomeProps> = ({
     userName,
     userEmail,
 }) => {
@@ -259,7 +259,6 @@ export const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
         </div>
     );
 };
-
 
 const calculateTimeSaved = (productsCount: number) => {
     const timePerProduct = {
