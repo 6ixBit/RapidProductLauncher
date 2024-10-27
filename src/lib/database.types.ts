@@ -270,6 +270,54 @@ export type Database = {
         }
         Relationships: []
       }
+      shopify_integrations: {
+        Row: {
+          id: number
+          user_id: string
+          organization_id: string
+          shopify_store_url: string
+          is_connected: boolean
+          connected_at: string
+          disconnected_at: string | null
+          admin_api_key: string | null
+        }
+        Insert: {
+          id?: never
+          user_id: string
+          organization_id: string
+          shopify_store_url: string
+          is_connected?: boolean
+          connected_at?: string
+          disconnected_at?: string | null
+          admin_api_key?: string | null
+        }
+        Update: {
+          id?: never
+          user_id?: string
+          organization_id?: string
+          shopify_store_url?: string
+          is_connected?: boolean
+          connected_at?: string
+          disconnected_at?: string | null
+          admin_api_key?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopify_integrations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shopify_integrations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       subscriptions: {
         Row: {
           cancel_at: string | null

@@ -1,36 +1,42 @@
+'use client';
+
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
-import {
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader
-} from '@/components/Modal/Modal';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/components/Modal/Modal';
 import H3 from '@/components/Text/H3';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { getDefaultOrganization } from '@/data/user/organizations';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+// const adminApiKey = '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';
 
 interface AddShopifyStoreModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const AddShopifyStoreModal: React.FC<AddShopifyStoreModalProps> = ({
-    isOpen,
-    onClose,
-}) => {
-    const [source, setSource] = useState<string>('AliExpress');
+function AddShopifyStoreModal({ isOpen, onClose }: AddShopifyStoreModalProps) {
     const [url, setUrl] = useState<string>('');
     const [apiKey, setApiKey] = useState<string>('');
-    const [language, setLanguage] = useState<string>('English');
     const [urlError, setUrlError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [step, setStep] = useState<number>(0);
+    const user = useLoggedInUser();
+    const [defaultOrganizationId, setDefaultOrganizationId] = useState<string | null>(null);
 
-    const adminApiKey = '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';
+    useEffect(() => {
+        const fetchDefaultOrganization = async () => {
+            const organizationId = await getDefaultOrganization();
+            setDefaultOrganizationId(organizationId);
+        };
+
+        fetchDefaultOrganization();
+    }, []); // Empty dependency array to run once on mount
 
     const validateUrl = (url: string) => {
         const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/i;
@@ -39,11 +45,7 @@ const AddShopifyStoreModal: React.FC<AddShopifyStoreModalProps> = ({
 
     useEffect(() => {
         if (url) {
-            if (!validateUrl(url)) {
-                setUrlError('Please enter a valid Shopify URL');
-            } else {
-                setUrlError('');
-            }
+            setUrlError(validateUrl(url) ? '' : 'Please enter a valid Shopify URL');
         } else {
             setUrlError('');
         }
@@ -55,28 +57,39 @@ const AddShopifyStoreModal: React.FC<AddShopifyStoreModalProps> = ({
             return;
         }
         setIsLoading(true);
-        setError(null); // Reset error state before starting the request
+        setError(null);
         try {
             const response = await fetch('/api/validate-shopify-store', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    shopDomain: url,
-                    adminApiKey: apiKey,
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shopDomain: url, adminApiKey: apiKey }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                // Show success message
-                setError(null);
-                alert('Shopify store added successfully!');
-                onClose();
+                const { error: supabaseError } = await supabaseUserClientComponentClient
+                    .from('shopify_integrations')
+                    .insert([
+                        {
+                            user_id: user.id,
+                            organization_id: defaultOrganizationId as string,
+                            shopify_store_url: url,
+                            is_connected: true,
+                            connected_at: new Date().toISOString(),
+                            admin_api_key: apiKey,
+                        },
+                    ]);
+
+                if (supabaseError) {
+                    setError('Failed to save Shopify store to the database.');
+                    console.error(supabaseError);
+                } else {
+                    setError(null);
+                    alert('Shopify store added and saved successfully!');
+                    onClose();
+                }
             } else {
-                // Show error message
                 setError(data.error || 'Failed to add Shopify store. Please try again.');
             }
         } catch (error) {
@@ -218,6 +231,6 @@ const AddShopifyStoreModal: React.FC<AddShopifyStoreModalProps> = ({
             </ModalFooter>
         </Modal>
     );
-};
+}
 
 export default AddShopifyStoreModal;

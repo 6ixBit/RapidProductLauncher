@@ -1,10 +1,12 @@
 'use client';
 
 import AddShopifyStoreModal from '@/components/AddShopifyStoreModal';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CheckCircle, ShoppingBag, XCircle } from 'lucide-react';
-import { useState } from 'react';
+import { CheckCircle, XCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface StoreIntegration {
     id: string;
@@ -13,12 +15,40 @@ interface StoreIntegration {
 }
 
 const IntegrationsPage = () => {
+    const supabaseClient = supabaseUserClientComponentClient;
+    const user = useLoggedInUser();
     const [isAddShopifyStoreModalOpen, setIsAddShopifyStoreModalOpen] = useState<boolean>(false);
+    const [storeIntegrations, setStoreIntegrations] = useState<StoreIntegration[]>([]);
 
-    const [storeIntegrations, setStoreIntegrations] = useState<StoreIntegration[]>([
-        { id: '1', name: 'Shopify Store 1', isConnected: true },
-        { id: '2', name: 'Shopify Store 2', isConnected: false },
-    ]);
+    useEffect(() => {
+        const fetchStoreIntegrations = async () => {
+            if (!user) return;
+
+            const { data, error } = await supabaseClient
+                .from('shopify_integrations')
+                .select('id, shopify_store_url, is_connected')
+                .eq('user_id', user.id);
+
+            if (error) {
+                console.error('Error fetching store integrations:', error);
+            } else {
+                const integrations = data.map((store) => ({
+                    id: store.id,
+                    name: store.shopify_store_url,
+                    isConnected: store.is_connected,
+                }));
+
+                const formattedIntegrations = integrations.map(integration => ({
+                    ...integration,
+                    id: integration.id.toString(),
+                }));
+
+                setStoreIntegrations(formattedIntegrations);
+            }
+        };
+
+        fetchStoreIntegrations();
+    }, [user, supabaseClient]);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -44,7 +74,7 @@ const IntegrationsPage = () => {
                         key={store.id}
                         className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center"
                     >
-                        <ShoppingBag className="w-12 h-12 mb-4 text-gray-600" />
+                        <FontAwesomeIcon icon={faShopify} className="w-12 h-12 mb-4 text-green-500" />
                         <h2 className="text-xl font-semibold mb-2">{store.name}</h2>
                         {store.isConnected ? (
                             <div className="flex items-center text-green-500">
