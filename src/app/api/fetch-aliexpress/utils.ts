@@ -41,3 +41,35 @@ export async function saveProductTemplateToDB(
 export function cleanHTML(html: string): string {
   return html.replace(/\n/g, '').replace(/\s+/g, ' ').trim();
 }
+
+export async function saveAdCreativesToDB(
+  htmlTemplateId: string,
+  adCopy: {
+    facebook: Array<{ description: string; subHeading: string }>;
+    instagram: Array<{ caption: string }>;
+  },
+) {
+  const supabase = createSupabaseUserServerActionClient();
+  // Insert Facebook ad creatives
+  const facebookPromises = adCopy.facebook.map((ad) =>
+    supabase.from('ad_creatives').insert({
+      html_template_id: htmlTemplateId,
+      platform: 'facebook',
+      ad_description: ad.description,
+      ad_sub_heading: ad.subHeading,
+    }),
+  );
+
+  // Insert Instagram ad creatives
+  const instagramPromises = adCopy.instagram.map((ad) =>
+    supabase.from('ad_creatives').insert({
+      html_template_id: htmlTemplateId,
+      platform: 'instagram',
+      ad_description: ad.caption,
+      ad_sub_heading: null, // Instagram doesn't use sub-headings
+    }),
+  );
+
+  // Execute all insertions in parallel
+  await Promise.all([...facebookPromises, ...instagramPromises]);
+}

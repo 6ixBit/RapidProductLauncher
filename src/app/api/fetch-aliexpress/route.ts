@@ -3,7 +3,11 @@ import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import puppeteer from 'puppeteer-core';
 import { z } from 'zod';
-import { cleanHTML, saveProductTemplateToDB } from './utils';
+import {
+  cleanHTML,
+  saveAdCreativesToDB,
+  saveProductTemplateToDB,
+} from './utils';
 
 const requestSchema = z.object({
   language: z.string(),
@@ -201,6 +205,9 @@ export async function POST(req: NextRequest) {
       user_id,
       organization_id,
     );
+    if (productID && productInfo?.adCopy) {
+      await saveAdCreativesToDB(productID, productInfo.adCopy);
+    }
 
     return NextResponse.json({
       productID,
