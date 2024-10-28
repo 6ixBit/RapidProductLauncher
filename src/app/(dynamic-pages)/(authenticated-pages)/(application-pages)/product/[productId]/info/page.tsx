@@ -99,13 +99,7 @@ export default function ProductPage() {
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-2">
-            {/* <button
-                onClick={() => router.push('/products')}
-                className="flex items-center mb-6 text-blue-600 hover:text-blue-800"
-            >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back To Products
-            </button> */}
+
             <TabsNavigation tabs={tabs} />
 
             {productData ? (

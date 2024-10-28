@@ -24,27 +24,46 @@ const InstagramCreativesPage = () => {
     const productID = params?.productId as string;
     const supabase = supabaseUserClientComponentClient;
     const [adCreatives, setAdCreatives] = useState<AdCreative[]>([]);
-
-
+    const [productImages, setProductImages] = useState<string[]>([]);
 
     useEffect(() => {
-        const fetchAdCreatives = async () => {
-            const { data, error } = await supabase
+        const fetchData = async () => {
+            // Fetch ad creatives
+            const { data: adData, error: adError } = await supabase
                 .from('ad_creatives')
                 .select('*')
                 .eq('html_template_id', productID)
                 .eq('platform', 'instagram');
 
-            if (error) {
-                console.error('Error fetching ad creatives:', error);
+            if (adError) {
+                console.error('Error fetching ad creatives:', adError);
                 return;
             }
 
-            setAdCreatives(data || []);
+            // Fetch images
+            const { data: templateData, error: templateError } = await supabase
+                .from('html_templates')
+                .select('image_urls')
+                .eq('id', productID)
+                .single();
+
+            if (templateError) {
+                console.error('Error fetching template:', templateError);
+                return;
+            }
+
+            setAdCreatives(adData || []);
+            setProductImages(templateData?.image_urls || []);
         };
 
-        fetchAdCreatives();
+        fetchData();
     }, [productID]);
+
+    // Helper function to get image for creative
+    const getImageForCreative = (index: number) => {
+        if (!productImages.length) return "https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png";
+        return productImages[index % productImages.length];
+    };
 
     const tabs = [
         {
@@ -128,12 +147,12 @@ const InstagramCreativesPage = () => {
         <div className="max-w-6xl mx-auto px-4 py-2">
             <TabsNavigation tabs={tabs} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                {adCreatives.map(ad => (
+                {adCreatives.map((ad, index) => (
                     <div key={ad.id} className="flex flex-col">
                         <InstagramAdComponent
                             username="RapidProductLauncher"
                             description={ad.ad_description}
-                            imageUrl="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg"
+                            imageUrl={getImageForCreative(index)}
                             profileUrl="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png"
                         />
                     </div>
