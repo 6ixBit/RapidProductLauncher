@@ -1,16 +1,50 @@
 'use client';
 
+import { TabsNavigation } from '@/components/TabsNavigation';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Code, Heart, MessageCircle, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import { TabsNavigation } from '@/components/TabsNavigation';
+interface AdCreative {
+    ad_description: string;
+    ad_sub_heading: string | null;
+    created_at: string;
+    html_template_id: string;
+    id: number;
+    platform: string;
+}
 
 const InstagramCreativesPage = () => {
     const params = useParams();
     const productID = params?.productId as string;
+    const supabase = supabaseUserClientComponentClient;
+    const [adCreatives, setAdCreatives] = useState<AdCreative[]>([]);
+
+
+
+    useEffect(() => {
+        const fetchAdCreatives = async () => {
+            const { data, error } = await supabase
+                .from('ad_creatives')
+                .select('*')
+                .eq('html_template_id', productID)
+                .eq('platform', 'instagram');
+
+            if (error) {
+                console.error('Error fetching ad creatives:', error);
+                return;
+            }
+
+            setAdCreatives(data || []);
+        };
+
+        fetchAdCreatives();
+    }, [productID]);
 
     const tabs = [
         {
@@ -33,12 +67,6 @@ const InstagramCreativesPage = () => {
             href: `/product/${productID}/instagram-creatives`,
             icon: <FontAwesomeIcon icon={faInstagram} size="lg" style={{ color: '#E1306C' }} />
         },
-    ];
-
-    const adComponents = [
-        { id: 1, username: 'RapidProductLauncher', description: 'Check out this amazing product!', imageUrl: 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg', profileUrl: 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png' },
-        { id: 2, username: 'RapidProductLauncher', description: 'Limited time offer!', imageUrl: 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg', profileUrl: 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png' },
-        { id: 3, username: 'RapidProductLauncher', description: 'Experience the difference with our product. We are on the mission to do anything. Yes, it was my son who done that. Everyone found out what was going on. Lil boosie said come on mayn. Make them people do their job. Thats the copes over here.', imageUrl: 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg', profileUrl: 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png' },
     ];
 
     const InstagramAdComponent = ({ username, description, imageUrl, profileUrl }) => {
@@ -77,7 +105,14 @@ const InstagramCreativesPage = () => {
                                 <MessageCircle className="transform scale-x-[-1]" />
                             </button>
                         </div>
-                        <button className="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">
+                        <button
+                            className="bg-blue-500 text-white px-3 py-2 rounded text-xs hover:bg-blue-600 flex items-center"
+                            onClick={() => {
+                                navigator.clipboard.writeText(description);
+                                toast.success('Ad description copied to clipboard!');
+                            }}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
                             COPY
                         </button>
                     </div>
@@ -93,13 +128,13 @@ const InstagramCreativesPage = () => {
         <div className="max-w-6xl mx-auto px-4 py-2">
             <TabsNavigation tabs={tabs} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                {adComponents.map(ad => (
+                {adCreatives.map(ad => (
                     <div key={ad.id} className="flex flex-col">
                         <InstagramAdComponent
-                            username={ad.username}
-                            description={ad.description}
-                            imageUrl={ad.imageUrl}
-                            profileUrl={ad.profileUrl}
+                            username="RapidProductLauncher"
+                            description={ad.ad_description}
+                            imageUrl="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg"
+                            profileUrl="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png"
                         />
                     </div>
                 ))}

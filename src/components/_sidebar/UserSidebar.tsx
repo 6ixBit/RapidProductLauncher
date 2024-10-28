@@ -1,6 +1,6 @@
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { cn } from '@/utils/cn';
-import { DollarSign, Home, Layout, Plug, Settings, Shield } from 'lucide-react';
+import { DollarSign, Home, Layout, Plug, Settings } from 'lucide-react';
 import { SidebarLink } from './SidebarLink';
 import { SidebarLogoAndToggle } from './_components/SidebarLogo';
 
@@ -54,12 +54,6 @@ export async function UserSidebar() {
           href="/settings"
           icon={<Settings className="h-5 w-5" />}
         />
-        <SidebarLink
-          label="Security Settings"
-          href="/settings/security"
-          icon={<Shield className="h-5 w-5" />}
-        />
-
       </div>
     </div>
   );
