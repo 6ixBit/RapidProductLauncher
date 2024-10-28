@@ -25,6 +25,19 @@ const ProductInfo = z.object({
       content: z.string(),
     }),
   ),
+  adCopy: z.object({
+    facebook: z.array(
+      z.object({
+        description: z.string(),
+        subHeading: z.string(),
+      }),
+    ),
+    instagram: z.array(
+      z.object({
+        caption: z.string(),
+      }),
+    ),
+  }),
 });
 
 export async function POST(req: NextRequest) {
@@ -46,27 +59,63 @@ export async function POST(req: NextRequest) {
 
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(2 * 60 * 1000);
+    let pdpBodyTopHtml;
 
     try {
       console.log('Navigating to URL:', url);
-      await page.goto(url, { waitUntil: 'domcontentloaded' });
-    } catch (error) {
-      console.error('Navigation error:', error);
-      throw new Error(`Failed to navigate to URL: ${error.message}`);
-    }
+      await page.goto(url, {
+        waitUntil: ['networkidle0', 'domcontentloaded', 'load'],
+        timeout: 60000,
+      });
 
-    let pdpBodyTopHtml;
-    try {
+      // Log the page HTML to see what we're actually getting
+      const pageContent = await page.content();
+      console.log('Page HTML:', pageContent.substring(0, 500) + '...'); // Log first 500 chars
+
+      // Check what selectors are available
+      const availableSelectors = await page.evaluate(() => {
+        // Log some common product container classes
+        const selectors = [
+          'div.pdp-body-top',
+          'div.product-info',
+          'div.product-detail',
+          // Add more potential selectors
+        ];
+
+        return selectors.map((selector) => ({
+          selector,
+          exists: !!document.querySelector(selector),
+          count: document.querySelectorAll(selector).length,
+        }));
+      });
+
+      console.log('Available selectors:', availableSelectors);
+
+      // Now try to get the product details
       pdpBodyTopHtml = await page.evaluate(() => {
         const pdpBodyTopDiv = document.querySelector('div.pdp-body-top');
         if (!pdpBodyTopDiv) {
-          throw new Error('Could not find product details div');
+          // Log all available div classes for debugging
+          const allDivs = Array.from(document.querySelectorAll('div'));
+          const classes = new Set(
+            allDivs.map((div) => div.className).filter(Boolean),
+          );
+          console.log('Available div classes:', Array.from(classes));
+          throw new Error(
+            'Could not find product details div (div.pdp-body-top)',
+          );
         }
         return pdpBodyTopDiv.outerHTML;
       });
+
       console.log('Successfully extracted PDP Body Top HTML');
     } catch (error) {
-      console.error('Error extracting product details:', error);
+      console.error('Detailed error information:', {
+        message: error.message,
+        stack: error.stack,
+        url: url,
+        timestamp: new Date().toISOString(),
+      });
       throw new Error(`Failed to extract product details: ${error.message}`);
     }
 
@@ -89,6 +138,17 @@ export async function POST(req: NextRequest) {
       - Three Key Points about the product
       - Subheader for marketing copy (a catchy phrase or brief description)
       - Generate 5 customer reviews in a UGC style, with sentiments ranging from 3 to 5 stars with customers names.
+      
+      Additionally, generate ad copy:
+      - Exactly 3 Facebook Ads, each with:
+        * A compelling description (max 125 characters)
+        * An attention-grabbing sub-heading (max 40 characters)
+        * Optimize for Facebook's audience with engaging, conversion-focused copy
+      
+      - 3 Instagram captions, each:
+        * Engaging and visual-focused (max 200 characters)
+        * Include relevant hashtags
+        * Optimize for Instagram's style with emojis and casual tone
 
       Product Markup: ${pdpBodyTopHtml}
       Output in ${language}
@@ -108,18 +168,29 @@ export async function POST(req: NextRequest) {
     });
 
     const productInfo = completion.choices[0].message.parsed;
+    console.log(
+      'Facebook Ad Copy:',
+      JSON.stringify(productInfo?.adCopy.facebook, null, 2),
+    );
+    console.log(
+      'Instagram Ad Copy:',
+      JSON.stringify(productInfo?.adCopy.instagram, null, 2),
+    );
 
-    // Construct the absolute URL for the generate route
-    const host = req.headers.get('host');
+    // Get the base URL from the request
     const protocol = req.headers.get('x-forwarded-proto') || 'http';
-    const generateProductTemplateUrl = `${protocol}://${host}/api/generate/product-description-template`;
+    const host = req.headers.get('host');
+    const baseUrl = `${protocol}://${host}`;
 
     // Send the productInfo to the generate route
-    const response = await fetch(generateProductTemplateUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(productInfo),
-    });
+    const response = await fetch(
+      `${baseUrl}/api/generate/product-description-template`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productInfo),
+      },
+    );
 
     const html = cleanHTML((await response.json()).template);
     const productID = await saveProductTemplateToDB(

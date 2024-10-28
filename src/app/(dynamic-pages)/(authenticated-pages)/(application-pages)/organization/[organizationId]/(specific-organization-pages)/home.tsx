@@ -85,12 +85,9 @@ export const Home: React.FC<HomeProps> = ({
         source: string,
         url: string,
         language: string,
-        signal?: AbortSignal
     ): Promise<void> => {
-        if (!userData?.user) {
-            console.error('User data not available');
-            return;
-        }
+        if (!userData?.user?.id || !organizationId) return;
+
         try {
             const response = await fetch('/api/fetch-aliexpress', {
                 method: 'POST',
@@ -104,7 +101,6 @@ export const Home: React.FC<HomeProps> = ({
                     user_id: userData.user.id,
                     organization_id: organizationId,
                 }),
-                signal // Add the abort signal here
             });
 
             if (!response.ok) {
@@ -112,17 +108,13 @@ export const Home: React.FC<HomeProps> = ({
             }
 
             const data = await response.json();
-
-            // Only redirect if the request wasn't aborted
-            if (data.productID && !signal?.aborted) {
-                await router.push(`/product/${data.productID}/info`);
+            if (data.productID) {
+                router.push(`/product/${data.productID}/info`);
+            } else {
+                console.error('Product ID not received in the response');
             }
         } catch (error) {
-            // Only throw if it's not an abort error
-            if (error.name !== 'AbortError') {
-                console.error('Error generating product:', error);
-                throw error; // Re-throw to be handled by the modal
-            }
+            console.error('Error generating product:', error);
         }
     };
 
