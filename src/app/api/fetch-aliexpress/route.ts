@@ -15,8 +15,8 @@ export async function POST(req: NextRequest) {
     const { language, url, source, user_id, organization_id } =
       requestSchema.parse(body);
 
-    const pdpBodyTopHtml = await PuppeteerService.extractProductDetails(url);
-    if (!pdpBodyTopHtml) {
+    const product = await PuppeteerService.extractProductDetails(url);
+    if (!product) {
       return NextResponse.json(
         { error: 'Failed to extract product data' },
         { status: 560 },
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     const productInfo = await OpenAIService.generateProductInfo(
-      pdpBodyTopHtml,
+      product.pdpBodyTopHtml,
       language,
     );
 
@@ -52,7 +52,12 @@ export async function POST(req: NextRequest) {
       await saveAdCreativesToDB(productID, productInfo.adCopy);
     }
 
-    return NextResponse.json({ productID, productInfo, html });
+    return NextResponse.json({
+      productID,
+      productInfo,
+      html,
+      imageUrls: product.imageUrls,
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
