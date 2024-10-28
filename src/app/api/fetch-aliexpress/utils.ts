@@ -71,3 +71,31 @@ export async function saveAdCreativesToDB(
   // Execute all insertions in parallel
   await Promise.all([...facebookPromises, ...instagramPromises]);
 }
+
+export async function saveImagesToDb(productId: string, imageUrls: string[]) {
+  try {
+    if (!imageUrls.length) {
+      console.warn('No images to save for product:', productId);
+      return;
+    }
+
+    const supabase = createSupabaseUserServerActionClient();
+    const { data, error } = await supabase
+      .from('html_templates')
+      .update({
+        image_urls: imageUrls,
+        thumbnail_url: imageUrls[0],
+      })
+      .eq('id', productId);
+
+    if (error) {
+      console.error('Error saving images to DB:', error);
+      throw error;
+    }
+
+    console.log(`✅ Saved ${imageUrls.length} images for product ${productId}`);
+  } catch (error) {
+    console.error('Failed to save images:', error);
+    throw error;
+  }
+}

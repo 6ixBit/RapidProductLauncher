@@ -41,7 +41,7 @@ export class PuppeteerService {
 
         // Wait for main image to load
         await page.waitForSelector('[class*="magnifier--image-"]', {
-          timeout: 60000,
+          timeout: 20000,
         });
 
         // Get the main image src using Puppeteer
@@ -102,7 +102,7 @@ export class PuppeteerService {
         }),
       );
 
-      return `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+      return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.S3_BUCKET_NAME}/${key}`;
     } catch (error) {
       console.error(`Failed to upload image ${index + 1}:`, error);
       return null;

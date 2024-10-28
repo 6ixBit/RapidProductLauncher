@@ -6,6 +6,7 @@ import { requestSchema } from './schema';
 import {
   cleanHTML,
   saveAdCreativesToDB,
+  saveImagesToDb,
   saveProductTemplateToDB,
 } from './utils';
 
@@ -48,8 +49,13 @@ export async function POST(req: NextRequest) {
       organization_id,
     );
 
-    if (productID && productInfo?.adCopy) {
-      await saveAdCreativesToDB(productID, productInfo.adCopy);
+    if (productID) {
+      if (productInfo?.adCopy) {
+        await saveAdCreativesToDB(productID, productInfo.adCopy);
+      }
+      if (product.imageUrls?.length) {
+        await saveImagesToDb(productID, product.imageUrls);
+      }
     }
 
     return NextResponse.json({
