@@ -152,7 +152,7 @@ export default function ProductsPage() {
                 setProducts(prevProducts => {
                     const productMap = new Map(prevProducts.map(p => [p.id, p]));
                     data.forEach(product => {
-                        productMap.set(product.id, product as Product);
+                        productMap.set(product.id, product as unknown as Product);
                     });
                     return Array.from(productMap.values())
                         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());

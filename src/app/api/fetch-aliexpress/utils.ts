@@ -50,7 +50,6 @@ export async function saveAdCreativesToDB(
   },
 ) {
   const supabase = createSupabaseUserServerActionClient();
-  // Insert Facebook ad creatives
   const facebookPromises = adCopy.facebook.map((ad) =>
     supabase.from('ad_creatives').insert({
       html_template_id: htmlTemplateId,
@@ -60,7 +59,6 @@ export async function saveAdCreativesToDB(
     }),
   );
 
-  // Insert Instagram ad creatives
   const instagramPromises = adCopy.instagram.map((ad) =>
     supabase.from('ad_creatives').insert({
       html_template_id: htmlTemplateId,

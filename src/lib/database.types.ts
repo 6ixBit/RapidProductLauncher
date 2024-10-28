@@ -1,5 +1,3 @@
-yarn run v1.22.22
-$ /Users/hamza/Desktop/RapidProductLauncher/node_modules/.bin/supabase gen types typescript --project-id zmjqpjlwdpjspoojebzl --schema public
 export type Json =
   | string
   | number
@@ -720,4 +718,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-Done in 1.18s.
