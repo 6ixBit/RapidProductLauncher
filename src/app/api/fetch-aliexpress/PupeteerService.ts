@@ -1,5 +1,5 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import puppeteer from 'puppeteer-core';
+import puppeteer, { Page } from 'puppeteer-core';
 
 export class PuppeteerService {
   private static readonly BROWSER_WS_ENDPOINT =
@@ -12,6 +12,102 @@ export class PuppeteerService {
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
     },
   });
+
+  private static async extractCarouselImages(page: Page): Promise<string[]> {
+    console.log('Starting image extraction from carousel...');
+
+    // Wait for thumbnails to be present
+    await page.waitForSelector('.slider--item--FefNjlj');
+    const thumbnails = await page.$$('.slider--item--FefNjlj');
+
+    if (!thumbnails.length) {
+      console.error('❌ Could not find carousel thumbnails');
+      return [];
+    }
+
+    const maxImages = Math.min(5, thumbnails.length);
+    console.log(
+      `📷 Found ${thumbnails.length} thumbnails, will process ${maxImages}`,
+    );
+
+    const images: string[] = [];
+
+    for (let i = 0; i < maxImages; i++) {
+      try {
+        console.log(`Processing thumbnail ${i + 1}/${maxImages}`);
+
+        // Click the thumbnail using Puppeteer
+        await thumbnails[i].click();
+
+        // Wait for main image to load
+        await page.waitForSelector('[class*="magnifier--image-"]', {
+          timeout: 60000,
+        });
+
+        // Get the main image src using Puppeteer
+        const mainImageSrc = await page.$eval(
+          '[class*="magnifier--image-"]',
+          (img: HTMLImageElement) => img.src,
+        );
+
+        const fullResUrl = mainImageSrc.replace(/_\d+x\d+\.jpg_\.webp$/, '');
+
+        if (!images.includes(fullResUrl)) {
+          console.log(
+            `✅ Got image ${i + 1}: ${fullResUrl.substring(0, 50)}...`,
+          );
+          images.push(fullResUrl);
+        } else {
+          console.log(`⚠️ Duplicate image found for thumbnail ${i + 1}`);
+        }
+
+        // Wait a bit for next interaction
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      } catch (error) {
+        console.error(`❌ Error processing thumbnail ${i + 1}:`, error);
+      }
+    }
+
+    console.log(`🎉 Extraction complete. Found ${images.length} unique images`);
+    return images;
+  }
+
+  private static async uploadImageToS3(
+    imageUrl: string,
+    index: number,
+  ): Promise<string | null> {
+    try {
+      console.log(`Uploading image ${index + 1}:`, imageUrl);
+      const imageResponse = await fetch(imageUrl, {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+          Referer: 'https://aliexpress.com',
+        },
+      });
+
+      if (!imageResponse.ok) {
+        throw new Error(`Failed to fetch image: ${imageResponse.status}`);
+      }
+
+      const imageBuffer = await imageResponse.arrayBuffer();
+      const key = `products/${Date.now()}-${index}.jpg`;
+
+      await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME || '',
+          Key: key,
+          Body: Buffer.from(imageBuffer),
+          ContentType: 'image/jpeg',
+        }),
+      );
+
+      return `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    } catch (error) {
+      console.error(`Failed to upload image ${index + 1}:`, error);
+      return null;
+    }
+  }
 
   static async extractProductDetails(url: string) {
     const browser = await puppeteer.connect({
@@ -26,66 +122,11 @@ export class PuppeteerService {
         waitUntil: ['networkidle0', 'domcontentloaded', 'load'],
       });
 
-      // Extract image URLs with logging
-      console.log('Starting image extraction...');
-      const imageUrls = await page.evaluate(() => {
-        const images = document.querySelectorAll('.pdp-info-left img');
-        console.log(`Found ${images.length} images`);
+      const imageUrls = await this.extractCarouselImages(page);
+      console.log('Found images:', imageUrls.length);
 
-        // Try multiple selectors and attributes
-        return Array.from(images).map((img) => {
-          const element = img as HTMLImageElement;
-          const src = element.src;
-          const dataSrc = element.getAttribute('data-src');
-          const originalSrc = element.getAttribute('data-original');
-
-          // Return all possible sources for logging
-          return {
-            src,
-            dataSrc,
-            originalSrc,
-          };
-        });
-      });
-
-      console.log('Raw image data:', JSON.stringify(imageUrls, null, 2));
-
-      // Upload images to S3
       const s3Urls = await Promise.all(
-        imageUrls.map(async (imageUrl, index) => {
-          try {
-            console.log(`Uploading image ${index + 1}:`, imageUrl);
-
-            const imageResponse = await fetch(imageUrl.src, {
-              headers: {
-                'User-Agent':
-                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                Referer: 'https://aliexpress.com',
-              },
-            });
-
-            if (!imageResponse.ok) {
-              throw new Error(`Failed to fetch image: ${imageResponse.status}`);
-            }
-
-            const imageBuffer = await imageResponse.arrayBuffer();
-            const key = `products/${Date.now()}-${index}.jpg`;
-
-            await this.s3Client.send(
-              new PutObjectCommand({
-                Bucket: process.env.S3_BUCKET_NAME || '',
-                Key: key,
-                Body: Buffer.from(imageBuffer),
-                ContentType: 'image/jpeg',
-              }),
-            );
-
-            return `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-          } catch (error) {
-            console.error(`Failed to upload image ${index + 1}:`, error);
-            return null;
-          }
-        }),
+        imageUrls.map((url, index) => this.uploadImageToS3(url, index)),
       );
 
       const successfulUrls = s3Urls.filter(
