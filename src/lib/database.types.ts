@@ -1,3 +1,5 @@
+yarn run v1.22.22
+$ /Users/hamza/Desktop/RapidProductLauncher/node_modules/.bin/supabase gen types typescript --project-id zmjqpjlwdpjspoojebzl --schema public
 export type Json =
   | string
   | number
@@ -95,6 +97,7 @@ export type Database = {
           created_at: string
           html_code: string
           id: string
+          image_urls: string[] | null
           language: string | null
           organization_id: string
           product_description: string | null
@@ -111,6 +114,7 @@ export type Database = {
           created_at?: string
           html_code: string
           id?: string
+          image_urls?: string[] | null
           language?: string | null
           organization_id: string
           product_description?: string | null
@@ -127,6 +131,7 @@ export type Database = {
           created_at?: string
           html_code?: string
           id?: string
+          image_urls?: string[] | null
           language?: string | null
           organization_id?: string
           product_description?: string | null
@@ -715,3 +720,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+Done in 1.18s.
