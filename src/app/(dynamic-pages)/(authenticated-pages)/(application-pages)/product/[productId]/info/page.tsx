@@ -3,13 +3,16 @@
 import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
+import { faCode, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ArrowLeft, Calendar, Code, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from "sonner";
 
 export default function ProductPage() {
     const params = useParams();
@@ -120,13 +123,12 @@ export default function ProductPage() {
                         <div className="flex-1 flex flex-col justify-between">
                             <div>
                                 <H1 className="text-3xl font-bold mb-4 text-gray-900 ">{productData.product_title}</H1>
-                                <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p>
-
-                            </div>
-
-                            <div>
+                                {/* <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p> */}
 
                                 <div className="mb-6">
+                                    <p className="text-2xl font-semibold text-green-600  mt-6 mb-2">
+                                        ${(parseFloat(productData.product_price.replace('$', '')) * 3).toFixed(2)}
+                                    </p>
                                     <div className="flex items-center mb-2 text-sm text-gray-500">
                                         <Calendar className="w-4 h-4 mr-2" />
                                         <span>Generated on: {formatDate(productData.created_at)}</span>
@@ -138,10 +140,37 @@ export default function ProductPage() {
                                         </a>
                                     </div>
                                 </div>
-                                <p className="text-2xl font-semibold text-green-600  mt-4">
-                                    Recommended Sale Price: ${(parseFloat(productData.product_price.replace('$', '')) * 3).toFixed(2)}
-                                </p>
+
                             </div>
+
+                            <div className="mt-4 md:mt-0">
+
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white">
+                                            <FontAwesomeIcon icon={faRocket} className="mr-2" />
+                                            Actions
+                                        </Button>
+
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem onClick={async () => {
+                                            toast.success('Description copied to clipboard');
+                                        }} className="py-4">
+                                            <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                            Import to Shopify
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={async () => {
+                                            toast.success('Sub Heading copied to clipboard');
+                                        }} className="py-4">
+                                            <FontAwesomeIcon icon={faCode} className="mr-2" />
+                                            Download HTML Code
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
                         </div>
                     </div>
                     <div className="border-t border-gray-200 p-6">
