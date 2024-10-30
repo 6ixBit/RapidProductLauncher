@@ -9,12 +9,7 @@ export async function UserSidebar() {
   const organizationId = organizations[0]?.id;
 
   return (
-    <div
-      className={cn(
-        'flex flex-col h-full',
-        'lg:px-3 lg:py-1 lg:pt-2.5',
-      )}
-    >
+    <div className={cn('flex flex-col h-full', 'lg:px-3 lg:py-1 lg:pt-2.5')}>
       <div className="flex justify-between items-center mb-4">
         <SidebarLogoAndToggle />
       </div>
@@ -24,7 +19,6 @@ export async function UserSidebar() {
             label="Dashboard"
             href={`/organization/${organizationId}`}
             icon={<Home className="h-5 w-5" />}
-
           />
         )}
         <SidebarLink
@@ -39,11 +33,7 @@ export async function UserSidebar() {
         />
       </div>
 
-
       <div className="flex flex-col space-y-1 mt-auto">
-
-
-
         <SidebarLink
           label="Billing"
           href={`/organization/${organizationId}/settings/billing`}

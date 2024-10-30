@@ -1,5 +1,5 @@
 const ProductPreviewPage = () => {
-    return <div>ProductPreviewPage</div>
-}
+  return <div>ProductPreviewPage</div>;
+};
 
-export default ProductPreviewPage
+export default ProductPreviewPage;

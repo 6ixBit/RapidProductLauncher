@@ -25,8 +25,7 @@ export default async function OrganizationPage({
               titleHref={`/organization/${organizationId}`}
             />
           }
-        >
-        </Suspense>
+        ></Suspense>
       </div>
 
       <div>

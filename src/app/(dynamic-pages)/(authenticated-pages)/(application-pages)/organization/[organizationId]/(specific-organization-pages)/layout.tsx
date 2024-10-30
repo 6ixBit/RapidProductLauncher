@@ -20,9 +20,7 @@ export default async function Layout({
 }) {
   const { organizationId } = paramsSchema.parse(params);
   return (
-    <ApplicationLayoutShell
-      sidebar={<UserSidebar />}
-    >
+    <ApplicationLayoutShell sidebar={<UserSidebar />}>
       <div>
         <InternalNavbar>
           <div className="hidden lg:flex w-full justify-between items-center">
@@ -31,9 +29,7 @@ export default async function Layout({
               <Link
                 className="flex gap-1.5 py-1.5 px-3 cursor-pointer items-center group rounded-md transition hover:cursor-pointer hover:text-foreground"
                 href={`/organization/what../settings`}
-              >
-
-              </Link>
+              ></Link>
             </div>
           </div>
         </InternalNavbar>

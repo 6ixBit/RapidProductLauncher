@@ -22,9 +22,8 @@ export default function HeroSection() {
             Rapid Product Launcher
           </h1>
           <p className="text-slate-500 dark:text-slate-400 leading-loose lg:text-lg lg:leading-relaxed max-w-4xl">
-            Welcome to Rapid Product Launcher: Your Gateway to
-            Innovation. Discover the Future of Excellence and Elevate Your
-            Experience.
+            Welcome to Rapid Product Launcher: Your Gateway to Innovation.
+            Discover the Future of Excellence and Elevate Your Experience.
           </p>
           <div className="flex flex-col md:flex-row items-center max-w-md w-full  gap-3 pt-2 ">
             <Button className="w-full">

@@ -17,26 +17,26 @@ export function SidebarLink({ label, href, icon }: SidebarLinkProps) {
     <div
       key={href}
       className={cn(
-        "hover:cursor-pointer rounded-md group w-full flex items-center",
+        'hover:cursor-pointer rounded-md group w-full flex items-center',
         isActive
-          ? "bg-blue-50 text-blue-600"
-          : "text-muted-foreground hover:bg-secondary"
+          ? 'bg-blue-50 text-blue-600'
+          : 'text-muted-foreground hover:bg-secondary',
       )}
     >
-      <div className={cn(
-        "p-2",
-        isActive
-          ? "text-blue-600"
-          : "group-hover:text-muted-foreground"
-      )}>
+      <div
+        className={cn(
+          'p-2',
+          isActive ? 'text-blue-600' : 'group-hover:text-muted-foreground',
+        )}
+      >
         {icon}
       </div>
       <Link
         className={cn(
-          "p-2 w-full text-sm",
+          'p-2 w-full text-sm',
           isActive
-            ? "text-blue-600 font-medium"
-            : "group-hover:text-foreground"
+            ? 'text-blue-600 font-medium'
+            : 'group-hover:text-foreground',
         )}
         href={href}
       >

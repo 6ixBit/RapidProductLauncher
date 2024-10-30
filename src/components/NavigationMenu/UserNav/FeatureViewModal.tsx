@@ -19,21 +19,17 @@ const onboardingFeatures = [
     title: 'User Authentication built in',
     description: (
       <p>
-        Start building your app with Rapid Product Launcher and you'll get a full-featured
-        authentication system, out of the box. More than 15 authentication
-        providers such as Google, GitHub, Twitter, Facebook, Apple, Discord etc
-        are supported.
+        Start building your app with Rapid Product Launcher and you'll get a
+        full-featured authentication system, out of the box. More than 15
+        authentication providers such as Google, GitHub, Twitter, Facebook,
+        Apple, Discord etc are supported.
       </p>
     ),
     image: '/assets/onboardingFeatures/authentication.png',
   },
   {
     title: 'Admin Panel',
-    description: (
-      <p>
-        Admin Panel
-      </p>
-    ),
+    description: <p>Admin Panel</p>,
     image: '/assets/onboardingFeatures/adminPanel.png',
   },
   {

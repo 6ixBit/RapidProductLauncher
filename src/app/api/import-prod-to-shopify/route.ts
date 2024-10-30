@@ -50,7 +50,7 @@ export async function createProduct(
 }
 
 export async function POST(request: Request) {
-  let { shopify_store_url, admin_api_key, product } = await request.json();
+  const { shopify_store_url, admin_api_key, product } = await request.json();
   try {
     const createdProduct = await createProduct(
       { shopDomain: shopify_store_url, adminApiKey: admin_api_key },

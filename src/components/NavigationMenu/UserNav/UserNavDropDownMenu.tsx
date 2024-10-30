@@ -28,8 +28,8 @@ const onboardingFeatures = [
     title: 'User Authentication built in',
     description: (
       <p>
-        RapidProductLauncher comes with a built-in authentication system. This means that
-        you can manage users and organizations right off the bat.
+        RapidProductLauncher comes with a built-in authentication system. This
+        means that you can manage users and organizations right off the bat.
       </p>
     ),
     image: '/assets/onboardingFeatures/authentication.png',
@@ -61,7 +61,8 @@ const onboardingFeatures = [
     title: 'Incredible performance with layouts, server components',
     description: (
       <p>
-        Rapid Product Launcher is built with Next.js 13, Supabase and Typescript.
+        Rapid Product Launcher is built with Next.js 13, Supabase and
+        Typescript.
       </p>
     ),
     image: '/assets/onboardingFeatures/layout.png',

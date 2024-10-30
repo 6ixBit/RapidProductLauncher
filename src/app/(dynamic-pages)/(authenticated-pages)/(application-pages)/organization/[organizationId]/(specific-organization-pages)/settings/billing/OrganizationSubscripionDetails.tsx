@@ -110,7 +110,9 @@ async function ChoosePricingTable({
                       </li>
                       <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
                         <Check className="text-green-600 w-6 h-6" />
-                        <T.P className="leading-6 ml-3">1 Shopify Store Integration</T.P>
+                        <T.P className="leading-6 ml-3">
+                          1 Shopify Store Integration
+                        </T.P>
                       </li>
                       <li className="grid grid-cols-[24px,1fr] gap-0 text-md items-start mb-2">
                         <Check className="text-green-600 w-6 h-6" />

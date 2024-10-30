@@ -63,16 +63,16 @@ function TermsAcceptance({ onSuccess }: TermsAcceptanceProps) {
       <CardHeader>
         <CardTitle>🎉 Welcome Aboard!</CardTitle>
         <CardDescription>
-          Before diving into Rapid Product Launcher, please take a
-          moment to go through our updated Terms of Service.
+          Before diving into Rapid Product Launcher, please take a moment to go
+          through our updated Terms of Service.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className=" space-y-2">
           <T.Small>
-            These terms and conditions govern the use of Rapid Product Launcher’s
-            products and services. They're designed to ensure a smooth and
-            secure experience for you.
+            These terms and conditions govern the use of Rapid Product
+            Launcher’s products and services. They're designed to ensure a
+            smooth and secure experience for you.
           </T.Small>
 
           <T.Subtle>
@@ -195,10 +195,10 @@ export function ProfileUpdate({
                       hasImageLoaded
                         ? undefined
                         : {
-                          duration: 0.5,
-                          repeat: Number.POSITIVE_INFINITY,
-                          repeatType: 'reverse',
-                        }
+                            duration: 0.5,
+                            repeat: Number.POSITIVE_INFINITY,
+                            repeatType: 'reverse',
+                          }
                     }
                     onLoad={() => {
                       setHasImageLoaded(true);
