@@ -29,7 +29,7 @@ export default function ProductPage() {
     const getConnectedShopifyStores = async (userId: string) => {
         try {
             const { data, error } = await supabase.from('shopify_integrations')
-                .select('shopify_store_url, admin_api_key')
+                .select('shopify_store_url, admin_api_key, myshopify_domain')
                 .eq('user_id', userId)
                 .eq('is_connected', true)
                 .single();
@@ -185,7 +185,7 @@ export default function ProductPage() {
                                                 return;
                                             }
 
-                                            console.log('Shopify Store URL:', shopifyIntegration.shopify_store_url);
+                                            console.log('Shopify Store URL:', shopifyIntegration.myshopify_domain);
                                             console.log('Admin API Key:', shopifyIntegration.admin_api_key);
                                             console.log('Product Data Out Of Order:', productData);
 
@@ -208,7 +208,7 @@ export default function ProductPage() {
                                                         'Content-Type': 'application/json',
                                                     },
                                                     body: JSON.stringify({
-                                                        shopify_store_url: shopifyIntegration.shopify_store_url,
+                                                        shopify_store_url: shopifyIntegration.myshopify_domain,
                                                         admin_api_key: shopifyIntegration.admin_api_key,
                                                         product: productPayload,
                                                     }),

@@ -19,7 +19,7 @@ export async function createProduct(
 ) {
   try {
     const response = await fetch(
-      `https://7da77f-4.myshopify.com/admin/api/2024-01/products.json`,
+      `https://${shopDomain}/admin/api/2024-01/products.json`,
       {
         method: 'POST',
         headers: {
