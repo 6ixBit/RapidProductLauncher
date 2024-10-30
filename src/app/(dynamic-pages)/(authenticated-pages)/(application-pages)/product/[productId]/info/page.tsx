@@ -2,6 +2,7 @@
 
 import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
@@ -14,6 +15,7 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from "sonner";
+import { formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
 
 export default function ProductPage() {
     const params = useParams();
@@ -25,27 +27,6 @@ export default function ProductPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [isImporting, setIsImporting] = useState<boolean>(false);
-
-    const getConnectedShopifyStores = async (userId: string) => {
-        try {
-            const { data, error } = await supabase.from('shopify_integrations')
-                .select('shopify_store_url, admin_api_key, myshopify_domain')
-                .eq('user_id', userId)
-                .eq('is_connected', true)
-                .single();
-
-            if (error) {
-                throw error;
-            }
-
-            return { data, error: null };
-        } catch (error) {
-            console.error('Error fetching Shopify integration:', error);
-            return { data: null, error };
-        }
-    }
-
-    //TODO: Add a gneerate product button to far right of Back to Products
 
     const tabs = [
         {
@@ -115,11 +96,6 @@ export default function ProductPage() {
         );
     }
 
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    };
-
     return (
         <div className="max-w-6xl mx-auto px-4 py-2">
 
@@ -146,9 +122,19 @@ export default function ProductPage() {
                                 {/* <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p> */}
 
                                 <div className="mb-6">
-                                    <p className="text-2xl font-semibold text-green-600  mt-6 mb-2">
-                                        ${(parseFloat(productData.product_price.replace('$', '')) * 3).toFixed(2)}
-                                    </p>
+                                    <div className='mb-4'>
+                                        <div className="flex items-center gap-3 mt-6">
+                                            <p className="text-2xl font-semibold text-green-600">
+                                                ${(parseFloat(productData.product_price.replace('$', '')) * 3).toFixed(2)}
+                                            </p>
+                                            <Badge variant={productData.is_imported_to_shopify ? 'secondary' : 'default'}>
+                                                <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                {productData.is_imported_to_shopify ? 'Imported' : 'Not Imported'}
+                                            </Badge>
+                                        </div>
+                                    </div>
+
+
                                     <div className="flex items-center mb-2 text-sm text-gray-500">
                                         <Calendar className="w-4 h-4 mr-2" />
                                         <span>Generated on {formatDate(productData.created_at)}</span>
@@ -164,6 +150,7 @@ export default function ProductPage() {
                             </div>
 
                             <div className="mt-4 md:mt-0">
+
 
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -184,10 +171,6 @@ export default function ProductPage() {
                                                 setIsImporting(false);
                                                 return;
                                             }
-
-                                            console.log('Shopify Store URL:', shopifyIntegration.myshopify_domain);
-                                            console.log('Admin API Key:', shopifyIntegration.admin_api_key);
-                                            console.log('Product Data Out Of Order:', productData);
 
                                             const productPayload = {
                                                 title: productData.product_title,
@@ -214,13 +197,16 @@ export default function ProductPage() {
                                                     }),
                                                 });
 
-                                                const result = await response.json();
-
                                                 if (response.ok) {
-                                                    //TODO: Update is_imported_to_shopify to true
-                                                    //TODO: Show on UI that product is imported to Shopify
-                                                    toast.success('Product imported to Shopify successfully!');
+                                                    const shopifyStoreUrl = await productHasBeenImportedToShopify(productID, shopifyIntegration.id);
+
+                                                    if (shopifyStoreUrl) {
+                                                        toast.success(`Product imported to Shopify successfully! You can view it at: ${shopifyStoreUrl}`);
+                                                    } else {
+                                                        toast.error('Failed to update product import status in Shopify.');
+                                                    }
                                                 } else {
+                                                    const result = await response.json();
                                                     toast.error(result.error || 'Failed to import product to Shopify');
                                                 }
                                             } catch (error) {
@@ -242,7 +228,6 @@ export default function ProductPage() {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-
                         </div>
                     </div>
                     <div className="border-t border-gray-200 p-6">

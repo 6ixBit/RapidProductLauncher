@@ -96,6 +96,8 @@ export type Database = {
           html_code: string
           id: string
           image_urls: string[] | null
+          is_imported_to_shopify: boolean
+          shopify_store_id: number | null
           language: string | null
           organization_id: string
           product_description: string | null
@@ -113,6 +115,8 @@ export type Database = {
           html_code: string
           id?: string
           image_urls?: string[] | null
+          is_imported_to_shopify?: boolean
+          shopify_store_id?: number | null
           language?: string | null
           organization_id: string
           product_description?: string | null
@@ -130,6 +134,8 @@ export type Database = {
           html_code?: string
           id?: string
           image_urls?: string[] | null
+          is_imported_to_shopify?: boolean
+          shopify_store_id?: number | null
           language?: string | null
           organization_id?: string
           product_description?: string | null
@@ -155,6 +161,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "html_templates_shopify_store_id_fkey"
+            columns: ["shopify_store_id"]
+            isOneToOne: false
+            referencedRelation: "shopify_integrations"
             referencedColumns: ["id"]
           },
         ]
