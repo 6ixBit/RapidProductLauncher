@@ -5,7 +5,7 @@ interface ShopifyConfig {
   adminApiKey: string;
 }
 
-export async function createProduct(
+async function createProduct(
   { shopDomain, adminApiKey }: ShopifyConfig,
   product: {
     title: string;
