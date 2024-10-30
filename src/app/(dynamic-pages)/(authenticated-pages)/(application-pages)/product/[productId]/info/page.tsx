@@ -8,10 +8,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faCode, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCode, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ArrowLeft, Calendar, Code, Link as LinkIcon, SquarePen } from 'lucide-react';
+import { ArrowLeft, Calendar, Code, ExternalLink, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from "sonner";
@@ -127,10 +128,19 @@ export default function ProductPage() {
                                             <p className="text-2xl font-semibold text-green-600">
                                                 ${(parseFloat(productData.product_price.replace('$', '')) * 3).toFixed(2)}
                                             </p>
-                                            <Badge variant={productData.is_imported_to_shopify ? 'primary' : 'default'}>
-                                                <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                {productData.is_imported_to_shopify ? 'Imported' : 'Not Imported'}
-                                            </Badge>
+                                            {productData.is_imported_to_shopify ? (
+                                                <Link href={productData.shopify_product_url || ''} target="_blank" rel="noopener noreferrer">
+                                                    <Badge variant="shopify">
+                                                        <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                        Imported
+                                                    </Badge>
+                                                </Link>
+                                            ) : (
+                                                <Badge variant="default">
+                                                    <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                    Not Imported
+                                                </Badge>
+                                            )}
                                         </div>
                                     </div>
 
@@ -142,7 +152,7 @@ export default function ProductPage() {
                                     <div className="flex items-center text-sm text-blue-600">
                                         <LinkIcon className="w-4 h-4 mr-2" />
                                         <a href={productData.source_url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                                            Original Product Link
+                                            Sourcing URL
                                         </a>
                                     </div>
                                 </div>
@@ -199,9 +209,26 @@ export default function ProductPage() {
 
                                                 if (response.ok) {
                                                     const shopifyStoreUrl = await productHasBeenImportedToShopify(productID, shopifyIntegration.id);
+                                                    const importedProduct = await response.json();
+                                                    console.log(importedProduct);
 
                                                     if (shopifyStoreUrl) {
-                                                        toast.success(`Product imported to Shopify successfully! You can view it at: ${shopifyStoreUrl}`);
+                                                        toast(
+                                                            <div className="flex items-center justify-between w-full">
+                                                                <FontAwesomeIcon icon={faCircleCheck} className="text-green-500" />
+                                                                <span>Product imported to store!</span>
+                                                                <Link
+                                                                    href={importedProduct.url}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-blue-500 hover:underline flex items-center ml-auto"
+                                                                    onClick={(e) => e.stopPropagation()}
+                                                                >
+                                                                    <ExternalLink size={14} className="mr-1" />
+                                                                    View Product
+                                                                </Link>
+                                                            </div>
+                                                        );
                                                     } else {
                                                         toast.error('Failed to update product import status in Shopify.');
                                                     }

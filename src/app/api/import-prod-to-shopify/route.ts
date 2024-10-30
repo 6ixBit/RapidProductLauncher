@@ -32,18 +32,20 @@ export async function createProduct(
 
     const data = await response.json();
 
-    // Log the response for debugging
-    console.log('Shopify API Response:', data);
-
     if (!response.ok) {
       console.error('Shopify API Error:', data);
       throw new Error(`Shopify API error: ${JSON.stringify(data)}`);
     }
 
-    return data.product;
+    return {
+      id: data.product.id,
+      handle: data.product.handle,
+      title: data.product.title,
+      url: `https://${shopDomain}/products/${data.product.handle}`,
+    };
   } catch (error) {
     console.error('Error in createProduct function:', error);
-    throw error; // Rethrow the error after logging
+    throw error;
   }
 }
 

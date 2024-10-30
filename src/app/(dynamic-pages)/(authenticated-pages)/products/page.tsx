@@ -29,6 +29,7 @@ interface Product {
     thumbnail_url: string;
     language: string;
     is_imported_to_shopify: boolean;
+    shopify_product_url: string;
 }
 
 const ITEMS_PER_PAGE = 8;
@@ -82,15 +83,21 @@ const ProductCard = ({ product }: { product: Product }) => (
                         onClick={(e) => e.stopPropagation()}
                     >
                         <ExternalLink size={14} className="mr-1" />
-                        Source URL
+                        Sourcing URL
                     </Link>
                 </div>
-
                 {product.is_imported_to_shopify && (
-                    <Badge variant="shopify">
-                        <FontAwesomeIcon icon={faShopify} className="mr-1" />
-                        Imported
-                    </Badge>
+                    <Link
+                        href={product.shopify_product_url || ''}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Badge variant="shopify">
+                            <FontAwesomeIcon icon={faShopify} className="mr-1" />
+                            Imported
+                        </Badge>
+                    </Link>
                 )}
             </div>
         </div>
