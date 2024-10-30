@@ -217,6 +217,8 @@ export default function ProductPage() {
                                                 const result = await response.json();
 
                                                 if (response.ok) {
+                                                    //TODO: Update is_imported_to_shopify to true
+                                                    //TODO: Show on UI that product is imported to Shopify
                                                     toast.success('Product imported to Shopify successfully!');
                                                 } else {
                                                     toast.error(result.error || 'Failed to import product to Shopify');
