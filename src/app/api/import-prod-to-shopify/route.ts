@@ -5,20 +5,26 @@ interface ShopifyConfig {
   adminApiKey: string;
 }
 
+interface ProductVariant {
+  price: number;
+}
+
+interface ProductImage {
+  src: string;
+}
+
+interface ProductPayload {
+  title: string;
+  body_html: string;
+  vendor: string;
+  product_type: string;
+  variants: ProductVariant[];
+  images: ProductImage[];
+}
+
 async function createProduct(
   { shopDomain, adminApiKey }: ShopifyConfig,
-  product: {
-    title: string;
-    body_html: string;
-    vendor: string;
-    product_type: string;
-    variants: {
-      price: number;
-    }[];
-    images: {
-      src: string;
-    }[];
-  },
+  product: ProductPayload,
 ) {
   try {
     const response = await fetch(
@@ -54,34 +60,22 @@ async function createProduct(
 
 export async function POST(request: Request) {
   const { shopify_store_url, admin_api_key, product } = await request.json();
-  try {
-    console.log('Incoming product data NOW:', product);
 
-    const productPayload = {
+  try {
+    const productPayload: ProductPayload = {
       title: product.title,
       body_html: product.body_html,
       vendor: product.vendor,
       product_type: product.product_type,
-      variants: [
-        {
-          price: product.variants[0].price,
-        },
-      ],
-      images:
-        product.images?.map((url) => ({
-          src: url,
-        })) || [],
+      variants: [{ price: product.variants[0].price }],
+      images: product.images?.map((url: string) => ({ src: url })) || [],
     };
-
-    console.log(
-      'Product Payload, no imges?:',
-      JSON.stringify(productPayload, null, 2),
-    );
 
     const createdProduct = await createProduct(
       { shopDomain: shopify_store_url, adminApiKey: admin_api_key },
       productPayload,
     );
+
     return NextResponse.json(createdProduct);
   } catch (error) {
     console.error('Error creating product:', error);
