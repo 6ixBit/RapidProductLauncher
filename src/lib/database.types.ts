@@ -384,6 +384,7 @@ export type Database = {
           organization_id: string
           shopify_store_url: string
           user_id: string
+          myshopify_domain: string
         }
         Insert: {
           admin_api_key?: string | null
@@ -394,6 +395,7 @@ export type Database = {
           organization_id: string
           shopify_store_url: string
           user_id: string
+          myshopify_domain: string
         }
         Update: {
           admin_api_key?: string | null
@@ -404,6 +406,7 @@ export type Database = {
           organization_id?: string
           shopify_store_url?: string
           user_id?: string
+          myshopify_domain?: string
         }
         Relationships: [
           {

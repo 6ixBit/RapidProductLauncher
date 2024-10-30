@@ -9,7 +9,7 @@ export class OpenAIService {
   static async generateProductInfo(htmlContent: string, language: string) {
     const prompt = `
         Extract the following information from the product markup:
-        - Product Title (provide a concise and intuitive name)
+        - Product Title (provide a concise and intuitive name, keep it short focus on the product)
         - Product Price (format as $ followed by the value, e.g., $7.8)
         - Product Description
         - Three Key Points about the product

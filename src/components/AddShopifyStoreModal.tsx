@@ -67,7 +67,11 @@ function AddShopifyStoreModal({ isOpen, onClose, onSuccess }: AddShopifyStoreMod
                 body: JSON.stringify({ shopDomain: url, adminApiKey: apiKey }),
             });
 
+            console.log('validateresponse', response);
+
             const data = await response.json();
+
+            console.log('shop domain', data.myShopifyDomain);
 
             if (response.ok) {
                 const { error: supabaseError } = await supabaseUserClientComponentClient
@@ -80,6 +84,7 @@ function AddShopifyStoreModal({ isOpen, onClose, onSuccess }: AddShopifyStoreMod
                             is_connected: true,
                             connected_at: new Date().toISOString(),
                             admin_api_key: apiKey,
+                            myshopify_domain: data.myShopifyDomain,
                         },
                     ]);
 

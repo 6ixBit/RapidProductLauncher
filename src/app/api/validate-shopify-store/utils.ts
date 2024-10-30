@@ -8,45 +8,30 @@ export async function validateShopifyAccess({
   shopDomain,
   adminApiKey,
 }: ShopifyConfig) {
-  try {
-    const response = await fetch(
-      `https://${shopDomain}/admin/api/2024-01/shop.json`,
-      {
-        headers: {
-          'X-Shopify-Access-Token': adminApiKey,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
+  // Ensure shopDomain has 'https://' appended if it isn't already
+  let formattedShopDomain = shopDomain;
 
-    if (!response.ok) {
-      return false;
-    }
-
-    const data = await response.json();
-    return !!data.shop; // Will be true if we got valid shop data
-  } catch (error) {
-    return false;
+  if (!formattedShopDomain.includes('://')) {
+    formattedShopDomain = `https://${formattedShopDomain}`;
   }
-}
 
-export async function createProduct(
-  { shopDomain, adminApiKey }: ShopifyConfig,
-  productData: any,
-) {
-  const response = await fetch(
-    `https://${shopDomain}/admin/api/2024-01/products.json`,
-    {
-      method: 'POST',
-      headers: {
-        'X-Shopify-Access-Token': adminApiKey,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        product: productData,
-      }),
+  // Make a test request to the Shopify API to validate the credentials
+  const apiUrl = `${formattedShopDomain}/admin/api/2024-01/shop.json`;
+
+  const response = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      'X-Shopify-Access-Token': adminApiKey,
+      'Content-Type': 'application/json',
     },
-  );
+  });
 
-  return response.json();
+  if (!response.ok) {
+    return { isValid: false }; // Invalid credentials
+  }
+
+  const shopData = await response.json();
+  const myShopifyDomain = shopData.shop.myshopify_domain; // Get the unique .myshopify.com domain
+
+  return { isValid: true, myShopifyDomain }; // Return validity and the myshopify domain
 }

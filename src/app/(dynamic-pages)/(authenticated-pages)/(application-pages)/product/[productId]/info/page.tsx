@@ -4,6 +4,7 @@ import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
 import { faCode, faRocket } from '@fortawesome/free-solid-svg-icons';
@@ -19,11 +20,30 @@ export default function ProductPage() {
     const router = useRouter();
     const supabase = supabaseUserClientComponentClient;
     const productID = params?.productId as string;
-
+    const user = useLoggedInUser();
     const [productData, setProductData] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [isImporting, setIsImporting] = useState<boolean>(false);
 
+    const getConnectedShopifyStores = async (userId: string) => {
+        try {
+            const { data, error } = await supabase.from('shopify_integrations')
+                .select('shopify_store_url, admin_api_key')
+                .eq('user_id', userId)
+                .eq('is_connected', true)
+                .single();
+
+            if (error) {
+                throw error;
+            }
+
+            return { data, error: null };
+        } catch (error) {
+            console.error('Error fetching Shopify integration:', error);
+            return { data: null, error };
+        }
+    }
 
     //TODO: Add a gneerate product button to far right of Back to Products
 
@@ -131,7 +151,7 @@ export default function ProductPage() {
                                     </p>
                                     <div className="flex items-center mb-2 text-sm text-gray-500">
                                         <Calendar className="w-4 h-4 mr-2" />
-                                        <span>Generated on: {formatDate(productData.created_at)}</span>
+                                        <span>Generated on {formatDate(productData.created_at)}</span>
                                     </div>
                                     <div className="flex items-center text-sm text-blue-600">
                                         <LinkIcon className="w-4 h-4 mr-2" />
@@ -156,10 +176,60 @@ export default function ProductPage() {
 
                                     <DropdownMenuContent>
                                         <DropdownMenuItem onClick={async () => {
-                                            toast.success('Description copied to clipboard');
+                                            setIsImporting(true);
+                                            const { data: shopifyIntegration, error } = await getConnectedShopifyStores(user.id);
+
+                                            if (error || !shopifyIntegration) {
+                                                toast.error('No connected Shopify store found.');
+                                                setIsImporting(false);
+                                                return;
+                                            }
+
+                                            console.log('Shopify Store URL:', shopifyIntegration.shopify_store_url);
+                                            console.log('Admin API Key:', shopifyIntegration.admin_api_key);
+                                            console.log('Product Data Out Of Order:', productData);
+
+                                            const productPayload = {
+                                                title: productData.product_title,
+                                                body_html: productData.html_code,
+                                                vendor: productData.user_id,
+                                                product_type: productData.product_sub_heading,
+                                                variants: [
+                                                    {
+                                                        price: parseFloat(productData.product_price.replace('$', '')),
+                                                    },
+                                                ],
+                                            };
+
+                                            try {
+                                                const response = await fetch('/api/import-prod-to-shopify', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                    },
+                                                    body: JSON.stringify({
+                                                        shopify_store_url: shopifyIntegration.shopify_store_url,
+                                                        admin_api_key: shopifyIntegration.admin_api_key,
+                                                        product: productPayload,
+                                                    }),
+                                                });
+
+                                                const result = await response.json();
+
+                                                if (response.ok) {
+                                                    toast.success('Product imported to Shopify successfully!');
+                                                } else {
+                                                    toast.error(result.error || 'Failed to import product to Shopify');
+                                                }
+                                            } catch (error) {
+                                                console.error('Error importing product:', error);
+                                                toast.error('An error occurred while importing the product');
+                                            } finally {
+                                                setIsImporting(false);
+                                            }
                                         }} className="py-4">
                                             <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                            Import to Shopify
+                                            {isImporting ? 'Importing...' : 'Import to Shopify'}
                                         </DropdownMenuItem>
                                         <DropdownMenuItem onClick={async () => {
                                             toast.success('Sub Heading copied to clipboard');
@@ -205,3 +275,5 @@ export default function ProductPage() {
         </div>
     );
 }
+
+
