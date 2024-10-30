@@ -123,11 +123,11 @@ export default function ProductPage() {
 
                                 <div className="mb-6">
                                     <div className='mb-4'>
-                                        <div className="flex items-center gap-3 mt-6">
+                                        <div className="flex items-center justify-between mt-6">
                                             <p className="text-2xl font-semibold text-green-600">
                                                 ${(parseFloat(productData.product_price.replace('$', '')) * 3).toFixed(2)}
                                             </p>
-                                            <Badge variant={productData.is_imported_to_shopify ? 'secondary' : 'default'}>
+                                            <Badge variant={productData.is_imported_to_shopify ? 'primary' : 'default'}>
                                                 <FontAwesomeIcon icon={faShopify} className="mr-2" />
                                                 {productData.is_imported_to_shopify ? 'Imported' : 'Not Imported'}
                                             </Badge>

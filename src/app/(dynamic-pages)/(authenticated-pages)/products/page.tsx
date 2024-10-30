@@ -2,10 +2,12 @@
 
 import GenerateProductModal from '@/components/GenerateProductModal';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
+import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { faArrowsRotate, faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ExternalLink } from 'lucide-react';
@@ -13,7 +15,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-//TODO: AWS Img URL - https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/Hc28c56baf7eb4b549e5ed454e9023bf3Y.jpeg
 
 interface Product {
     id: string;
@@ -27,6 +28,7 @@ interface Product {
     image_url: string;
     thumbnail_url: string;
     language: string;
+    is_imported_to_shopify: boolean;
 }
 
 const ITEMS_PER_PAGE = 8;
@@ -47,7 +49,6 @@ const languageToEmoji = (language: string) => {
     }
 };
 
-
 const ProductCard = ({ product }: { product: Product }) => (
     <Link href={`/product/${product.id}/info`}>
         <div className="border rounded-lg p-3 shadow-md text-sm cursor-pointer hover:shadow-lg transition-shadow">
@@ -60,27 +61,37 @@ const ProductCard = ({ product }: { product: Product }) => (
             />
             <h2 className="font-semibold truncate">{product.product_title}</h2>
             <p className="text-gray-600 mb-3">{product.product_price}</p>
-            <div className="flex justify-between items-center text-xs">
-                <Link
-                    href={product.source_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline flex items-center"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <ExternalLink size={14} className="mr-1" />
-                    Source URL
-                </Link>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span className="bg-gray-200 px-2 py-1 rounded">
-                            {languageToEmoji(product.language || 'Unknown')}
-                        </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        {`This product page was generated in ${product.language || 'an unknown language'}.`}
-                    </TooltipContent>
-                </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <span className="bg-gray-200 p-1 rounded mr-2">
+                        Translated to  {languageToEmoji(product.language || 'Unknown')}
+                    </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                    {`This product page was generated in ${product.language || 'an unknown language'}.`}
+                </TooltipContent>
+            </Tooltip>
+            <div className="flex justify-between items-center text-xs mt-6">
+                <div className="flex items-center">
+
+                    <Link
+                        href={product.source_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline flex items-center"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <ExternalLink size={14} className="mr-1" />
+                        Source URL
+                    </Link>
+                </div>
+
+                {product.is_imported_to_shopify && (
+                    <Badge variant="shopify">
+                        <FontAwesomeIcon icon={faShopify} className="mr-1" />
+                        Imported
+                    </Badge>
+                )}
             </div>
         </div>
     </Link>
