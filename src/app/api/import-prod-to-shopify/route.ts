@@ -15,6 +15,9 @@ async function createProduct(
     variants: {
       price: number;
     }[];
+    images: {
+      src: string;
+    }[];
   },
 ) {
   try {
@@ -52,14 +55,41 @@ async function createProduct(
 export async function POST(request: Request) {
   const { shopify_store_url, admin_api_key, product } = await request.json();
   try {
+    console.log('Incoming product data NOW:', product);
+
+    const productPayload = {
+      title: product.title,
+      body_html: product.body_html,
+      vendor: product.vendor,
+      product_type: product.product_type,
+      variants: [
+        {
+          price: product.variants[0].price,
+        },
+      ],
+      images:
+        product.images?.map((url) => ({
+          src: url,
+        })) || [],
+    };
+
+    console.log(
+      'Product Payload, no imges?:',
+      JSON.stringify(productPayload, null, 2),
+    );
+
     const createdProduct = await createProduct(
       { shopDomain: shopify_store_url, adminApiKey: admin_api_key },
-      product,
+      productPayload,
     );
     return NextResponse.json(createdProduct);
   } catch (error) {
+    console.error('Error creating product:', error);
     return NextResponse.json(
-      { error: 'Failed to create product', message: error },
+      {
+        error: 'Failed to create product',
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
