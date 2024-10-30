@@ -23,6 +23,7 @@ export const getConnectedShopifyStores = async (userId: string) => {
 export const productHasBeenImportedToShopify = async (
   productId: string,
   shopifyStoreId: number | null,
+  shopifyProductUrl: string | null,
 ) => {
   try {
     // Update the product to mark it as imported to Shopify
@@ -31,6 +32,7 @@ export const productHasBeenImportedToShopify = async (
       .update({
         is_imported_to_shopify: true,
         shopify_store_id: shopifyStoreId,
+        shopify_product_url: shopifyProductUrl,
       })
       .eq('id', productId);
 

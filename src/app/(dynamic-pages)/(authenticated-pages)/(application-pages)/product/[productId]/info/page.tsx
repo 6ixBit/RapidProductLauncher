@@ -208,9 +208,8 @@ export default function ProductPage() {
                                                 });
 
                                                 if (response.ok) {
-                                                    const shopifyStoreUrl = await productHasBeenImportedToShopify(productID, shopifyIntegration.id);
                                                     const importedProduct = await response.json();
-                                                    console.log(importedProduct);
+                                                    const shopifyStoreUrl = await productHasBeenImportedToShopify(productID, shopifyIntegration.id, importedProduct.url);
 
                                                     if (shopifyStoreUrl) {
                                                         toast(
