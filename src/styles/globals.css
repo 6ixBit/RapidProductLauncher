@@ -13,6 +13,10 @@ body {
   width: 100%;
 }
 
+.grid-cols-53 {
+  grid-template-columns: repeat(53, minmax(0, 1fr));
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

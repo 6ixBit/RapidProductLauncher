@@ -91,7 +91,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
         .select('*')
         .eq('user_id', userData.user.id)
         .order('created_at', { ascending: false })
-        .limit(4); // Limit to 4 recent products
+        .limit(6); // Limit to 4 recent products
 
       if (error) {
         console.error('Error fetching recent products:', error);
@@ -171,10 +171,10 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
-          <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-blue-500">
-            <div className="bg-blue-100 p-3 rounded-full">
+          <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-blue-500 text-white">
+            <div className="bg-blue-400 p-3 rounded-full">
               <svg
-                className="w-6 h-6 text-blue-500"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -189,14 +189,15 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               </svg>
             </div>
             <div>
-              <H3 className="text-lg font-semibold">Products Tested</H3>
-              <p className="text-2xl font-bold">{productsCount}</p>
+              <H3 className="text-lg font-semibold text-white">Products Tested</H3>
+              <p className="text-2xl font-bold text-white">{productsCount}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-green-500 ">
-            <div className="bg-green-100 p-3 rounded-full">
+
+          <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-green-500 text-white">
+            <div className="bg-green-400 p-3 rounded-full">
               <svg
-                className="w-6 h-6 text-green-500"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -211,8 +212,8 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               </svg>
             </div>
             <div>
-              <H3 className="text-lg font-semibold">Time Saved</H3>
-              <p className="text-2xl font-bold">
+              <H3 className="text-lg font-semibold text-white">Time Saved</H3>
+              <p className="text-2xl font-bold text-white">
                 {(() => {
                   const { hours, minutes } = calculateTimeSaved(productsCount);
                   return `${hours}h ${minutes > 0 ? `${minutes}m` : ''}`;
@@ -220,10 +221,11 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-4 p-4 bg-white rounded-lg shadow border-4 border-yellow-500 animate-pulse">
-            <div className="bg-yellow-100 p-3 rounded-full">
+
+          <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-yellow-500 text-white">
+            <div className="bg-yellow-400 p-3 rounded-full">
               <svg
-                className="w-6 h-6 text-yellow-500"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -238,8 +240,8 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               </svg>
             </div>
             <div>
-              <H3 className="text-lg font-semibold">Credits Left</H3>
-              <p className="text-2xl font-bold">{userCredits}</p>
+              <H3 className="text-lg font-semibold text-white">Credits Left</H3>
+              <p className="text-2xl font-bold text-white">{userCredits}</p>
             </div>
           </div>
         </div>
