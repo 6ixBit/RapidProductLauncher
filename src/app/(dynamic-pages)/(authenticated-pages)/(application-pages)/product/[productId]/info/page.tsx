@@ -36,10 +36,29 @@ export default function ProductPage() {
     const queryClient = useQueryClient();
     const user = useLoggedInUser();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [organizationId, setOrganizationId] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    // Replace useState and useEffect with useQuery
+    // Use React Query for fetching the default organization ID
+    const { data: organizationId, isLoading: isOrgLoading, error: orgError } = useQuery({
+        queryKey: ['userOrganization', user.id],
+        queryFn: async () => {
+            const { data: orgMember, error } = await supabase
+                .from('organization_members')
+                .select('organization_id')
+                .eq('member_id', user.id)
+                .order('created_at', { ascending: true })
+                .limit(1)
+                .single();
+
+            if (error) {
+                throw error;
+            }
+
+            return orgMember.organization_id;
+        },
+    });
+
+    // Replace useState and useEffect with useQuery for product data
     const { data: productData, isLoading, error } = useQuery({
         queryKey: ['product', productID],
         queryFn: async () => {
@@ -445,4 +464,5 @@ export default function ProductPage() {
         </div>
     );
 }
+
 

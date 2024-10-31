@@ -118,30 +118,12 @@ export class PuppeteerService {
       const page = await browser.newPage();
       page.setDefaultNavigationTimeout(2 * 60 * 1000);
 
-      await page.setRequestInterception(true);
-      page.on('request', (request) => {
-        // Block non-essential resource types
-        const blockedResourceTypes = [
-          'image', // We'll still get image URLs, just not load them
-          'stylesheet',
-          'font',
-          'media',
-          'analytics',
-          'advertisement',
-        ];
-
-        if (blockedResourceTypes.includes(request.resourceType())) {
-          request.abort();
-        } else {
-          request.continue();
-        }
-      });
-
       await page.goto(url, {
-        waitUntil: ['domcontentloaded'], // Simplified wait conditions
+        waitUntil: ['networkidle0', 'domcontentloaded', 'load'],
       });
 
       const imageUrls = await this.extractCarouselImages(page);
+      console.log('Found images:', imageUrls.length);
 
       const s3Urls = await Promise.all(
         imageUrls.map((url, index) => this.uploadImageToS3(url, index)),
@@ -176,7 +158,6 @@ export class PuppeteerService {
                 element.querySelector('span')?.textContent?.trim() || '',
             )
             .filter((text) => text !== '');
-
           const imageVariants = Array.from(
             document.querySelectorAll('.sku-item--image--jMUnnGA'),
           )
@@ -185,7 +166,6 @@ export class PuppeteerService {
               imageUrl: element.querySelector('img')?.src || '',
             }))
             .filter((variant) => variant.imageUrl !== '');
-
           return {
             textVariants,
             imageVariants,
