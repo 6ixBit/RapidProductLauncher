@@ -214,7 +214,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
           <ModalSuccessButton
             onClick={handleGenerate}
             disabled={isGenerateDisabled}
-            className={`${isGenerateDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-green-500 hover:bg-green-600 text-white ${isGenerateDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Generate
           </ModalSuccessButton>
