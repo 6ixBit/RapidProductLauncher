@@ -165,7 +165,7 @@ export default function ProductPage() {
         <div className="max-w-6xl mx-auto px-4 py-2">
             <div className="flex flex-col gap-4">
                 <button
-                    className="w-full lg:hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                    className="w-full lg:hidden px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
                     onClick={() => setIsModalOpen(true)}
                 >
                     <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
@@ -176,7 +176,7 @@ export default function ProductPage() {
                         <TabsNavigation tabs={tabs} />
                     </div>
                     <button
-                        className="hidden lg:flex px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                        className="hidden lg:flex px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
                         onClick={() => setIsModalOpen(true)}
                     >
                         <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
