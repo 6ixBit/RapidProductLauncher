@@ -118,12 +118,30 @@ export class PuppeteerService {
       const page = await browser.newPage();
       page.setDefaultNavigationTimeout(2 * 60 * 1000);
 
+      await page.setRequestInterception(true);
+      page.on('request', (request) => {
+        // Block non-essential resource types
+        const blockedResourceTypes = [
+          'image', // We'll still get image URLs, just not load them
+          'stylesheet',
+          'font',
+          'media',
+          'analytics',
+          'advertisement',
+        ];
+
+        if (blockedResourceTypes.includes(request.resourceType())) {
+          request.abort();
+        } else {
+          request.continue();
+        }
+      });
+
       await page.goto(url, {
-        waitUntil: ['networkidle0', 'domcontentloaded', 'load'],
+        waitUntil: ['domcontentloaded'], // Simplified wait conditions
       });
 
       const imageUrls = await this.extractCarouselImages(page);
-      console.log('Found images:', imageUrls.length);
 
       const s3Urls = await Promise.all(
         imageUrls.map((url, index) => this.uploadImageToS3(url, index)),
@@ -135,7 +153,7 @@ export class PuppeteerService {
       console.log('Successfully uploaded images:', successfulUrls.length);
 
       return {
-        pdpBodyTopHtml: await page.evaluate(() => {
+        productPageHtml: await page.evaluate(() => {
           const pdpBodyTopDiv = document.querySelector('div.pdp-body-top');
           if (!pdpBodyTopDiv) {
             throw new Error('Could not find product details div');
@@ -143,6 +161,36 @@ export class PuppeteerService {
           return pdpBodyTopDiv.outerHTML;
         }),
         imageUrls: successfulUrls,
+        price: await page.evaluate(() => {
+          const priceElement = document.querySelector(
+            '.price--currentPriceText--V8_y_b5',
+          );
+          return priceElement ? priceElement.textContent?.trim() : null;
+        }),
+        variants: await page.evaluate(() => {
+          const textVariants = Array.from(
+            document.querySelectorAll('.sku-item--text--hYfAukP'),
+          )
+            .map(
+              (element) =>
+                element.querySelector('span')?.textContent?.trim() || '',
+            )
+            .filter((text) => text !== '');
+
+          const imageVariants = Array.from(
+            document.querySelectorAll('.sku-item--image--jMUnnGA'),
+          )
+            .map((element) => ({
+              text: element.querySelector('img')?.alt?.trim() || '',
+              imageUrl: element.querySelector('img')?.src || '',
+            }))
+            .filter((variant) => variant.imageUrl !== '');
+
+          return {
+            textVariants,
+            imageVariants,
+          };
+        }),
       };
     } finally {
       await browser.close();

@@ -24,9 +24,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    console.log('product page:', product);
+
     const productInfo = await OpenAIService.generateProductInfo(
-      product.pdpBodyTopHtml,
+      product.productPageHtml,
       language,
+      product?.price || '',
+      product.variants,
     );
 
     const baseUrl = `${req.headers.get('x-forwarded-proto') || 'http'}://${req.headers.get('host')}`;

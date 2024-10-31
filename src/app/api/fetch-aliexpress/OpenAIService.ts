@@ -6,20 +6,32 @@ export class OpenAIService {
   private static readonly API_KEY = process.env.OPENAI_API_KEY;
   private static readonly openai = new OpenAI({ apiKey: this.API_KEY });
 
-  static async generateProductInfo(htmlContent: string, language: string) {
+  static async generateProductInfo(
+    htmlContent: string,
+    language: string,
+    price: string,
+    variants: {
+      textVariants: string[];
+      imageVariants: { text: string; imageUrl: string }[];
+    },
+  ) {
     const prompt = `
-        Extract the following information from the product markup:
+        Extract and enhance the following information from the product markup. Use the provided price of ${price} and available variants:
+        Text Variants: ${variants.textVariants.join(', ')}
+        Color/Image Variants: ${variants.imageVariants.map((v) => v.text).join(', ')}
+
+        Extract and generate:
         - Product Title (provide a concise and intuitive name, keep it short focus on the product)
-        - Product Price (format as $ followed by the value, e.g., $7.8)
-        - Product Description
-        - Three Key Points about the product
-        - Subheader for marketing copy (a catchy phrase or brief description)
+        - Product Price (use the provided price of ${price})
+        - Product Description (incorporate available variants and options)
+        - Three Key Points about the product (mention variety of options if relevant)
+        - Subheader for marketing copy (a catchy phrase mentioning price point or variety if compelling)
         - Generate potential target audience (e.g. Women aged 25-35 who love fashion)
-        - Generate 5 customer reviews in a UGC style, with sentiments ranging from 3 to 5 stars with clear customers names (e.g. John Doe I love this product... ⭐️⭐️⭐️⭐️)
+        - Generate 5 customer reviews in a UGC style, with sentiments ranging from 3 to 5 stars with clear customers names (include mentions of specific variants or options in some reviews)
         
         Additionally, generate ad copy:
         - Exactly 3 Facebook Ads, each with:
-          * A compelling description (max 125 characters)
+          * A compelling description (max 125 characters) that highlights price point or variety of options
           * An attention-grabbing sub-heading (max 40 characters)
           * Optimize for Facebook's audience with engaging, conversion-focused copy
         
@@ -27,6 +39,7 @@ export class OpenAIService {
           * Engaging and visual-focused (max 200 characters)
           * Include relevant hashtags
           * Optimize for Instagram's style with emojis and casual tone
+          * Incorporate price points and variety of options where relevant
   
         Product Markup: ${htmlContent}
         Output in ${language}
