@@ -7,7 +7,6 @@ import H3 from '@/components/Text/H3';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import UserActivityCalendar from '@/components/UserActivityCalendar';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
@@ -146,7 +145,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
         <div className="flex justify-between items-center mb-12">
           <div>
             <H1 className="text-xl md:text-2xl font-extrabold lg:text-3xl">
-              🚀 Launch Faster
+              ⚡️ Launch Faster
               <span className="hidden sm:inline text-lg md:text-2xl lg:text-3xl">
                 , Profit Sooner.
               </span>
@@ -276,7 +275,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
           </div>
         )}
         {/* Promotional Banner */}
-        <div className="bg-gradient-to-r from-green-600 to-green-500 text-white text-center py-6 mt-16 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer px-4">
+        {/* <div className="bg-gradient-to-r from-green-600 to-green-500 text-white text-center py-6 mt-16 rounded-lg shadow-lg flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer px-4">
           <a
             href="your-affiliate-link-here"
             target="_blank"
@@ -292,7 +291,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               !
             </span>
           </a>
-        </div>
+        </div> */}
       </div>
     </TooltipProvider>
   );
