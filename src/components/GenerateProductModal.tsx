@@ -25,9 +25,9 @@ interface GenerateProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onGenerate: (
-    source: string,
-    prompt: string,
-    language: string,
+    source?: string,
+    prompt?: string,
+    language?: string,
     signal?: AbortSignal,
   ) => Promise<void>;
 }

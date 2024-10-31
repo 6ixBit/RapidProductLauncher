@@ -1,5 +1,6 @@
 'use client';
 
+import GenerateProductModal from '@/components/GenerateProductModal';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
@@ -11,10 +12,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getDefaultOrganization } from '@/data/user/organizations';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faCircleCheck, faCode, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCircleCheck, faMagicWandSparkles, faStore } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ArrowLeft, Calendar, Code, ExternalLink, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
@@ -23,6 +25,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
+
 
 export default function ProductPage() {
     const params = useParams();
@@ -33,7 +36,53 @@ export default function ProductPage() {
     const [productData, setProductData] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [organizationId, setOrganizationId] = useState<string | null>(null);
 
+    useEffect(() => {
+        const fetchOrg = async () => {
+            const org = await getDefaultOrganization();
+            setOrganizationId(org);
+        };
+        fetchOrg();
+    }, []);
+
+    const handleGenerateProduct = async (
+        source: string,
+        url: string,
+        language: string,
+    ): Promise<void> => {
+        if (!user || !organizationId) return;
+
+        try {
+            const response = await fetch('/api/fetch-aliexpress', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    source,
+                    url,
+                    language,
+                    user_id: user.id,
+                    organization_id: organizationId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            const data = await response.json();
+            if (data.productID) {
+                router.push(`/product/${data.productID}/info`);
+            } else {
+                console.error('Product ID not received in the response');
+            }
+        } catch (error) {
+            console.error('Error generating product:', error);
+        }
+    };
 
     const tabs = [
         {
@@ -110,10 +159,35 @@ export default function ProductPage() {
             </div>
         );
     }
-
     return (
         <div className="max-w-6xl mx-auto px-4 py-2">
-            <TabsNavigation tabs={tabs} />
+            <div className="flex flex-col gap-4">
+                <button
+                    className="w-full lg:hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                    Generate New Product
+                </button>
+                <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0 w-full">
+                    <div className="w-full overflow-x-auto">
+                        <TabsNavigation tabs={tabs} />
+                    </div>
+                    <button
+                        className="hidden lg:flex px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                        Generate
+                    </button>
+                </div>
+            </div>
+
+            <GenerateProductModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onGenerate={handleGenerateProduct}
+            />
 
             {productData ? (
                 <div className="mt-1 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -195,7 +269,7 @@ export default function ProductPage() {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white">
-                                            <FontAwesomeIcon icon={faRocket} className="mr-2" />
+                                            <FontAwesomeIcon icon={faBolt} className='mr-2' />
                                             Actions
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -299,7 +373,7 @@ export default function ProductPage() {
                                                 Import to Shopify
                                             </div>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem
+                                        {/* <DropdownMenuItem
                                             onClick={async () => {
                                                 toast.success('Sub Heading copied to clipboard');
                                             }}
@@ -307,7 +381,20 @@ export default function ProductPage() {
                                         >
                                             <FontAwesomeIcon icon={faCode} className="mr-2" />
                                             Download HTML Code
-                                        </DropdownMenuItem>
+                                        </DropdownMenuItem> */}
+                                        {productData.shopify_product_url && (
+                                            <DropdownMenuItem asChild className="py-4">
+                                                <Link
+                                                    href={productData.shopify_product_url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center"
+                                                >
+                                                    <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                    View on your store
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        )}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
@@ -358,3 +445,4 @@ export default function ProductPage() {
         </div>
     );
 }
+

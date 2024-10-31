@@ -13,6 +13,7 @@ export const ProductInfo = z.object({
   price: z.string(),
   description: z.string(),
   subHeading: z.string(),
+  targetAudience: z.string(),
   keyPoints: z.array(z.string()),
   reviews: z.array(
     z.object({
