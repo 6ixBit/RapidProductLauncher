@@ -103,7 +103,10 @@ export type Database = {
           product_description: string | null
           product_key_points: string[] | null
           product_price: string | null
-          product_reviews: Json | null
+          product_reviews: {
+            name: string;
+            content: string;
+          }[] | null
           product_sub_heading: string | null
           product_title: string | null
           shopify_product_url: string | null
@@ -123,7 +126,10 @@ export type Database = {
           product_description?: string | null
           product_key_points?: string[] | null
           product_price?: string | null
-          product_reviews?: Json | null
+          product_reviews?: {
+            name: string;
+            content: string;
+          }[] | null
           product_sub_heading?: string | null
           product_title?: string | null
           shopify_product_url?: string | null
@@ -143,7 +149,10 @@ export type Database = {
           product_description?: string | null
           product_key_points?: string[] | null
           product_price?: string | null
-          product_reviews?: Json | null
+          product_reviews?: {
+            name: string;
+            content: string;
+          }[] | null
           product_sub_heading?: string | null
           product_title?: string | null
           shopify_product_url?: string | null

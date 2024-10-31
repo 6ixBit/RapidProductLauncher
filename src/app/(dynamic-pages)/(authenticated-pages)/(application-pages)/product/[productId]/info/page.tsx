@@ -120,10 +120,13 @@ export default function ProductPage() {
                         View Product
                     </Link>
                 </div>,
+                {
+                    dismissible: true
+                }
             );
         },
-        onError: (error) => {
-            toast.error(error.message || 'An error occurred while importing the product');
+        onError: (error: any) => {
+            toast.error((error as Error).message || 'An error occurred while importing the product');
         },
     });
 
@@ -147,7 +150,7 @@ export default function ProductPage() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <H1>Whoops! 😅</H1>
-                <p className="text-red-500 mb-8 mt-2">{error.message}</p>
+                <p className="text-red-500 mb-8 mt-2">{(error as Error).message}</p>
                 <Button onClick={() => router.push('/products')}>
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back To Products
@@ -344,7 +347,10 @@ export default function ProductPage() {
                                                     <div className="flex items-center">
                                                         <LoadingSpinner className="w-4 h-4 mr-2" />
                                                         <span>Importing product to Shopify...</span>
-                                                    </div>
+                                                    </div>,
+                                                    {
+                                                        dismissible: true
+                                                    }
                                                 );
                                                 importToShopifyMutation.mutate(undefined, {
                                                     onSettled: () => {
