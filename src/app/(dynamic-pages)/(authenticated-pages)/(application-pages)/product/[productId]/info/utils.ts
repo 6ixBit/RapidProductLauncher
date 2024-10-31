@@ -56,3 +56,22 @@ export const formatDate = (dateString: string) => {
     day: 'numeric',
   });
 };
+
+export const deleteProduct = async (productId: string) => {
+  try {
+    const { error } = await supabaseUserClientComponentClient
+      .from('html_templates')
+      .delete()
+      .eq('id', productId);
+
+    if (error) {
+      console.error('Error deleting product:', error);
+      return { success: false, error };
+    }
+
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error in deleteProduct:', error);
+    return { success: false, error };
+  }
+};

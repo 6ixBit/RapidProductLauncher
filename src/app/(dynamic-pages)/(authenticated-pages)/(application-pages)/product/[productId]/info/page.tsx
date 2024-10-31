@@ -1,5 +1,6 @@
 'use client';
 
+import DeleteModal from '@/components/DeleteModal';
 import GenerateProductModal from '@/components/GenerateProductModal';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { TabsNavigation } from '@/components/TabsNavigation';
@@ -16,7 +17,7 @@ import { getDefaultOrganization } from '@/data/user/organizations';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faBolt, faCircleCheck, faMagicWandSparkles, faStore } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCircleCheck, faMagicWandSparkles, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ArrowLeft, Calendar, Code, ExternalLink, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
@@ -24,7 +25,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
+import { deleteProduct, formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
 
 
 export default function ProductPage() {
@@ -38,6 +39,7 @@ export default function ProductPage() {
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [organizationId, setOrganizationId] = useState<string | null>(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
         const fetchOrg = async () => {
@@ -368,20 +370,12 @@ export default function ProductPage() {
                                             }}
                                             className="py-4"
                                         >
-                                            <div className="flex items-center">
+                                            <div className="flex items-center text-[#96bf47]">
                                                 <FontAwesomeIcon icon={faShopify} className="mr-2" />
                                                 Import to Shopify
                                             </div>
                                         </DropdownMenuItem>
-                                        {/* <DropdownMenuItem
-                                            onClick={async () => {
-                                                toast.success('Sub Heading copied to clipboard');
-                                            }}
-                                            className="py-4"
-                                        >
-                                            <FontAwesomeIcon icon={faCode} className="mr-2" />
-                                            Download HTML Code
-                                        </DropdownMenuItem> */}
+
                                         {productData.shopify_product_url && (
                                             <DropdownMenuItem asChild className="py-4">
                                                 <Link
@@ -395,8 +389,33 @@ export default function ProductPage() {
                                                 </Link>
                                             </DropdownMenuItem>
                                         )}
+
+                                        <DropdownMenuItem
+                                            onClick={() => setShowDeleteModal(true)}
+                                            className="py-4 text-red-600 hover:text-red-700"
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                                            Delete Product
+                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
+
+                                <DeleteModal
+                                    isOpen={showDeleteModal}
+                                    onClose={() => setShowDeleteModal(false)}
+                                    onDelete={async () => {
+                                        const result = await deleteProduct(productData.id);
+                                        if (result.success) {
+                                            toast.success('Product deleted successfully');
+                                            router.push('/products');
+                                        } else {
+                                            toast.error('Failed to delete product');
+                                        }
+                                        setShowDeleteModal(false);
+                                    }}
+                                    title="Delete Product"
+                                    description={`Are you sure you want to delete "${productData.product_title}"? This action cannot be undone.`}
+                                />
                             </div>
                         </div>
                     </div>
