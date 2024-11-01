@@ -27,7 +27,7 @@ export class OpenAIService {
         - Three Key Points about the product (mention variety of options if relevant)
         - Subheader for marketing copy (a catchy phrase mentioning price point or variety if compelling)
         - Generate potential target audience (e.g. Women aged 25-35 who love fashion)
-        - Generate 5 customer reviews in a UGC style, with sentiments ranging from 3 to 5 stars with clear customers names (include mentions of specific variants or options in some reviews)
+        - Generate 5 customer reviews in a UGC style with varying sentiment (e.g. "This product is decent, but could be better" to "Absolutely love this, best purchase ever!") with clear customer names (include mentions of specific variants or options in some reviews)
         
         Additionally, generate ad copy:
         - Exactly 3 Facebook Ads, each with:

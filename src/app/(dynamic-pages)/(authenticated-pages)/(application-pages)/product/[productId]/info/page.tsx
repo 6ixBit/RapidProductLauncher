@@ -90,41 +90,50 @@ export default function ProductPage() {
             // Extract variants
             const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
             const sizeVariants = productData?.variants || [];
-
             // Determine variants and options based on what we have
+
             let variants = [];
             let options = [];
 
+
             // Case 1: Both colors and sizes
             if (colorVariants.length && sizeVariants.length) {
+                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never[]' due to empty array type inference
                 variants = sizeVariants.flatMap(size =>
                     colorVariants.map(color => ({
                         option1: `${color.text} / ${size}`,
                         price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
                     }))
                 );
+
                 options = [
+                    // @ts-expect-error Type '{ name: string; values: string[]; }' is not assignable to type 'never'
                     { name: 'Style', values: variants.map(v => v.option1) }
                 ];
             }
             // Case 2: Only colors
             else if (colorVariants.length) {
+                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never'
                 variants = colorVariants.map(color => ({
                     option1: color.text,
                     price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
                 }));
+                // @ts-expect-error Type '{ name: string; values: string[]; }[]' is not assignable to type 'never'
                 options = [{ name: 'Color', values: colorVariants.map(color => color.text) }];
             }
             // Case 3: Only sizes
             else if (sizeVariants.length) {
+                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never'
                 variants = sizeVariants.map(size => ({
                     option1: size,
                     price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
                 }));
+                // @ts-expect-error Type '{ name: string; values: string[]; }[]' is not assignable to type 'never'
                 options = [{ name: 'Size', values: sizeVariants }];
             }
             // Case 4: No variants
             else {
+                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never'
                 variants = [{
                     option1: 'Normal:',
                     price: parseFloat(productData?.product_price?.replace('$', '') || '0'),

@@ -110,6 +110,7 @@ export type Database = {
           product_sub_heading: string | null
           product_title: string | null
           shopify_product_url: string | null
+          shopify_product_id: string | null
           source_url: string
           thumbnail_url: string | null
           user_id: string
@@ -136,6 +137,7 @@ export type Database = {
           product_sub_heading?: string | null
           product_title?: string | null
           shopify_product_url?: string | null
+          shopify_product_id?: string | null
           source_url: string
           thumbnail_url?: string | null
           user_id: string
@@ -162,6 +164,7 @@ export type Database = {
           product_sub_heading?: string | null
           product_title?: string | null
           shopify_product_url?: string | null
+          shopify_product_id?: string | null
           source_url?: string
           thumbnail_url?: string | null
           user_id?: string

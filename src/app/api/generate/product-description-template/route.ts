@@ -37,16 +37,72 @@ const productDescriptionTemplate = (data, images) => `
       }
       .reviews {
         margin-top: 40px;
+        background-color: #f8f9fa;
+        padding: 40px 20px;
+        border-radius: 12px;
       }
+      
+      .reviews h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #2d3748;
+      }
+      
       .review {
-        background-color: #f9f9f9;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 5px;
+        background-color: white;
+        padding: 24px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
       }
+      
+      .review:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .review-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        gap: 12px;
+      }
+      
+      .review-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .review-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .review-info {
+        flex-grow: 1;
+      }
+      
       .review-name {
-        font-weight: bold;
-        margin-bottom: 5px;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 4px;
+      }
+      
+      .review-stars {
+        color: #f6ad55;
+        letter-spacing: 2px;
+      }
+      
+      .review-content {
+        color: #4a5568;
+        line-height: 1.6;
+        font-size: 0.95em;
+        font-style: italic;
       }
       
       .feature-section {
@@ -132,13 +188,26 @@ const productDescriptionTemplate = (data, images) => `
     </div>
 
     <div class="reviews">
-      <h2>What our customers say</h2>
+      <h2>What Our Customers Say</h2>
       ${data.reviews
         .map(
-          (review) => `
+          (review, index) => `
         <div class="review">
-          <div class="review-name">${review.name} ⭐⭐⭐⭐⭐</div>
-          <p>${review.content}</p>
+          <div class="review-header">
+            <div class="review-avatar">
+              <img 
+                src="${images[index % images.length]}"
+                alt="${review.name}'s avatar"
+              />
+            </div>
+            <div class="review-info">
+              <div class="review-name">${review.name}</div>
+              <div class="review-stars">★★★★★</div>
+            </div>
+          </div>
+          <div class="review-content">
+            "${review.content}"
+          </div>
         </div>
       `,
         )
