@@ -81,18 +81,56 @@ export default function ProductPage() {
                 throw new Error('No connected Shopify store found.');
             }
 
-            console.log('productData:', productData?.variants);
+            console.log('productData variants:', productData?.variants);
 
             // Parse the image variants JSON strings
-            const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
+            //  const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
 
-            // Create all combinations of colors and sizes
-            const variants = productData?.variants?.flatMap(size =>
-                colorVariants.map(color => ({
-                    option1: `${color.text} / ${size}`,  // Combine color and size into a single option
+
+            // Extract variants
+            const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
+            const sizeVariants = productData?.variants || [];
+
+            // Determine variants and options based on what we have
+            let variants = [];
+            let options = [];
+
+            // Case 1: Both colors and sizes
+            if (colorVariants.length && sizeVariants.length) {
+                variants = sizeVariants.flatMap(size =>
+                    colorVariants.map(color => ({
+                        option1: `${color.text} / ${size}`,
+                        price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
+                    }))
+                );
+                options = [
+                    { name: 'Style', values: variants.map(v => v.option1) }
+                ];
+            }
+            // Case 2: Only colors
+            else if (colorVariants.length) {
+                variants = colorVariants.map(color => ({
+                    option1: color.text,
                     price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
-                }))
-            ) || [];
+                }));
+                options = [{ name: 'Color', values: colorVariants.map(color => color.text) }];
+            }
+            // Case 3: Only sizes
+            else if (sizeVariants.length) {
+                variants = sizeVariants.map(size => ({
+                    option1: size,
+                    price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
+                }));
+                options = [{ name: 'Size', values: sizeVariants }];
+            }
+            // Case 4: No variants
+            else {
+                variants = [{
+                    option1: 'Normal:',
+                    price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
+                }];
+                options = [];
+            }
 
             const productPayload = {
                 title: productData?.product_title || '',
@@ -100,15 +138,10 @@ export default function ProductPage() {
                 vendor: productData?.user_id || '',
                 product_type: productData?.product_sub_heading || '',
                 variants,
-                options: [
-                    {
-                        name: 'Variant',  // Single option combining both color and size
-                        values: variants.map(v => v.option1)
-                    }
-                ],
+                options,
                 images: [
                     ...(productData?.image_urls || []),
-                    ...colorVariants.map(color => ({ src: color.imageUrl }))
+                    ...colorVariants.map(color => color.imageUrl)
                 ],
             };
 
