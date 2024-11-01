@@ -16,7 +16,7 @@ import {
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faBolt, faCircleCheck, faMagicWandSparkles, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCircleCheck, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, Code, ExternalLink, Link as LinkIcon, SquarePen } from 'lucide-react';
@@ -169,6 +169,7 @@ export default function ProductPage() {
                 productID,
                 shopifyIntegration.id,
                 importedProduct.url,
+                importedProduct.id,
             );
 
             return { importedProduct, shopifyStoreUrl };
@@ -439,17 +440,31 @@ export default function ProductPage() {
                                         </DropdownMenuItem>
 
                                         {productData?.shopify_product_url && (
-                                            <DropdownMenuItem asChild className="py-4">
-                                                <Link
-                                                    href={productData?.shopify_product_url || ''}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center"
-                                                >
-                                                    <FontAwesomeIcon icon={faStore} className="mr-2" />
-                                                    View on your store
-                                                </Link>
-                                            </DropdownMenuItem>
+                                            <>
+                                                <DropdownMenuItem asChild className="py-4">
+                                                    <Link
+                                                        href={productData?.shopify_product_url || ''}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center"
+                                                    >
+                                                        <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                        View on your store
+                                                    </Link>
+                                                </DropdownMenuItem>
+
+                                                <DropdownMenuItem asChild className="py-4">
+                                                    <Link
+                                                        href={`https://admin.shopify.com/store/${productData.shopify_product_url?.split('.')[0].replace('https://', '')}/products/${productData.shopify_product_id}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center"
+                                                    >
+                                                        <FontAwesomeIcon icon={faPencil} className="mr-2" />
+                                                        Edit on Shopify
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                            </>
                                         )}
 
                                         <DropdownMenuItem
