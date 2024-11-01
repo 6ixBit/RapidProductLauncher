@@ -157,15 +157,12 @@ const productDescriptionTemplate = (data, images) => `
     <p>${data.description}</p>
 
     <h2>Key Features</h2>
-    <ul>
-      ${data.keyPoints.map((point) => `<li>${point}</li>`).join('')}
-    </ul>
 
     <div class="feature-section">
       <h2 style="text-align: center; font-size: 1.8em; margin-bottom: 24px;">Product Features</h2>
       
       ${images
-        .slice(0, 3)
+        .slice(0, Math.min(3, data.keyPoints.length))
         .map(
           (image, index) => `
         <div class="feature-container">
@@ -178,8 +175,8 @@ const productDescriptionTemplate = (data, images) => `
             />
           </div>
           <div class="feature-content">
-            <h3 class="feature-title">Feature ${index + 1}</h3>
-            <p>Description for Feature ${index + 1}. Replace this text with actual feature description.</p>
+    
+            <p>${data.keyPoints[index]}</p>
           </div>
         </div>
       `,

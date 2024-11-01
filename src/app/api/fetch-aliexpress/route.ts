@@ -10,6 +10,10 @@ import {
   saveProductTemplateToDB,
 } from './utils';
 
+export const config = {
+  maxDuration: 300,
+};
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

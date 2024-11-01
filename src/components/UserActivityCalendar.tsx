@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/t
 const UserActivityCalendar = () => {
   const supabase = supabaseUserClientComponentClient;
 
-  const { data: activityData } = useQuery({
+  const { data: activityData, isLoading, isFetched } = useQuery({
     queryKey: ['userProductActivity'],
     queryFn: async () => {
       const oneYearAgo = new Date();
@@ -69,13 +69,28 @@ const UserActivityCalendar = () => {
     return `${day}${suffix(day)} ${month}`;
   };
 
+  const todayDate = new Date().toISOString().split('T')[0].replace(/-/g, '/');
+  const todayContributions = activityData?.find(item => item.date === todayDate)?.count;
+
+  console.log(activityData);
   return (
     <div className="space-y-4">
       <div>
         <H2>Product Launch Calendar</H2>
-        <p className="text-gray-600 mb-2">
-          Each lit-up square represents a day you leaped your competition.{' '}
-        </p>
+
+        {isLoading ? (
+          <p className="text-gray-600 mb-2">Loading your activity...</p>
+        ) : isFetched && (
+          <p className="text-gray-600 mb-2">
+            {todayContributions === 0 ? (
+              <>You've only launched <strong>0</strong> products today. 😢</>
+            ) : todayContributions! <= 3 ? (
+              <>You've launched <strong>{todayContributions}</strong> products today. Not bad! 🙂</>
+            ) : (
+              <>Great job! You've launched <strong>{todayContributions}</strong> products today! 🎉</>
+            )}
+          </p>
+        )}
       </div>
       <TooltipProvider>
         <HeatMap
