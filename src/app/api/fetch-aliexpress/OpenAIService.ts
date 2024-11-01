@@ -23,23 +23,23 @@ export class OpenAIService {
         Extract and generate:
         - Product Title (provide a concise and intuitive name, keep it short focus on the product)
         - Product Price (use the provided price of ${price})
-        - Product Description (incorporate available variants and options)
+        - Product Description
         - Three Key Points about the product (mention variety of options if relevant)
         - Subheader for marketing copy (a catchy phrase mentioning price point or variety if compelling)
-        - Generate potential target audience (e.g. Women aged 25-35 who love fashion)
+        - Generate target audience for internal use only (e.g. Women aged 25-35 who love fashion)
         - Generate 5 customer reviews in a UGC style with varying sentiment (e.g. "This product is decent, but could be better" to "Absolutely love this, best purchase ever!") with clear customer names (include mentions of specific variants or options in some reviews)
         
-        Additionally, generate ad copy:
+        Additionally, generate ad copy (do not reference target audience in any of these):
         - Exactly 3 Facebook Ads, each with:
-          * A compelling description (max 125 characters) that highlights price point or variety of options
+          * A compelling description (max 125 characters) that focuses on benefits, features, or price point
           * An attention-grabbing sub-heading (max 40 characters)
-          * Optimize for Facebook's audience with engaging, conversion-focused copy
+          * Optimize for conversion with broad appeal
         
         - 3 Instagram captions, each:
           * Engaging and visual-focused (max 200 characters)
           * Include relevant hashtags
           * Optimize for Instagram's style with emojis and casual tone
-          * Incorporate price points and variety of options where relevant
+          * Focus on product features, benefits, and value proposition
   
         Product Markup: ${htmlContent}
         Output in ${language}

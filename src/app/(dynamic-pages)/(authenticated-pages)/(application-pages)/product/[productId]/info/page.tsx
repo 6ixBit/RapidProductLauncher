@@ -19,7 +19,7 @@ import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg
 import { faBolt, faCircleCheck, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Calendar, Code, ExternalLink, Link as LinkIcon, SquarePen } from 'lucide-react';
+import { ArrowLeft, Calendar, Code, ExternalLink, ImageIcon, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -82,10 +82,6 @@ export default function ProductPage() {
             }
 
             console.log('productData variants:', productData?.variants);
-
-            // Parse the image variants JSON strings
-            //  const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
-
 
             // Extract variants
             const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
@@ -305,6 +301,11 @@ export default function ProductPage() {
                 />
             ),
         },
+        {
+            label: "Media Center",
+            href: `/product/${productID}/media-center`,
+            icon: <ImageIcon style={{ color: '#4B5563' }} />
+        }
     ];
 
     return (
@@ -496,6 +497,22 @@ export default function ProductPage() {
                             </div>
                         </div>
                     </div>
+                    {productData.target_audience && (
+                        <div className="border-t border-gray-200 p-6">
+                            <h2 className="text-xl font-semibold mb-3 text-gray-900">
+                                Your Ideal Customer Profile
+                            </h2>
+                            <div className="text-gray-700 leading-relaxed">
+                                <p className="mb-2 font-semibold text-gray-900">
+                                    {productData.target_audience}
+                                </p>
+                                <p className="text-sm text-gray-500 mt-2">
+                                    Understanding your target audience helps optimize your marketing and sales strategies.
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="border-t border-gray-200 p-6">
                         <h2 className="text-xl font-semibold mb-3 text-gray-900">
                             Description
