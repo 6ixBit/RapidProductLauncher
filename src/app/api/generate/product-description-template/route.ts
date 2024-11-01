@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const getRandomStars = () => {
+  const stars = Math.floor(Math.random() * 3) + 3; // Random number between 3-5
+  return '★'.repeat(stars) + '☆'.repeat(5 - stars);
+};
+
 const productDescriptionTemplate = (data, images) => `
   <html lang="en">
   <head>
@@ -154,12 +159,45 @@ const productDescriptionTemplate = (data, images) => `
     </style>
   </head>
   <body>
+     <div style="text-align: center; margin: 20px 0;">
+     <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px;">
+      <p style="font-weight: bold;"> Trusted by 5,000+ Customers</p>
+      <img
+        src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-5.svg"
+        alt="5-Star Rating"
+        width="120"
+        height="24"
+      />
+    </div>
+
+      <div style="display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto; padding: 0 20px;">
+        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+            <svg style="width: 40px; height: 40px; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+          </svg>
+          <h3 style="font-weight: 600; font-size: 14px;">Fast Shipping</h3>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+          <svg class="w-10 h-10" style="width: 40px; height: 40px; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 style="font-weight: 600; font-size: 14px;">Satisfaction Guaranteed</h3>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+            <svg style="width: 40px; height: 40px; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+          </svg>
+          <h3 style="font-weight: 600; font-size: 14px;">24/7 Support</h3>
+        </div>
+      </div>
+    </div>
     <p>${data.description}</p>
 
-    <h2>Key Features</h2>
 
     <div class="feature-section">
-      <h2 style="text-align: center; font-size: 1.8em; margin-bottom: 24px;">Product Features</h2>
+      <h2 style="text-align: center; font-size: 1.8em; margin-bottom: 24px;">Why You'll Love This Product</h2>
       
       ${images
         .slice(0, Math.min(3, data.keyPoints.length))
@@ -199,7 +237,8 @@ const productDescriptionTemplate = (data, images) => `
             </div>
             <div class="review-info">
               <div class="review-name">${review.name}</div>
-              <div class="review-stars">★★★★★</div>
+              <div class="review-stars">${getRandomStars()}</div>
+              <div style="color: #28a745; font-size: 12px;">✓ Verified Purchase</div>
             </div>
           </div>
           <div class="review-content">
