@@ -27,7 +27,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { deleteProduct, formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
 
-
 export default function ProductPage() {
     const params = useParams();
     const router = useRouter();
@@ -323,7 +322,7 @@ export default function ProductPage() {
                         <TabsNavigation tabs={tabs} />
                     </div>
                     <button
-                        className="hidden lg:flex px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
+                        className="hidden lg:flex items-center px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
                         onClick={() => setIsModalOpen(true)}
                     >
                         <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />

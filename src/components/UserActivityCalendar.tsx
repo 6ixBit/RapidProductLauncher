@@ -80,7 +80,7 @@ const UserActivityCalendar = () => {
 
         {isLoading ? (
           <p className="text-gray-600 mb-2">Loading your activity...</p>
-        ) : isFetched && (
+        ) : isFetched && activityData ? (
           <p className="text-gray-600 mb-2">
             {todayContributions === 0 ? (
               <>You've only launched <strong>0</strong> products today. 😢</>
@@ -90,6 +90,8 @@ const UserActivityCalendar = () => {
               <>Great job! You've launched <strong>{todayContributions}</strong> products today! 🎉</>
             )}
           </p>
+        ) : (
+          <p className="text-gray-600 mb-2">No activity data available</p>
         )}
       </div>
       <TooltipProvider>
@@ -112,7 +114,10 @@ const UserActivityCalendar = () => {
             30: '#00acc1',
           }}
           legendRender={(props) => (
-            <rect {...props} y={Number(props.y) + 10} rx={5} />
+            <g>
+              <rect {...props} y={Number(props.y) + 10} rx={5} />
+
+            </g>
           )}
           rectProps={{
             rx: 5,

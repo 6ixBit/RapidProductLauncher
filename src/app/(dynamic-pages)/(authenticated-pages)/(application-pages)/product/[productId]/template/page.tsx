@@ -4,7 +4,7 @@ import { TabsNavigation } from '@/components/TabsNavigation/TabsNavigation';
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Liquid } from 'liquidjs';
-import { Code, SquarePen } from 'lucide-react';
+import { Code, ImageIcon, SquarePen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { liquidTemplate_1_edited } from './templates';
@@ -101,6 +101,11 @@ const TemplatePage = () => {
         />
       ),
     },
+    {
+      label: "Media Center",
+      href: `/product/${productID}/media-center`,
+      icon: <ImageIcon style={{ color: '#4B5563' }} />
+    }
   ];
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { TabsNavigation } from '@/components/TabsNavigation';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Code, ExternalLink, SquarePen } from 'lucide-react';
+import { Code, ExternalLink, ImageIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -61,6 +61,11 @@ const MediaCenterPage = () => {
         />
       ),
     },
+    {
+      label: "Media Center",
+      href: `/product/${productID}/media-center`,
+      icon: <ImageIcon style={{ color: '#4B5563' }} />
+    }
   ];
 
   const openImageInNewTab = (imageUrl: string) => {
