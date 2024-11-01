@@ -7,6 +7,9 @@ export async function saveProductTemplateToDB(
   source_url: string,
   user_id: string,
   organization_id: string,
+  target_audience: string,
+  variants: string[],
+  image_variants: any[],
 ): Promise<string | null> {
   const supabase = createSupabaseUserServerActionClient();
 
@@ -25,6 +28,9 @@ export async function saveProductTemplateToDB(
         product_sub_heading: productInfo.subHeading,
         product_key_points: productInfo.keyPoints,
         product_reviews: productInfo.reviews,
+        target_audience: target_audience,
+        variants: variants,
+        image_variants: image_variants,
       },
     ])
     .select('id');
@@ -80,7 +86,7 @@ export async function saveImagesToDb(productId: string, imageUrls: string[]) {
     }
 
     const supabase = createSupabaseUserServerActionClient();
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('html_templates')
       .update({
         image_urls: imageUrls,

@@ -67,9 +67,11 @@ export async function POST(request: Request) {
       body_html: product.body_html,
       vendor: product.vendor,
       product_type: product.product_type,
-      variants: [{ price: product.variants[0].price }],
+      variants: product.variants,
       images: product.images?.map((url: string) => ({ src: url })) || [],
     };
+
+    console.log('productPayload Receivee On server:', productPayload);
 
     const createdProduct = await createProduct(
       { shopDomain: shopify_store_url, adminApiKey: admin_api_key },

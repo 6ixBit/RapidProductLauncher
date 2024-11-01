@@ -33,6 +33,10 @@ export async function POST(req: NextRequest) {
       product.variants,
     );
 
+    if (!productInfo) {
+      throw new Error('Failed to generate product info');
+    }
+
     const baseUrl = `${req.headers.get('x-forwarded-proto') || 'http'}://${req.headers.get('host')}`;
     const response = await fetch(
       `${baseUrl}/api/generate/product-description-template`,
@@ -43,6 +47,8 @@ export async function POST(req: NextRequest) {
       },
     );
 
+    console.log('product info to openai:', productInfo);
+
     const html = cleanHTML((await response.json()).template);
     const productID = await saveProductTemplateToDB(
       html,
@@ -51,6 +57,9 @@ export async function POST(req: NextRequest) {
       url,
       user_id,
       organization_id,
+      productInfo.targetAudience,
+      product.variants.textVariants,
+      product.variants.imageVariants,
     );
 
     if (productID) {

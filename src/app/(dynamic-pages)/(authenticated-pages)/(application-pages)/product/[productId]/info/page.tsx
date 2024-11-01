@@ -81,18 +81,38 @@ export default function ProductPage() {
                 throw new Error('No connected Shopify store found.');
             }
 
+            console.log('productData:', productData?.variants);
+
+            // Parse the image variants JSON strings
+            const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
+
+            // Create all combinations of colors and sizes
+            const variants = productData?.variants?.flatMap(size =>
+                colorVariants.map(color => ({
+                    option1: `${color.text} / ${size}`,  // Combine color and size into a single option
+                    price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
+                }))
+            ) || [];
+
             const productPayload = {
                 title: productData?.product_title || '',
                 body_html: productData?.html_code || '',
                 vendor: productData?.user_id || '',
                 product_type: productData?.product_sub_heading || '',
-                variants: [
+                variants,
+                options: [
                     {
-                        price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
-                    },
+                        name: 'Variant',  // Single option combining both color and size
+                        values: variants.map(v => v.option1)
+                    }
                 ],
-                images: productData?.image_urls || [],
+                images: [
+                    ...(productData?.image_urls || []),
+                    ...colorVariants.map(color => ({ src: color.imageUrl }))
+                ],
             };
+
+            console.log('productPayload:', productPayload);
 
             const response = await fetch('/api/import-prod-to-shopify', {
                 method: 'POST',

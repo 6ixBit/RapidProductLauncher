@@ -113,6 +113,9 @@ export type Database = {
           source_url: string
           thumbnail_url: string | null
           user_id: string
+          variants: string[];
+          image_variants: string[];
+          target_audience: string;
         }
         Insert: {
           created_at?: string
@@ -136,6 +139,9 @@ export type Database = {
           source_url: string
           thumbnail_url?: string | null
           user_id: string
+          variants?: string[];
+          image_variants?: string[];
+          target_audience?: string;
         }
         Update: {
           created_at?: string
@@ -159,6 +165,9 @@ export type Database = {
           source_url?: string
           thumbnail_url?: string | null
           user_id?: string
+          variants?: string[];
+          image_variants?: string[];
+          target_audience?: string;
         }
         Relationships: [
           {
