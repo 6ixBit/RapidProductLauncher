@@ -545,7 +545,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
         {isMultiComplete && (
           <Button
             onClick={handleClose}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700"
+            variant="destructive"
           >
             Close
           </Button>
