@@ -76,6 +76,7 @@
     "framer-motion": "^8.0.2",
     "geist": "^1.1.0",
     "liquidjs": "^10.18.0",
+    "lottie-react": "^2.4.0",
     "lucide-react": "^0.330.0",
     "moment": "^2.29.4",
     "next": "14.3.0-canary.34",

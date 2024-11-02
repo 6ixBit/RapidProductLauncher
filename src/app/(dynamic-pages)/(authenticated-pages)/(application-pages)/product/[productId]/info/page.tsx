@@ -38,7 +38,7 @@ export default function ProductPage() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     // Use React Query for fetching the default organization ID
-    const { data: organizationId, isLoading: isOrgLoading, error: orgError } = useQuery({
+    const { data: organizationId } = useQuery({
         queryKey: ['userOrganization', user.id],
         queryFn: async () => {
             const { data: orgMember, error } = await supabase
