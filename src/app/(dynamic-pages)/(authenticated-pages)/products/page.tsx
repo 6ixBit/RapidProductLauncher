@@ -53,7 +53,8 @@ export default function ProductsPage() {
         isLoading,
         isError,
         error,
-        refetch
+        refetch,
+        remove
     } = useInfiniteQuery({
         queryKey: ['products', user?.id],
         queryFn: async ({ pageParam = null }) => {
@@ -156,6 +157,13 @@ export default function ProductsPage() {
         }
     };
 
+    const handleRefresh = async () => {
+        // Remove the existing query data
+        remove();
+        // Refetch from scratch
+        refetch({ refetchPage: (_: number, index: number) => index === 0 });
+    };
+
     const allProducts = data?.pages.flat() ?? [];
 
     return (
@@ -173,7 +181,7 @@ export default function ProductsPage() {
                         </button>
                         <button
                             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
-                            onClick={() => refetch()}
+                            onClick={handleRefresh}
                         >
                             <FontAwesomeIcon
                                 icon={faArrowsRotate}

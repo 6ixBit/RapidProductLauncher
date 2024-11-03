@@ -245,6 +245,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
         setIsLoading(false);
         setIsMultiComplete(true);
         queryClient.invalidateQueries({ queryKey: ['userProductActivity'] });
+        queryClient.invalidateQueries({ queryKey: ['products', user.id] });
       }
       return;
     }
