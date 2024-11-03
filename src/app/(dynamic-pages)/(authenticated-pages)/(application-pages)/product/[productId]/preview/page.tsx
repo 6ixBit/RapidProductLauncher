@@ -75,8 +75,6 @@ const ProductPreviewPage = () => {
 
       if (error) throw error;
 
-
-
       return {
         htmlCode: data.html_code,
         images: data.image_urls || [],
@@ -130,13 +128,12 @@ const ProductPreviewPage = () => {
                   <select
                     id="variant-select"
                     className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    value={productData.variants[0]}
+                    disabled
                   >
-                    <option value="">Choose an option</option>
-                    {productData.variants.map((variant, index) => (
-                      <option key={index} value={variant}>
-                        {variant}
-                      </option>
-                    ))}
+                    <option value={productData.variants[0]}>
+                      {productData.variants[0]}
+                    </option>
                   </select>
                 </div>
               )}
