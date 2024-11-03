@@ -72,9 +72,6 @@ const UserActivityCalendar = () => {
   const todayDate = new Date().toISOString().split('T')[0].replace(/-/g, '/');
   const todayContributions = activityData?.find(item => item.date === todayDate)?.count;
 
-  console.log(todayContributions);
-
-  console.log('activityData', activityData);
   return (
     <div className="space-y-4">
       <div>

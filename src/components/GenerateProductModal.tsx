@@ -24,7 +24,7 @@ import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faAmazon, faEtsy } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Lottie from 'lottie-react';
 import { X } from 'lucide-react';
 import Image from 'next/image';
@@ -79,6 +79,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
   const [completedProducts, setCompletedProducts] = useState<Record<number, string>>({});
   const router = useRouter();
   const supabase = supabaseUserClientComponentClient;
+  const queryClient = useQueryClient();
 
   const user = useLoggedInUser();
 
@@ -243,6 +244,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
       } finally {
         setIsLoading(false);
         setIsMultiComplete(true);
+        queryClient.invalidateQueries({ queryKey: ['userProductActivity'] });
       }
       return;
     }
