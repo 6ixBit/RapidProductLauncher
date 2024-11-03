@@ -25,7 +25,7 @@ import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg
 import { faBolt, faCircleCheck, faCircleInfo, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Calendar, Code, ExternalLink, ImageIcon, Link as LinkIcon, SquarePen } from 'lucide-react';
+import { ArrowLeft, Calendar, ExternalLink, Eye, ImageIcon, Link as LinkIcon, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -278,17 +278,21 @@ export default function ProductPage() {
             console.error('Error generating product:', error);
         }
     };
-
     const tabs = [
         {
             label: 'Product Info',
             href: `/product/${productID}/info`,
             icon: <SquarePen />,
         },
+        // {
+        //     label: 'Page Template',
+        //     href: `/product/${productID}/template`,
+        //     icon: <Code />,
+        // },
         {
-            label: 'Page Template',
-            href: `/product/${productID}/template`,
-            icon: <Code />,
+            label: 'Preview',
+            href: `/product/${productID}/preview`,
+            icon: <Eye />,
         },
         {
             label: 'Facebook Creatives',

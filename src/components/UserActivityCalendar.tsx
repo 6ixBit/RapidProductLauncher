@@ -81,9 +81,9 @@ const UserActivityCalendar = () => {
           <p className="text-gray-600 mb-2">Loading your activity...</p>
         ) : isFetched && activityData ? (
           <p className="text-gray-600 mb-2">
-            {todayContributions === 0 || todayContributions === undefined ? (
+            {!todayContributions ? (
               <>You've only launched <strong>0</strong> products today. 😢</>
-            ) : todayContributions! <= 3 ? (
+            ) : todayContributions <= 3 ? (
               <>You've launched <strong>{todayContributions}</strong> products today. Not bad! 🙂</>
             ) : (
               <>Great job! You've launched <strong>{todayContributions}</strong> products today! 🎉</>
