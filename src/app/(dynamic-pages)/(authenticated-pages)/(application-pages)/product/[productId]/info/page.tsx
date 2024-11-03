@@ -13,10 +13,16 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faBolt, faCircleCheck, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCircleCheck, faCircleInfo, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, Code, ExternalLink, ImageIcon, Link as LinkIcon, SquarePen } from 'lucide-react';
@@ -362,14 +368,31 @@ export default function ProductPage() {
                                 <div className="mb-6">
                                     <div className="mb-4">
                                         <div className="flex items-center justify-between mt-6">
-                                            <p className="text-2xl font-semibold text-green-600">
-                                                $
-                                                {(
-                                                    parseFloat(
-                                                        productData?.product_price?.replace('$', '') || '0',
-                                                    ) * 3
-                                                ).toFixed(2)}
-                                            </p>
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <div className="flex items-center">
+                                                        <p className="text-2xl font-semibold text-green-600">
+                                                            ${(parseFloat(productData?.product_price?.replace('$', '') || '0') * 3).toFixed(2)}
+                                                        </p>
+                                                        <TooltipTrigger asChild>
+                                                            <button className="text-gray-400 hover:text-gray-600 transition-colors ml-2">
+                                                                <FontAwesomeIcon icon={faCircleInfo} className="w-4 h-4 text-blue-500" />
+                                                            </button>
+                                                        </TooltipTrigger>
+                                                    </div>
+                                                    <TooltipContent className="flex flex-col gap-2 p-3">
+                                                        <div className="flex justify-between gap-4">
+                                                            <span className="text-gray-500">Supplier price:</span>
+                                                            <span className="font-medium">${parseFloat(productData?.product_price?.replace('$', '') || '0').toFixed(2)}</span>
+                                                        </div>
+                                                        <div className="flex justify-between gap-4">
+                                                            <span className="text-gray-500">Gross profit margin:</span>
+                                                            <span className="font-medium text-green-600">{((3 - 1) * 100).toFixed(0)}%</span>
+                                                        </div>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+
                                             {productData.is_imported_to_shopify ? (
                                                 <Link
                                                     href={productData?.shopify_product_url || ''}
@@ -377,10 +400,7 @@ export default function ProductPage() {
                                                     rel="noopener noreferrer"
                                                 >
                                                     <Badge variant="shopify">
-                                                        <FontAwesomeIcon
-                                                            icon={faShopify}
-                                                            className="mr-2"
-                                                        />
+                                                        <FontAwesomeIcon icon={faShopify} className="mr-2" />
                                                         Imported
                                                     </Badge>
                                                 </Link>
@@ -396,7 +416,7 @@ export default function ProductPage() {
                                     <div className="flex items-center mb-2 text-sm text-gray-500">
                                         <Calendar className="w-4 h-4 mr-2" />
                                         <span>
-                                            Generated on {formatDate(productData.created_at)}
+                                            Generated on {formatDate(productData.created_at)} in {productData.language}
                                         </span>
                                     </div>
                                     <div className="flex items-center text-sm text-blue-600">
