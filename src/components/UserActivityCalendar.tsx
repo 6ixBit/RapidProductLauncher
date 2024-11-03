@@ -72,7 +72,9 @@ const UserActivityCalendar = () => {
   const todayDate = new Date().toISOString().split('T')[0].replace(/-/g, '/');
   const todayContributions = activityData?.find(item => item.date === todayDate)?.count;
 
-  console.log(activityData);
+  console.log(todayContributions);
+
+  console.log('activityData', activityData);
   return (
     <div className="space-y-4">
       <div>
@@ -82,7 +84,7 @@ const UserActivityCalendar = () => {
           <p className="text-gray-600 mb-2">Loading your activity...</p>
         ) : isFetched && activityData ? (
           <p className="text-gray-600 mb-2">
-            {todayContributions === 0 ? (
+            {todayContributions === 0 || todayContributions === undefined ? (
               <>You've only launched <strong>0</strong> products today. 😢</>
             ) : todayContributions! <= 3 ? (
               <>You've launched <strong>{todayContributions}</strong> products today. Not bad! 🙂</>

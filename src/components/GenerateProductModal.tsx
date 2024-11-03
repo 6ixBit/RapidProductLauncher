@@ -28,6 +28,7 @@ import { useQuery } from '@tanstack/react-query';
 import Lottie from 'lottie-react';
 import { X } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from 'react';
 import { toast } from "sonner";
@@ -71,7 +72,6 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
   const [urlError, setUrlError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [urls, setUrls] = useState<string[]>(['']);
   const [activeTab, setActiveTab] = useState<string>('single');
   const [multiUrlErrors, setMultiUrlErrors] = useState<string[]>([]);
   const [multiUrls, setMultiUrls] = useState<UrlEntry[]>([{ url: '', marketplace: 'AliExpress' }]);
@@ -131,14 +131,6 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     setMultiUrlErrors(newErrors);
   }, [multiUrls]);
 
-  useEffect(() => {
-    console.log('Auth State:', {
-      user,
-      userId: user?.id,
-      orgId: organizationId
-    });
-  }, [user, organizationId]);
-
   const LOADING_MESSAGES = [
     "Still faster than your competition's manual copy-paste...",
     "While you automate, your competitors are still formatting product descriptions...",
@@ -159,7 +151,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
       return "Processing time: ~1 minute";
     }
 
-    return `Processing ${productCount === 1 ? 'product' : 'products'}: ~${productCount} ${productCount === 1 ? 'minute' : 'minutes'}`;
+    return `Processing ${productCount === 1 ? 'product' : 'products'}: ~${productCount} ${productCount === 1 ? 'minute (Est.)' : 'minutes (Est.)'}`;
   };
 
   const handleGenerate = async () => {
@@ -218,14 +210,20 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
               }));
               toast.success(`Product ${i + 1} generated successfully!`, {
                 action: {
-                  label: "View",
-                  onClick: () => router.push(`/product/${data.productID}/info`)
+                  label: "Open",
+                  onClick: () => window.open(`/product/${data.productID}/info`, '_blank')
                 },
               });
             }
           } catch (error) {
             console.error(`Error generating product ${i + 1}:`, error);
-            toast.error(`Failed to generate product ${i + 1}`);
+            toast.error(`Failed to generate product ${i + 1}`, {
+              description: 'There was an error processing this product. Other products will continue processing.',
+              action: {
+                label: 'View URL',
+                onClick: () => window.open(entry.url, '_blank')
+              },
+            });
           } finally {
             setProcessingProducts(prev => ({
               ...prev,
@@ -235,7 +233,13 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
         }
       } catch (error) {
         console.error('Multi-generate error:', error);
-        toast.error('Failed to process products');
+        toast.error('Failed to process products', {
+          description: 'There was an error processing your products. Please try again.',
+          action: {
+            label: 'Retry',
+            onClick: () => handleGenerate()
+          },
+        });
       } finally {
         setIsLoading(false);
         setIsMultiComplete(true);
@@ -261,6 +265,13 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     } catch (error) {
       if (!abortController.signal.aborted) {
         setError('Failed to generate product. Please try again.');
+        toast.error('Failed to generate product', {
+          description: 'There was an error processing your request. Please try again.',
+          action: {
+            label: 'Retry',
+            onClick: () => handleGenerate()
+          },
+        });
       }
     } finally {
       if (!abortController.signal.aborted) {
@@ -336,6 +347,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                   <p className="text-sm text-gray-400 italic">
                     {loadingMessage}
                   </p>
+
                 </>
               )}
               {isMultiComplete && !isLoading && (
@@ -345,40 +357,58 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
               )}
             </div>
 
-            <div className="w-full space-y-3 max-h-[300px] overflow-y-auto">
-              {multiUrls.map((entry, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg border bg-gray-50"
-                >
+            {isLoading && activeTab === 'single' && (
+              <div className="w-full">
+                <div className="flex items-center justify-between p-3 rounded-lg border bg-gray-50">
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-700">
-                      Product {index + 1}
+                      Product 1
                     </span>
-                    <ExternalUrlLink url={entry.url} />
+                    <ExternalUrlLink url={url} />
                   </div>
                   <div className="flex items-center gap-2">
-                    {processingProducts[index] ? (
-                      <LoadingSpinner className="h-4 w-4" />
-                    ) : completedProducts[index] ? (
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-500">✓</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-blue-500 hover:text-blue-600"
-                          onClick={() => window.open(completedProducts[index], '_blank')}
-                        >
-                          View Product
-                        </Button>
-                      </div>
-                    ) : (
-                      <span className="text-gray-400">Pending</span>
-                    )}
+                    <LoadingSpinner className="h-4 w-4" />
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {activeTab === 'multi' && (
+              <div className="w-full space-y-3 max-h-[300px] overflow-y-auto">
+                {multiUrls.map((entry, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-gray-50"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-gray-700">
+                        Product {index + 1}
+                      </span>
+                      <ExternalUrlLink url={entry.url} />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {processingProducts[index] ? (
+                        <LoadingSpinner className="h-4 w-4" />
+                      ) : completedProducts[index] ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-green-500">✓</span>
+                          <Link
+                            href={completedProducts[index]}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-600 text-sm px-3 py-1 rounded-md hover:bg-gray-100 transition-colors"
+                          >
+                            View Product
+                          </Link>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Pending</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-8">
