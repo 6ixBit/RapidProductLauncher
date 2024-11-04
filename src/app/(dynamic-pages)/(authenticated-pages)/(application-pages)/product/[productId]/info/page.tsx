@@ -464,13 +464,7 @@ export default function ProductPage() {
                                     </DropdownMenuTrigger>
 
                                     <DropdownMenuContent className="w-[250px]">
-                                        <DropdownMenuItem
-                                            className="py-4"
-                                            onSelect={(e) => {
-                                                // Prevent closing the dropdown when selecting a store
-                                                e.preventDefault();
-                                            }}
-                                        >
+                                        <div className="p-4">
                                             <div className="flex flex-col w-full gap-2">
                                                 <div className="flex items-center text-[#96bf47]">
                                                     <FontAwesomeIcon icon={faShopify} className="mr-2" />
@@ -493,18 +487,19 @@ export default function ProductPage() {
 
                                                 <button
                                                     onClick={(e) => {
+                                                        e.preventDefault();
                                                         e.stopPropagation();
                                                         const selectedStore = stores?.find(store => store.id === Number(selectedStoreId));
                                                         importToShopifyMutation.mutate({ selectedStore });
                                                         setDropdownOpen(false);
                                                     }}
                                                     className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors"
-                                                    disabled={!selectedStoreId} // Disable button if no store is selected
+                                                    disabled={!selectedStoreId}
                                                 >
                                                     Import
                                                 </button>
                                             </div>
-                                        </DropdownMenuItem>
+                                        </div>
 
                                         {productData?.shopify_product_url && (
                                             <>
