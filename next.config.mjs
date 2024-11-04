@@ -8,6 +8,7 @@ export default {
       's3.us-east-2.amazonaws.com',
       'rapid-product-launcher.ai.s3.us-east-2.amazonaws.com',
       'ae-pic-a1.aliexpress-media.com',
+      'placehold.co',
     ],
     remotePatterns: [
       {

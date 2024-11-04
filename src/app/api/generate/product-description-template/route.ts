@@ -119,10 +119,17 @@ const productDescriptionTemplate = (data, images) => `
         align-items: center;
         gap: 32px;
         margin: 48px 0;
+        padding: 24px;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        background: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
       
-      .feature-container:nth-child(even) {
-        flex-direction: row-reverse;
+      .feature-container:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       }
       
       .feature-image {
@@ -132,43 +139,53 @@ const productDescriptionTemplate = (data, images) => `
       .feature-image img {
         width: 100%;
         height: auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
       
       .feature-content {
         width: 50%;
+        padding: 20px;
       }
       
-      .feature-title {
-        font-size: 1.25rem;
-        font-weight: 600;
+      .feature-content h2 {
+        color: #1a202c;
+        font-size: 1.5rem;
         margin-bottom: 1rem;
+        font-weight: 600;
+      }
+      
+      .feature-content p {
+        color: #4a5568;
+        line-height: 1.625;
       }
       
       @media (max-width: 768px) {
         .feature-container {
           flex-direction: column !important;
+          padding: 16px;
         }
         
         .feature-image,
         .feature-content {
           width: 100%;
+          padding: 12px;
         }
       }
     </style>
   </head>
   <body>
      <div style="text-align: center; margin: 20px 0;">
-     <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px;">
-      <p style="font-weight: bold;"> Trusted by 5,000+ Customers</p>
-      <img
-        src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-5.svg"
-        alt="5-Star Rating"
-        width="120"
-        height="24"
-      />
-    </div>
+       <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 24px;">
+         <p style="font-weight: 600; font-size: 14px; margin: 0;">Rated 5/5</p>
+         <img
+           src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-5.svg"
+           alt="5-Star Rating"
+           width="120"
+           height="24"
+         />
+         <p style="font-weight: 700; color: #4a5568; font-size: 14px; margin: 0;">TrustPilot</p>
+       </div>
 
       <div style="display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto; padding: 0 20px;">
         <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
@@ -213,7 +230,7 @@ const productDescriptionTemplate = (data, images) => `
             />
           </div>
           <div class="feature-content">
-    
+            <h2>Key Feature ${index + 1}</h2>
             <p>${data.keyPoints[index]}</p>
           </div>
         </div>

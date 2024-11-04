@@ -526,8 +526,10 @@ export default function ProductPage() {
                                 Your Ideal Customer Profile
                             </h2>
                             <div className="text-gray-700 leading-relaxed">
-                                <p className="mb-2 font-semibold text-gray-900">
-                                    {productData.target_audience}
+                                <p className="mb-2 font-semibold">
+                                    <span className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-md border-l-4 border-blue-500">
+                                        {productData.target_audience}
+                                    </span>
                                 </p>
                                 <p className="text-sm text-gray-500 mt-2">
                                     Understanding your target audience helps optimize your marketing and sales strategies.
