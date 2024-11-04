@@ -32,6 +32,11 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { deleteProduct, formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
 
+// Add this helper function at the top of your file
+const cleanStoreUrl = (url: string) => {
+    return url.replace(/^(https?:\/\/)?(www\.)?/, '');
+};
+
 export default function ProductPage() {
     const params = useParams();
     const router = useRouter();
@@ -458,7 +463,7 @@ export default function ProductPage() {
                                         </Button>
                                     </DropdownMenuTrigger>
 
-                                    <DropdownMenuContent>
+                                    <DropdownMenuContent className="w-[250px]">
                                         <DropdownMenuItem
                                             className="py-4"
                                             onSelect={(e) => {
@@ -481,7 +486,7 @@ export default function ProductPage() {
                                                     <option value="">Select a store...</option>
                                                     {stores?.map(store => (
                                                         <option key={store.id} value={store.id}>
-                                                            {store.shopify_store_url}
+                                                            {cleanStoreUrl(store.shopify_store_url)}
                                                         </option>
                                                     ))}
                                                 </select>
