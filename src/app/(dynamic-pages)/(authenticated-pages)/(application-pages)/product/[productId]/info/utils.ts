@@ -6,8 +6,7 @@ export const getConnectedShopifyStores = async (userId: string) => {
       .from('shopify_integrations')
       .select('id, shopify_store_url, admin_api_key, myshopify_domain')
       .eq('user_id', userId)
-      .eq('is_connected', true)
-      .single();
+      .eq('is_connected', true);
 
     if (error) {
       throw error;

@@ -2,7 +2,6 @@
 
 import DeleteModal from '@/components/DeleteModal';
 import GenerateProductModal from '@/components/GenerateProductModal';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { TabsNavigation } from '@/components/TabsNavigation';
 import H1 from '@/components/Text/H1';
 import { Badge } from '@/components/ui/badge';
@@ -42,6 +41,8 @@ export default function ProductPage() {
     const user = useLoggedInUser();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedStoreId, setSelectedStoreId] = useState<string>('');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     // Use React Query for fetching the default organization ID
     const { data: organizationId } = useQuery({
@@ -78,15 +79,27 @@ export default function ProductPage() {
         },
     });
 
+    // Add this near your other state declarations
+    const { data: stores } = useQuery({
+        queryKey: ['shopifyStores', user.id],
+        queryFn: async () => {
+            const { data, error } = await getConnectedShopifyStores(user.id);
+            if (error) throw error;
+            return data || [];
+        },
+    });
+
     // Mutation for importing to Shopify
     const importToShopifyMutation = useMutation({
-        mutationFn: async () => {
-            const { data: shopifyIntegration, error } = await getConnectedShopifyStores(user.id);
-            if (error || !shopifyIntegration) {
+        mutationFn: async ({ selectedStore }: { selectedStore: any }) => {
+            // Show loading toast when mutation starts
+            toast.loading('Importing product to Shopify...', {
+                duration: Infinity, // Will be dismissed when mutation completes
+            });
+
+            if (!selectedStore) {
                 throw new Error('No connected Shopify store found.');
             }
-
-            console.log('productData variants:', productData?.variants);
 
             // Extract variants
             const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
@@ -159,8 +172,8 @@ export default function ProductPage() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    shopify_store_url: shopifyIntegration.myshopify_domain,
-                    admin_api_key: shopifyIntegration.admin_api_key,
+                    shopify_store_url: selectedStore.myshopify_domain,
+                    admin_api_key: selectedStore.admin_api_key,
                     product: productPayload,
                 }),
             });
@@ -173,7 +186,7 @@ export default function ProductPage() {
             const importedProduct = await response.json();
             const shopifyStoreUrl = await productHasBeenImportedToShopify(
                 productID,
-                shopifyIntegration.id,
+                selectedStore.id,
                 importedProduct.url,
                 importedProduct.id,
             );
@@ -181,7 +194,8 @@ export default function ProductPage() {
             return { importedProduct, shopifyStoreUrl };
         },
         onSuccess: (data) => {
-            // Invalidate and refetch product data
+            // Dismiss all toasts (including loading) and show success
+            toast.dismiss();
             queryClient.invalidateQueries({ queryKey: ['product', productID] });
 
             toast(
@@ -205,6 +219,8 @@ export default function ProductPage() {
             );
         },
         onError: (error: any) => {
+            // Dismiss loading toast and show error
+            toast.dismiss();
             toast.error((error as Error).message || 'An error occurred while importing the product');
         },
     });
@@ -434,7 +450,7 @@ export default function ProductPage() {
                             </div>
 
                             <div className="mt-4 md:mt-0">
-                                <DropdownMenu>
+                                <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
                                     <DropdownMenuTrigger asChild>
                                         <Button className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white">
                                             <FontAwesomeIcon icon={faBolt} className='mr-2' />
@@ -444,27 +460,44 @@ export default function ProductPage() {
 
                                     <DropdownMenuContent>
                                         <DropdownMenuItem
-                                            onClick={() => {
-                                                const loadingToast = toast.loading(
-                                                    <div className="flex items-center">
-                                                        <LoadingSpinner className="w-4 h-4 mr-2" />
-                                                        <span>Importing product to Shopify...</span>
-                                                    </div>,
-                                                    {
-                                                        dismissible: true
-                                                    }
-                                                );
-                                                importToShopifyMutation.mutate(undefined, {
-                                                    onSettled: () => {
-                                                        toast.dismiss(loadingToast);
-                                                    }
-                                                });
-                                            }}
                                             className="py-4"
+                                            onSelect={(e) => {
+                                                // Prevent closing the dropdown when selecting a store
+                                                e.preventDefault();
+                                            }}
                                         >
-                                            <div className="flex items-center text-[#96bf47]">
-                                                <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                Import to Shopify
+                                            <div className="flex flex-col w-full gap-2">
+                                                <div className="flex items-center text-[#96bf47]">
+                                                    <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                    Import to Shopify
+                                                </div>
+
+                                                <select
+                                                    className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
+                                                    value={selectedStoreId}
+                                                    onChange={(e) => setSelectedStoreId(e.target.value)}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    <option value="">Select a store...</option>
+                                                    {stores?.map(store => (
+                                                        <option key={store.id} value={store.id}>
+                                                            {store.shopify_store_url}
+                                                        </option>
+                                                    ))}
+                                                </select>
+
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        const selectedStore = stores?.find(store => store.id === Number(selectedStoreId));
+                                                        importToShopifyMutation.mutate({ selectedStore });
+                                                        setDropdownOpen(false);
+                                                    }}
+                                                    className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors"
+                                                    disabled={!selectedStoreId} // Disable button if no store is selected
+                                                >
+                                                    Import
+                                                </button>
                                             </div>
                                         </DropdownMenuItem>
 
