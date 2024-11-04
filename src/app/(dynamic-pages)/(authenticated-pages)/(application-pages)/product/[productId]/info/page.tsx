@@ -91,11 +91,9 @@ export default function ProductPage() {
             // Extract variants
             const colorVariants = productData?.image_variants?.map(variant => JSON.parse(variant)) || [];
             const sizeVariants = productData?.variants || [];
-            // Determine variants and options based on what we have
 
             let variants = [];
             let options = [];
-
 
             // Case 1: Both colors and sizes
             if (colorVariants.length && sizeVariants.length) {
@@ -154,8 +152,6 @@ export default function ProductPage() {
                     ...colorVariants.map(color => color.imageUrl)
                 ],
             };
-
-            console.log('productPayload:', productPayload);
 
             const response = await fetch('/api/import-prod-to-shopify', {
                 method: 'POST',
@@ -292,7 +288,7 @@ export default function ProductPage() {
         {
             label: 'Preview',
             href: `/product/${productID}/preview`,
-            icon: <Eye />,
+            icon: <Eye style={{ color: '#000000' }} />,
         },
         {
             label: 'Facebook Creatives',

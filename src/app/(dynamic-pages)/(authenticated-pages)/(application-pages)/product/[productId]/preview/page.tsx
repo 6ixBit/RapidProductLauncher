@@ -161,9 +161,20 @@ const ProductPreviewPage = () => {
             <div className="flex flex-col gap-8">
               {/* Product Details Section */}
               <div className="flex flex-col gap-4">
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {productData.title}
-                </h1>
+                {/* Title and Rating Row */}
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#f6ad55] text-xl">★★★★★</span>
+                    <span className="text-gray-600 font-semibold">
+
+                    </span>
+                  </div>
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    {productData.title}
+                  </h1>
+
+                </div>
+
                 <div className="text-2xl font-semibold text-gray-900">
                   {productData.price}
                 </div>

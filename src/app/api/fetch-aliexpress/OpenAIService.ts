@@ -30,12 +30,12 @@ export class OpenAIService {
         - Generate 5 customer reviews in a UGC style with varying sentiment (e.g. "This product is decent, but could be better" to "Absolutely love this, best purchase ever!") with clear customer names (include mentions of specific variants or options in some reviews)
         
         Additionally, generate ad copy (do not reference target audience in any of these):
-        - Exactly 3 Facebook Ads, each with:
+        - Exactly 5 Facebook Ads, each with:
           * A compelling description (max 125 characters) that focuses on benefits, features, or price point
           * An attention-grabbing sub-heading (max 40 characters)
           * Optimize for conversion with broad appeal
         
-        - 3 Instagram captions, each:
+        - 5 Instagram captions, each:
           * Engaging and visual-focused (max 200 characters)
           * Include relevant hashtags
           * Optimize for Instagram's style with emojis and casual tone

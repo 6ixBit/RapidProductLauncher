@@ -175,43 +175,32 @@ const productDescriptionTemplate = (data, images) => `
     </style>
   </head>
   <body>
-     <div style="text-align: center; margin: 20px 0;">
-       <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 24px;">
-         <p style="font-weight: 600; font-size: 14px; margin: 0;">Rated 5/5</p>
-         <img
-           src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-5.svg"
-           alt="5-Star Rating"
-           width="120"
-           height="24"
-         />
-         <p style="font-weight: 700; color: #4a5568; font-size: 14px; margin: 0;">TrustPilot</p>
-       </div>
 
-      <div style="display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto; padding: 0 20px;">
-        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-            <svg style="width: 40px; height: 40px; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-          </svg>
-          <h3 style="font-weight: 600; font-size: 14px;">Fast Shipping</h3>
-        </div>
-
-        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-          <svg class="w-10 h-10" style="width: 40px; height: 40px; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <h3 style="font-weight: 600; font-size: 14px;">Satisfaction Guaranteed</h3>
-        </div>
-
-        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-            <svg style="width: 40px; height: 40px; margin-bottom: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-          </svg>
-          <h3 style="font-weight: 600; font-size: 14px;">24/7 Support</h3>
-        </div>
+    <div style="text-align: center; margin: 20px 0;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 24px;">
+    
+        <p style="font-weight: 600; font-size: 14px; margin: 0;">Rated 5/5 Excellent</p>
+        <img
+          src="https://cdn.trustpilot.net/brand-assets/4.1.0/stars/stars-5.svg"
+          alt="5-Star Rating"
+          width="120"
+          height="24"
+        />
+        <p style="font-weight: 700; color: #4a5568; font-size: 14px; margin: 0;">TrustPilot</p>
       </div>
     </div>
-    <p>${data.description}</p>
 
+      ${
+        data.subheader
+          ? `
+      <h2 style="font-size: 1.25rem; color: #4B5563; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: normal; line-height: 1.4;">
+        ${data.subheader}
+      </h2>
+    `
+          : ''
+      }
+
+    <p>${data.description}</p>
 
     <div class="feature-section">
       <h2 style="text-align: center; font-size: 1.8em; margin-bottom: 24px;">Why You'll Love This Product</h2>
@@ -220,7 +209,7 @@ const productDescriptionTemplate = (data, images) => `
         .slice(0, Math.min(3, data.keyPoints.length))
         .map(
           (image, index) => `
-        <div class="feature-container">
+        <div class="feature-container" style="flex-direction: ${index % 2 === 0 ? 'row' : 'row-reverse'};">
           <div class="feature-image">
             <img 
               src="${image}"
@@ -237,6 +226,35 @@ const productDescriptionTemplate = (data, images) => `
       `,
         )
         .join('')}
+    </div>
+
+    <div style="display: flex; justify-content: space-between; max-width: 800px; margin: 0 auto; padding: 0 20px;">
+      <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+        <svg style="width: 40px; height: 40px; margin-bottom: 8px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+          <path d="M112 0C85.5 0 64 21.5 64 48l0 48L16 96c-8.8 0-16 7.2-16 16s7.2 16 16 16l48 0 208 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L64 160l-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l16 0 176 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L64 224l-48 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l48 0 144 0c8.8 0 16 7.2 16 16s-7.2 16-16 16L64 288l0 128c0 53 43 96 96 96s96-43 96-96l128 0c0 53 43 96 96 96s96-43 96-96l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64 0-32 0-18.7c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7L416 96l0-48c0-26.5-21.5-48-48-48L112 0zM544 237.3l0 18.7-128 0 0-96 50.7 0L544 237.3zM160 368a48 48 0 1 1 0 96 48 48 0 1 1 0-96zm272 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0z"/>
+        </svg>
+        <h3 style="font-weight: 600; font-size: 14px;">Fast Shipping</h3>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+        <img 
+          src="https://img.icons8.com/pulsar-color/48/instagram-check-mark.png" 
+          alt="Verified Badge"
+          width="40" 
+          height="40" 
+          style="margin-bottom: 8px;"
+          loading="lazy"
+          onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22 fill=%22%231DA1F2%22/><path d=%22M9 12l2 2 4-4%22 stroke=%22white%22 stroke-width=%222%22 fill=%22none%22/></svg>';"
+        />
+        <h3 style="font-weight: 600; font-size: 14px;">Satisfaction Guaranteed</h3>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+        <svg style="width: 40px; height: 40px; margin-bottom: 8px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/>
+        </svg>
+        <h3 style="font-weight: 600; font-size: 14px;">24/7 Support</h3>
+      </div>
     </div>
 
     <div class="reviews">
@@ -269,6 +287,10 @@ const productDescriptionTemplate = (data, images) => `
   </body>
 </html>
 `;
+
+//TODO: Make a sports version of this template or a fashion version of this template
+//TODO: So that users can choose a template that matches their store
+//TODO: Allow user to enter a primary colour that will be used in the template
 
 export async function POST(req: NextRequest) {
   try {

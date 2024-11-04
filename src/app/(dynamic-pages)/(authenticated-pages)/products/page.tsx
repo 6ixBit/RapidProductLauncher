@@ -44,7 +44,6 @@ export default function ProductsPage() {
     const loadMoreRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
-    // Convert to useInfiniteQuery
     const {
         data,
         fetchNextPage,

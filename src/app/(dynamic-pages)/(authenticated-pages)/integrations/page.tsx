@@ -14,7 +14,6 @@ import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supab
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -22,6 +21,7 @@ interface StoreIntegration {
   id: string;
   name: string;
   isConnected: boolean;
+  myshopify_domain: string;
 }
 
 const StoreCard = ({
@@ -79,18 +79,16 @@ const StoreCard = ({
           className="w-12 h-12 text-green-500 mr-2"
         />
       </div>
-      <div className="flex items-center">
+      <div className="flex flex-col items-center mb-2">
         <h2 className="text-xl font-semibold">{store.name}</h2>
-        {store.isConnected && (
-          <CheckCircle className="pl-2 w-6 h-6 text-green-500" />
-        )}
+        <span className="text-sm text-gray-500 mt-1">{store.myshopify_domain}</span>
+
       </div>
       <button
-        className={`mt-4 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-          store.isConnected
-            ? 'bg-red-500 hover:bg-red-600 text-white'
-            : 'bg-blue-500 hover:bg-blue-600 text-white'
-        }`}
+        className={`mt-4 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${store.isConnected
+          ? 'bg-red-500 hover:bg-red-600 text-white'
+          : 'bg-blue-500 hover:bg-blue-600 text-white'
+          }`}
         onClick={
           store.isConnected ? () => handleDisconnectClick(store) : undefined
         }
@@ -147,7 +145,7 @@ const IntegrationsPage = () => {
 
       const { data, error } = await supabaseClient
         .from('shopify_integrations')
-        .select('id, shopify_store_url, is_connected')
+        .select('id, shopify_store_url, is_connected, myshopify_domain')
         .eq('user_id', user.id);
 
       if (error) throw error;
@@ -156,6 +154,7 @@ const IntegrationsPage = () => {
         id: store.id.toString(),
         name: store.shopify_store_url,
         isConnected: store.is_connected,
+        myshopify_domain: store.myshopify_domain,
       }));
     },
     enabled: !!user,
