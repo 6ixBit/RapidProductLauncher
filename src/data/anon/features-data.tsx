@@ -38,9 +38,8 @@ const files = [
 
 export const featuresData = [
   {
-    name: 'Save your files',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'One Click Product Listing',
+    description: "Go from your product research spreadsheet to Shopify listing within a few minutes.",
     background: (
       <Command
         value="0"

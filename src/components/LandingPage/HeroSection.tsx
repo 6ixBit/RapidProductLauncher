@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import HeroImage from '/public/images/hero.jpeg';
@@ -13,7 +13,7 @@ export default function HeroSection() {
             <div className="flex items-center  gap-2 py-1 px-3 w-fit rounded-full border border-border dark:border-none bg-secondary">
               <Sparkles size={16} />
               <span className="text-md font-medium lg:text-base">
-                Introducing
+                Import, Publish, Profit.
               </span>
               <ArrowRight size={16} />
             </div>
@@ -22,18 +22,14 @@ export default function HeroSection() {
             Rapid Product Launcher
           </h1>
           <p className="text-slate-500 leading-loose lg:text-lg lg:leading-relaxed max-w-4xl">
-            Welcome to Rapid Product Launcher: Your Gateway to Innovation.
-            Discover the Future of Excellence and Elevate Your Experience.
+            Test Ecom products 10x faster than your competition with AI.
           </p>
-          <div className="flex flex-col md:flex-row items-center max-w-md w-full  gap-3 pt-2 ">
-            <Button className="w-full">
-              Log In
+          <div className="flex flex-col md:flex-row items-center justify-center max-w-md w-full  gap-3 pt-2 ">
+            <Button className="w-1/2">
+              Get started for free
               <ArrowRight size={16} className="ml-2" />
             </Button>
-            <Button className="w-full" variant={'secondary'}>
-              Learn More
-              <ChevronRight size={16} className="ml-2" />
-            </Button>
+
           </div>
         </div>
         <div className="rounded-md border-2 flex-1 overflow-hidden border-border shadow-sm">

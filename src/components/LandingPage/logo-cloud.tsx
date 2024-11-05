@@ -7,7 +7,7 @@ export default function LogoCloud() {
     <section className="flex justify-center items-center text-center  max-w-6xl mx-auto overflow-hidden">
       <div className="space-y-2">
         <p className="text-gray-500 text-xl font-semibold">
-          Trusted by 150+ Companies
+          Leveraged by 100+ Companies
         </p>
         <div className="w-full">
           <div className="mx-auto w-full px-4 md:px-8">

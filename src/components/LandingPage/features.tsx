@@ -8,9 +8,9 @@ export default function Features() {
     <section className="py-16 max-w-6xl flex flex-col justify-center items-center  mx-auto space-y-10 overflow-hidden px-6">
       <TitleBlock
         icon={<Sparkles size={16} />}
-        title="Discover Next-Level Features"
+        title="Save HOURS of manual product listing"
         section="Features"
-        subtitle="Discover the essential insights into cutting-edge advancements. Our next-level features guide reveals the essentials for staying ahead."
+        subtitle="Simply paste links from AliExpress or Etsy and our advanced AI will generate optimized product details, marketing copy, and pricing to instantly publish on Shopify."
       />
       <BentoGrid className="grid-cols-1 md:grid-cols-2">
         {featuresData.slice(0, 2).map((feature, idx) => (

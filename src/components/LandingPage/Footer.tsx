@@ -23,7 +23,7 @@ export function Footer() {
                 </div>
               </Link>
               <p className="max-w-[350px]">
-                Acme Inc. 123 Acme Street, London, UK, SW1A 1AA
+                Launcher Faster Than The Competition.
               </p>
             </div>
             <div className="flex lg:justify-end w-full items-start gap-10 lg:gap-20 flex-wrap">
@@ -46,13 +46,13 @@ export function Footer() {
           <div className="w-full h-[1px] bg-slate-200"></div>
           <div className="flex flex-col gap-8 lg:flex-row justify-between items-center py-16 w-full">
             <p className="text-slate-500 w-full text-sm">
-              © 2023
+              © 2025
               <a
                 href="https://rapidproductlauncher.ai/"
                 className="underline mx-2 decoration-slate-500 underline-offset-1 dec"
                 target="_blank"
               >
-                Arni Creative Private Limited.
+                Rapid Product Launcher
               </a>
               All Rights Reserved
             </p>
