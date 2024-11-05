@@ -144,3 +144,64 @@ export const getProductShopifyStores = async (productId: string) => {
     return { data: null, error };
   }
 };
+
+export const cleanStoreUrl = (url: string) => {
+  return url.replace(/^(https?:\/\/)?(www\.)?/, '');
+};
+
+export const getProductData = async (supabase: any, productID: string) => {
+  const { data, error } = await supabase
+    .from('html_templates')
+    .select('*')
+    .eq('id', productID)
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const getUserOrganization = async (supabase: any, userId: string) => {
+  const { data: orgMember, error } = await supabase
+    .from('organization_members')
+    .select('organization_id')
+    .eq('member_id', userId)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .single();
+
+  if (error) throw error;
+  return orgMember.organization_id;
+};
+
+export const generateNewProduct = async (
+  source: string,
+  url: string,
+  language: string,
+  userId: string,
+  organizationId: string,
+): Promise<string> => {
+  const response = await fetch('/api/fetch-aliexpress', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      source,
+      url,
+      language,
+      user_id: userId,
+      organization_id: organizationId,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  const data = await response.json();
+  if (!data.productID) {
+    throw new Error('Product ID not received in the response');
+  }
+
+  return data.productID;
+};

@@ -20,23 +20,29 @@ import {
 } from '@/components/ui/tooltip';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { faFacebook, faInstagram, faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faBolt, faCircleCheck, faCircleInfo, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faShopify } from '@fortawesome/free-brands-svg-icons';
+import { faBolt, faCircleCheck, faCircleInfo, faEye, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Calendar, ExternalLink, Eye, ImageIcon, Link as LinkIcon, SquarePen } from 'lucide-react';
+import { ArrowLeft, Calendar, ExternalLink, Link as LinkIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { addToProductShopifyIntegrations, deleteProduct, formatDate, getConnectedShopifyStores, getProductShopifyStores, productHasBeenImportedToShopify } from './utils';
-
-// Add this helper function at the top of your file
-const cleanStoreUrl = (url: string) => {
-    return url.replace(/^(https?:\/\/)?(www\.)?/, '');
-};
-
+import { NavigationTabs } from '../../tabs';
+import {
+    addToProductShopifyIntegrations,
+    cleanStoreUrl,
+    deleteProduct,
+    formatDate,
+    generateNewProduct,
+    getConnectedShopifyStores,
+    getProductData,
+    getProductShopifyStores,
+    getUserOrganization,
+    productHasBeenImportedToShopify,
+} from './utils';
 export default function ProductPage() {
     const params = useParams();
     const router = useRouter();
@@ -53,36 +59,13 @@ export default function ProductPage() {
     // Use React Query for fetching the default organization ID
     const { data: organizationId } = useQuery({
         queryKey: ['userOrganization', user.id],
-        queryFn: async () => {
-            const { data: orgMember, error } = await supabase
-                .from('organization_members')
-                .select('organization_id')
-                .eq('member_id', user.id)
-                .order('created_at', { ascending: true })
-                .limit(1)
-                .single();
-
-            if (error) {
-                throw error;
-            }
-
-            return orgMember.organization_id;
-        },
+        queryFn: () => getUserOrganization(supabase, user.id)
     });
 
     // Replace useState and useEffect with useQuery for product data
     const { data: productData, isLoading, error } = useQuery({
         queryKey: ['product', productID],
-        queryFn: async () => {
-            const { data, error } = await supabase
-                .from('html_templates')
-                .select('*')
-                .eq('id', productID)
-                .single();
-
-            if (error) throw error;
-            return data;
-        },
+        queryFn: () => getProductData(supabase, productID)
     });
 
     // Add this near your other state declarations
@@ -214,7 +197,10 @@ export default function ProductPage() {
         onSuccess: (data) => {
             // Dismiss all toasts (including loading) and show success
             toast.dismiss();
+
+            // Invalidate both queries to trigger a refresh
             queryClient.invalidateQueries({ queryKey: ['product', productID] });
+            queryClient.invalidateQueries({ queryKey: ['productShopifyStores', productID] });
 
             toast(
                 <div className="flex items-center justify-between w-full">
@@ -280,72 +266,13 @@ export default function ProductPage() {
         if (!user || !organizationId) return;
 
         try {
-            const response = await fetch('/api/fetch-aliexpress', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    source,
-                    url,
-                    language,
-                    user_id: user.id,
-                    organization_id: organizationId,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-
-            const data = await response.json();
-            if (data.productID) {
-                router.push(`/product/${data.productID}/info`);
-            } else {
-                console.error('Product ID not received in the response');
-            }
+            const productID = await generateNewProduct(source, url, language, user.id, organizationId);
+            router.push(`/product/${productID}/info`);
         } catch (error) {
             console.error('Error generating product:', error);
         }
     };
-    const tabs = [
-        {
-            label: 'Product Info',
-            href: `/product/${productID}/info`,
-            icon: <SquarePen />,
-        },
-        // {
-        //     label: 'Page Template',
-        //     href: `/product/${productID}/template`,
-        //     icon: <Code />,
-        // },
-        {
-            label: 'Preview',
-            href: `/product/${productID}/preview`,
-            icon: <Eye style={{ color: '#000000' }} />,
-        },
-        {
-            label: 'Facebook Creatives',
-            href: `/product/${productID}/facebook-creatives`,
-            icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
-        },
-        {
-            label: 'Instagram Creatives',
-            href: `/product/${productID}/instagram-creatives`,
-            icon: (
-                <FontAwesomeIcon
-                    icon={faInstagram}
-                    size="lg"
-                    style={{ color: '#E1306C' }}
-                />
-            ),
-        },
-        {
-            label: "Media Center",
-            href: `/product/${productID}/media-center`,
-            icon: <ImageIcon style={{ color: '#4B5563' }} />
-        }
-    ];
+
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-2">
@@ -359,7 +286,7 @@ export default function ProductPage() {
                 </button>
                 <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0 w-full">
                     <div className="w-full overflow-x-auto">
-                        <TabsNavigation tabs={tabs} />
+                        <TabsNavigation tabs={NavigationTabs(productID)} />
                     </div>
                     <button
                         className="hidden lg:flex items-center px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
@@ -506,8 +433,8 @@ export default function ProductPage() {
                                                         importToShopifyMutation.mutate({ selectedStore });
                                                         setDropdownOpen(false);
                                                     }}
-                                                    className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors"
-                                                    disabled={!selectedStoreId}
+                                                    className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    disabled={!selectedStoreId || selectedStoreId === ''}
                                                 >
                                                     Import
                                                 </button>
@@ -516,11 +443,11 @@ export default function ProductPage() {
 
                                         {importedStores && importedStores.length > 0 && (
                                             <>
-                                                <DropdownMenuItem className="py-4">
+                                                <div className="p-4">
                                                     <div className="flex flex-col w-full gap-2">
                                                         <div className="flex items-center text-gray-700">
                                                             <FontAwesomeIcon icon={faStore} className="mr-2" />
-                                                            View on Store
+                                                            Manage Product
                                                         </div>
 
                                                         <select
@@ -551,23 +478,19 @@ export default function ProductPage() {
                                                                     }
                                                                     setDropdownOpen(false);
                                                                 }}
-                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors"
-                                                                disabled={!selectedViewStoreId}
+                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                disabled={!selectedViewStoreId || selectedViewStoreId === ''}
                                                             >
-                                                                <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                                <FontAwesomeIcon icon={faEye} className="mr-2" />
                                                                 View
                                                             </button>
 
                                                             <button
                                                                 onClick={(e) => {
-                                                                    console.log("selectedViewStoreId", selectedViewStoreId)
                                                                     e.preventDefault();
                                                                     e.stopPropagation();
-                                                                    console.log("imported stores", importedStores)
                                                                     const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
                                                                     if (store) {
-                                                                        console.log(productData)
-                                                                        console.log('store', store)
                                                                         window.open(
                                                                             `https://admin.shopify.com/store/${store.myshopify_domain.replace('.myshopify.com', '')}/products/${store?.shopify_product_id}`,
                                                                             '_blank'
@@ -575,21 +498,21 @@ export default function ProductPage() {
                                                                     }
                                                                     setDropdownOpen(false);
                                                                 }}
-                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors"
-                                                                disabled={!selectedViewStoreId}
+                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                disabled={!selectedViewStoreId || selectedViewStoreId === ''}
                                                             >
                                                                 <FontAwesomeIcon icon={faPencil} className="mr-2" />
                                                                 Edit
                                                             </button>
                                                         </div>
                                                     </div>
-                                                </DropdownMenuItem>
+                                                </div>
                                             </>
                                         )}
 
                                         <DropdownMenuItem
                                             onClick={() => setShowDeleteModal(true)}
-                                            className="py-4 text-red-600 hover:text-red-700"
+                                            className="p-4 text-red-600"
                                         >
                                             <FontAwesomeIcon icon={faTrash} className="mr-2" />
                                             Delete Product
