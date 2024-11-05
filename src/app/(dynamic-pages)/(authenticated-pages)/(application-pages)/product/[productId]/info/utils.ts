@@ -21,7 +21,6 @@ export const getConnectedShopifyStores = async (userId: string) => {
 
 export const productHasBeenImportedToShopify = async (
   productId: string,
-  shopifyStoreId: number | null,
   shopifyProductUrl: string | null,
   shopifyProductId: string | null,
 ) => {
@@ -31,7 +30,6 @@ export const productHasBeenImportedToShopify = async (
       .from('html_templates')
       .update({
         is_imported_to_shopify: true,
-        shopify_store_id: shopifyStoreId,
         shopify_product_url: shopifyProductUrl,
         shopify_product_id: shopifyProductId,
       })
@@ -53,6 +51,8 @@ export const addToProductShopifyIntegrations = async (
   productId: string,
   shopifyStoreId: number,
   productUrl: string,
+  shopifyProductId: string,
+  shopifyProductHandle: string,
 ) => {
   try {
     // Update the product to mark it as imported to Shopify in our ref table
@@ -62,6 +62,8 @@ export const addToProductShopifyIntegrations = async (
         product_id: productId,
         shopify_integration_id: shopifyStoreId,
         product_url: productUrl,
+        shopify_product_id: shopifyProductId,
+        shopify_product_handle: shopifyProductHandle,
       });
 
     if (updateError) {
@@ -112,6 +114,8 @@ export const getProductShopifyStores = async (productId: string) => {
         `
         shopify_integration_id,
         product_url,
+        shopify_product_id,
+        shopify_product_handle,
         shopify_integrations (
           id,
           shopify_store_url,
@@ -131,6 +135,8 @@ export const getProductShopifyStores = async (productId: string) => {
     const stores = data.map((item) => ({
       ...item.shopify_integrations,
       product_url: item.product_url,
+      shopify_product_id: item.shopify_product_id,
+      shopify_product_handle: item.shopify_product_handle,
     }));
     return { data: stores, error: null };
   } catch (error) {

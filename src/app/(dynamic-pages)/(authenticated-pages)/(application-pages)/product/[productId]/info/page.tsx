@@ -108,7 +108,6 @@ export default function ProductPage() {
     // Mutation for importing to Shopify
     const importToShopifyMutation = useMutation({
         mutationFn: async ({ selectedStore }: { selectedStore: any }) => {
-            // Show loading toast when mutation starts
             toast.loading('Importing product to Shopify...', {
                 duration: Infinity, // Will be dismissed when mutation completes
             });
@@ -201,12 +200,13 @@ export default function ProductPage() {
 
 
             const importedProduct = await response.json();
-            await addToProductShopifyIntegrations(productID, selectedStore.id, importedProduct.url);
+
+            await addToProductShopifyIntegrations(productID, selectedStore.id, importedProduct.url, importedProduct.id, importedProduct.handle);
+            //TODO: Remove as it might be redudant then Update has been imported flag
             const shopifyStoreUrl = await productHasBeenImportedToShopify(
                 productID,
                 selectedStore.id,
                 importedProduct.url,
-                importedProduct.id,
             );
 
             return { importedProduct, shopifyStoreUrl };
@@ -560,13 +560,16 @@ export default function ProductPage() {
 
                                                             <button
                                                                 onClick={(e) => {
+                                                                    console.log("selectedViewStoreId", selectedViewStoreId)
                                                                     e.preventDefault();
                                                                     e.stopPropagation();
+                                                                    console.log("imported stores", importedStores)
                                                                     const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
                                                                     if (store) {
-                                                                        console.log(productData?.shopify_product_id)
+                                                                        console.log(productData)
+                                                                        console.log('store', store)
                                                                         window.open(
-                                                                            `https://admin.shopify.com/store/${store.myshopify_domain}/products/${productData?.shopify_product_id}`,
+                                                                            `https://admin.shopify.com/store/${store.myshopify_domain.replace('.myshopify.com', '')}/products/${store?.shopify_product_id}`,
                                                                             '_blank'
                                                                         );
                                                                     }

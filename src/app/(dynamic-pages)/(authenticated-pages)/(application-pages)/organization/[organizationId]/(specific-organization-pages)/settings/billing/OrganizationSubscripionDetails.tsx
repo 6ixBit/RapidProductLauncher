@@ -211,10 +211,10 @@ export async function OrganizationSubscripionDetails({
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <T.H3 className="text-gray-900 dark:text-slate-100 ">Subscription</T.H3>
+        <T.H3 className="text-gray-900">Subscription</T.H3>
         <T.P className="text-muted-foreground">
           You are currently on the{' '}
-          <span className="text-blue-500 dark:text-blue-400">
+          <span className="text-blue-500">
             {subscriptionDetails.title}{' '}
             <span>{subscriptionDetails.sidenote}</span>
           </span>
