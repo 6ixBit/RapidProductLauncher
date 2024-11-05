@@ -1,6 +1,6 @@
 import { fetchSlimOrganizations } from '@/data/user/organizations';
 import { cn } from '@/utils/cn';
-import { DollarSign, Home, Layout, Plug, Settings } from 'lucide-react';
+import { DollarSign, HelpCircle, Home, Layout, Plug, Settings } from 'lucide-react';
 import { SidebarLink } from './SidebarLink';
 import { SidebarLogoAndToggle } from './_components/SidebarLogo';
 
@@ -18,18 +18,18 @@ export async function UserSidebar() {
           <SidebarLink
             label="Dashboard"
             href={`/organization/${organizationId}`}
-            icon={<Home className="h-5 w-5" />}
+            icon={<Home className="h-5 w-5 text-blue-500" />}
           />
         )}
         <SidebarLink
           label="Products"
           href={`/products`}
-          icon={<Layout className="h-5 w-5" />}
+          icon={<Layout className="h-5 w-5 text-blue-600" />}
         />
         <SidebarLink
           label="Store Integrations"
           href={`/integrations`}
-          icon={<Plug className="h-5 w-5" />}
+          icon={<Plug className="h-5 w-5 text-blue-500" />}
         />
       </div>
 
@@ -38,6 +38,11 @@ export async function UserSidebar() {
           label="Billing"
           href={`/organization/${organizationId}/settings/billing`}
           icon={<DollarSign className="h-5 w-5" />}
+        />
+        <SidebarLink
+          label="Help"
+          href="/help"
+          icon={<HelpCircle className="h-5 w-5" />}
         />
         <SidebarLink
           label="Account Settings"

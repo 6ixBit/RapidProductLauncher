@@ -8,8 +8,7 @@ type SidebarLinkProps = {
   href: string;
   icon: JSX.Element;
 };
-
-export function SidebarLink({ label, href, icon }: SidebarLinkProps) {
+export function SidebarLink({ label, href, icon, labelColor }: SidebarLinkProps & { labelColor?: string }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -37,6 +36,7 @@ export function SidebarLink({ label, href, icon }: SidebarLinkProps) {
           isActive
             ? 'text-blue-600 font-medium'
             : 'group-hover:text-foreground',
+          labelColor
         )}
         href={href}
       >
