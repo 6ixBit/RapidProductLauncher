@@ -132,20 +132,15 @@ export function Login({
         />
       ) : (
         <div className="space-y-8 bg-background p-6 rounded-lg shadow">
+          <h2 className="text-2xl font-bold mb-4 text-center">Rapid Product Launcher</h2>
           <Tabs defaultValue="password" className="md:min-w-[400px]">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-3 mb-10">
               <TabsTrigger value="password">Password</TabsTrigger>
               <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
               <TabsTrigger value="social-login">Social Login</TabsTrigger>
             </TabsList>
             <TabsContent value="password">
               <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>Login to Rapid Product Launcher</CardTitle>
-                  <CardDescription>
-                    Login with the account you used to signup.
-                  </CardDescription>
-                </CardHeader>
                 <CardContent className="space-y-2 p-0">
                   <EmailAndPassword
                     isLoading={passwordMutation.isLoading}

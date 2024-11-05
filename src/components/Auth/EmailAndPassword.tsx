@@ -76,7 +76,7 @@ export const EmailAndPassword = ({
             <div className="text-sm">
               <Link
                 href="/sign-up"
-                className="font-medium text-muted-foreground hover:text-foreground"
+                className="font-medium text-blue-500 hover:text-blue-700"
               >
                 Sign up instead?
               </Link>
@@ -85,7 +85,7 @@ export const EmailAndPassword = ({
             <div className="text-sm">
               <Link
                 href="/login"
-                className="font-medium text-muted-foreground hover:text-foreground"
+                className="font-medium text-blue-500 hover:text-blue-700"
               >
                 Login instead?
               </Link>
@@ -96,7 +96,7 @@ export const EmailAndPassword = ({
             <div className="text-sm">
               <Link
                 href="/forgot-password"
-                className="font-medium text-muted-foreground"
+                className="font-medium text-blue-500 hover:text-blue-700"
               >
                 Forgot your password?
               </Link>
@@ -120,7 +120,7 @@ export const EmailAndPassword = ({
               type="submit"
               variant={'default'}
               className={classNames(
-                'flex w-full justify-center rounded-lg border border-transparent py-2 text-foreground px-4 text-sm font-medium  shadow-sm',
+                'flex w-full justify-center rounded-lg border border-transparent py-2 text-foreground px-4 text-sm font-medium text-black shadow-sm mt-12',
               )}
             >
               {view === 'sign-in' ? 'Login' : 'Sign up'}
