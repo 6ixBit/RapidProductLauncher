@@ -587,18 +587,24 @@ export type Database = {
           product_id: string
           shopify_integration_id: number
           product_url: string
+          shopify_product_id: string
+          shopify_product_handle: string
         }
         Insert: {
           id?: never
           product_id: string
           shopify_integration_id: number
           product_url: string
+          shopify_product_id: string
+          shopify_product_handle: string
         }
         Update: {
           id?: never
           product_id?: string
           shopify_integration_id?: number
           product_url?: string
+          shopify_product_id?: string
+          shopify_product_handle?: string
         }
         Relationships: [
           {

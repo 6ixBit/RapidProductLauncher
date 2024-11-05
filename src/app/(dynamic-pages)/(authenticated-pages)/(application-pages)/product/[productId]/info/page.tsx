@@ -43,6 +43,7 @@ import {
     getUserOrganization,
     productHasBeenImportedToShopify,
 } from './utils';
+
 export default function ProductPage() {
     const params = useParams();
     const router = useRouter();
@@ -108,7 +109,6 @@ export default function ProductPage() {
 
             // Case 1: Both colors and sizes
             if (colorVariants.length && sizeVariants.length) {
-                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never[]' due to empty array type inference
                 variants = sizeVariants.flatMap(size =>
                     colorVariants.map(color => ({
                         option1: `${color.text} / ${size}`,
@@ -123,7 +123,6 @@ export default function ProductPage() {
             }
             // Case 2: Only colors
             else if (colorVariants.length) {
-                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never'
                 variants = colorVariants.map(color => ({
                     option1: color.text,
                     price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
@@ -133,7 +132,6 @@ export default function ProductPage() {
             }
             // Case 3: Only sizes
             else if (sizeVariants.length) {
-                // @ts-expect-error Type '{ option1: string; price: number; }[]' is not assignable to type 'never'
                 variants = sizeVariants.map(size => ({
                     option1: size,
                     price: parseFloat(productData?.product_price?.replace('$', '') || '0'),
@@ -490,9 +488,10 @@ export default function ProductPage() {
                                                                     e.preventDefault();
                                                                     e.stopPropagation();
                                                                     const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
+                                                                    console.log('store', store);
                                                                     if (store) {
                                                                         window.open(
-                                                                            `https://admin.shopify.com/store/${store.myshopify_domain.replace('.myshopify.com', '')}/products/${store?.shopify_product_id}`,
+                                                                            `https://admin.shopify.com/store/${store.myshopify_domain?.replace('.myshopify.com', '')}/products/${store?.shopify_product_id}`,
                                                                             '_blank'
                                                                         );
                                                                     }

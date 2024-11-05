@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center bg-amber-50 text-amber-700 px-4 py-2 rounded-full border border-amber-200 shadow-sm hover:bg-amber-100 transition-colors">
                 <FontAwesomeIcon icon={faBell} className="text-amber-600" />
-                <span className="text-sm font-medium ml-2">
+                <span className="text-sm font-medium px-4">
                   Welcome Founders, the more you test the quicker you'll find winners, execution is everything ⚔️
                 </span>
               </span>
