@@ -160,7 +160,7 @@ async function ChoosePricingTable({
                       />
                     </>
                   ) : (
-                    <T.P className="py-2 px-4 bg-primary-background dark:bg-dark-primary-background text-sm text-primary-text dark:text-dark-primary-text rounded-lg">
+                    <T.P className="py-2 px-4 bg-primary-background text-sm text-primary-text rounded-lg">
                       Contact your administrator to upgrade plan
                     </T.P>
                   )}

@@ -25,7 +25,7 @@ export default function LogoCloud() {
                       width={112}
                       height={40}
                       src={logo.url}
-                      className=" px-2 invert-[50%] brightness-200 grayscale-[100%] dark:grayscale-0 dark:invert-[50%]  "
+                      className=" px-2 invert-[50%] brightness-200 grayscale-[100%]  "
                       alt={`${logo.name}`}
                     />
                   </a>

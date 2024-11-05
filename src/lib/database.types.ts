@@ -581,6 +581,42 @@ export type Database = {
         }
         Relationships: []
       }
+      product_shopify_integrations: {
+        Row: {
+          id: number
+          product_id: string
+          shopify_integration_id: number
+          product_url: string
+        }
+        Insert: {
+          id?: never
+          product_id: string
+          shopify_integration_id: number
+          product_url: string
+        }
+        Update: {
+          id?: never
+          product_id?: string
+          shopify_integration_id?: number
+          product_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_shopify_integrations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "html_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_shopify_integrations_shopify_integration_id_fkey"
+            columns: ["shopify_integration_id"]
+            isOneToOne: false
+            referencedRelation: "shopify_integrations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never

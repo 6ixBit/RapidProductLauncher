@@ -49,6 +49,33 @@ export const productHasBeenImportedToShopify = async (
   }
 };
 
+export const addToProductShopifyIntegrations = async (
+  productId: string,
+  shopifyStoreId: number,
+  productUrl: string,
+) => {
+  try {
+    // Update the product to mark it as imported to Shopify in our ref table
+    const { error: updateError } = await supabaseUserClientComponentClient
+      .from('product_shopify_integrations')
+      .insert({
+        product_id: productId,
+        shopify_integration_id: shopifyStoreId,
+        product_url: productUrl,
+      });
+
+    if (updateError) {
+      console.error('Error updating product:', updateError);
+      return null;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in updating product import status:', error);
+    return null;
+  }
+};
+
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', {
@@ -74,5 +101,40 @@ export const deleteProduct = async (productId: string) => {
   } catch (error) {
     console.error('Error in deleteProduct:', error);
     return { success: false, error };
+  }
+};
+
+export const getProductShopifyStores = async (productId: string) => {
+  try {
+    const { data, error } = await supabaseUserClientComponentClient
+      .from('product_shopify_integrations')
+      .select(
+        `
+        shopify_integration_id,
+        product_url,
+        shopify_integrations (
+          id,
+          shopify_store_url,
+          myshopify_domain,
+          admin_api_key
+        )
+      `,
+      )
+      .eq('product_id', productId);
+
+    if (error) {
+      console.error('Error fetching product stores:', error);
+      return { data: null, error };
+    }
+
+    // Transform the data to get the stores directly with product_url
+    const stores = data.map((item) => ({
+      ...item.shopify_integrations,
+      product_url: item.product_url,
+    }));
+    return { data: stores, error: null };
+  } catch (error) {
+    console.error('Error in getProductShopifyStores:', error);
+    return { data: null, error };
   }
 };

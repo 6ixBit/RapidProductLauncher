@@ -26,14 +26,14 @@ export default function Integration() {
             width={80}
             height={80}
             alt="logo"
-            className="dark:hidden block "
+            className=" block "
           />
           <Image
             src={darkLogo}
             width={80}
             height={80}
             alt="logo"
-            className="hidden dark:block  "
+            className="hidden  "
           />
         </span>
 

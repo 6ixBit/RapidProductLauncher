@@ -30,7 +30,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { deleteProduct, formatDate, getConnectedShopifyStores, productHasBeenImportedToShopify } from './utils';
+import { addToProductShopifyIntegrations, deleteProduct, formatDate, getConnectedShopifyStores, getProductShopifyStores, productHasBeenImportedToShopify } from './utils';
 
 // Add this helper function at the top of your file
 const cleanStoreUrl = (url: string) => {
@@ -48,6 +48,7 @@ export default function ProductPage() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedStoreId, setSelectedStoreId] = useState<string>('');
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [selectedViewStoreId, setSelectedViewStoreId] = useState<string>('');
 
     // Use React Query for fetching the default organization ID
     const { data: organizationId } = useQuery({
@@ -89,6 +90,16 @@ export default function ProductPage() {
         queryKey: ['shopifyStores', user.id],
         queryFn: async () => {
             const { data, error } = await getConnectedShopifyStores(user.id);
+            if (error) throw error;
+            return data || [];
+        },
+    });
+
+    // Add this query alongside your other queries
+    const { data: importedStores } = useQuery({
+        queryKey: ['productShopifyStores', productID],
+        queryFn: async () => {
+            const { data, error } = await getProductShopifyStores(productID);
             if (error) throw error;
             return data || [];
         },
@@ -188,7 +199,9 @@ export default function ProductPage() {
                 throw new Error(result.error || 'Failed to import product to Shopify');
             }
 
+
             const importedProduct = await response.json();
+            await addToProductShopifyIntegrations(productID, selectedStore.id, importedProduct.url);
             const shopifyStoreUrl = await productHasBeenImportedToShopify(
                 productID,
                 selectedStore.id,
@@ -501,30 +514,72 @@ export default function ProductPage() {
                                             </div>
                                         </div>
 
-                                        {productData?.shopify_product_url && (
+                                        {importedStores && importedStores.length > 0 && (
                                             <>
-                                                <DropdownMenuItem asChild className="py-4">
-                                                    <Link
-                                                        href={productData?.shopify_product_url || ''}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center"
-                                                    >
-                                                        <FontAwesomeIcon icon={faStore} className="mr-2" />
-                                                        View on your store
-                                                    </Link>
-                                                </DropdownMenuItem>
+                                                <DropdownMenuItem className="py-4">
+                                                    <div className="flex flex-col w-full gap-2">
+                                                        <div className="flex items-center text-gray-700">
+                                                            <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                            View on Store
+                                                        </div>
 
-                                                <DropdownMenuItem asChild className="py-4">
-                                                    <Link
-                                                        href={`https://admin.shopify.com/store/${productData.shopify_product_url?.split('.')[0].replace('https://', '')}/products/${productData.shopify_product_id}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center"
-                                                    >
-                                                        <FontAwesomeIcon icon={faPencil} className="mr-2" />
-                                                        Edit on Shopify
-                                                    </Link>
+                                                        <select
+                                                            className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
+                                                            value={selectedViewStoreId}
+                                                            onChange={(e) => setSelectedViewStoreId(e.target.value)}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <option value="">Select a store...</option>
+                                                            {importedStores.map(store => (
+                                                                <option key={store.id} value={store.id}>
+                                                                    {cleanStoreUrl(store.shopify_store_url || '')}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+
+                                                        <div className="flex gap-2">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
+                                                                    if (store) {
+                                                                        window.open(
+                                                                            store.product_url,
+                                                                            '_blank'
+                                                                        );
+                                                                    }
+                                                                    setDropdownOpen(false);
+                                                                }}
+                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors"
+                                                                disabled={!selectedViewStoreId}
+                                                            >
+                                                                <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                                View
+                                                            </button>
+
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
+                                                                    if (store) {
+                                                                        console.log(productData?.shopify_product_id)
+                                                                        window.open(
+                                                                            `https://admin.shopify.com/store/${store.myshopify_domain}/products/${productData?.shopify_product_id}`,
+                                                                            '_blank'
+                                                                        );
+                                                                    }
+                                                                    setDropdownOpen(false);
+                                                                }}
+                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors"
+                                                                disabled={!selectedViewStoreId}
+                                                            >
+                                                                <FontAwesomeIcon icon={faPencil} className="mr-2" />
+                                                                Edit
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </DropdownMenuItem>
                                             </>
                                         )}

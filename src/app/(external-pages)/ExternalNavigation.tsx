@@ -25,20 +25,20 @@ export function ExternalNavigation() {
       >
         <div className="flex space-x-8">
           <Link href="/" className="font-bold text-xl ">
-            <div className="relative flex space-x-2 w-10 h-10 md:w-fit items-center justify-center text-foreground dark:-ml-4 -ml-2">
+            <div className="relative flex space-x-2 w-10 h-10 md:w-fit items-center justify-center text-foreground  -ml-2">
               <Image
                 src={acmeLightLogo}
                 width={40}
                 height={40}
                 alt="logo"
-                className="dark:hidden block h-8 w-8"
+                className=" block h-8 w-8"
               />
               <Image
                 src={acmeDarkLogo}
                 width={40}
                 height={40}
                 alt="logo"
-                className="hidden dark:block h-8 w-8"
+                className="hidden h-8 w-8"
               />
               <span className="hidden font-bold lg:inline-block">acme</span>
             </div>

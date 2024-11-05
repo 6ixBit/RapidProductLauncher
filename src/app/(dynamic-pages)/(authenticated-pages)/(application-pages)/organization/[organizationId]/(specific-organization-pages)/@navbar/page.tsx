@@ -24,7 +24,6 @@ export async function generateMetadata({ params }: { params: unknown }) {
 
 async function Title({ organizationId }: { organizationId: string }) {
   const title = await getOrganizationTitle(organizationId);
-  // className="gap-2 ring-0 bg-purple-50 rounded-full dark:bg-slate-800 text-purple-600 font-medium dark:text-slate-400"
 
   return (
     <div className="flex items-center gap-2">

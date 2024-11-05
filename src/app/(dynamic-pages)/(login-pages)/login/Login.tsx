@@ -131,7 +131,7 @@ export function Login({
           resetSuccessMessage={setSuccessMessage}
         />
       ) : (
-        <div className="space-y-8 bg-background p-6 rounded-lg shadow dark:border">
+        <div className="space-y-8 bg-background p-6 rounded-lg shadow">
           <Tabs defaultValue="password" className="md:min-w-[400px]">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="password">Password</TabsTrigger>

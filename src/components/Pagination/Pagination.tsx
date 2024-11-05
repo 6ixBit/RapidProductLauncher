@@ -1,9 +1,9 @@
 'use client';
 
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the total number of pages is 7 or less,
@@ -106,7 +106,7 @@ function PaginationNumber({
       'rounded-l-md': position === 'first' || position === 'single',
       'rounded-r-md': position === 'last' || position === 'single',
       'z-10 bg-blue-600 border-blue-600 text-white': isActive,
-      'hover:bg-gray-100 dark:hover:bg-slate-800':
+      'hover:bg-gray-100':
         !isActive && position !== 'middle',
       'text-gray-300': position === 'middle',
     },

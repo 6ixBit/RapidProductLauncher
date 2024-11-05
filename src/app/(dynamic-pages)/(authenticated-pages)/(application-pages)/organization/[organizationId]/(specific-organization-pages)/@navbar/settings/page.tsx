@@ -20,20 +20,20 @@ export default function OrganizationSettingsNavbar({
         href={`/organization/${organizationId}`}
       >
         <ArrowLeftIcon className="w-4 h-4 text-muted-foreground hover:text-foreground" />
-        <span className="text-muted-foreground hover:text-foreground group-hover:text-muted-foreground dark:group-hover:text-foreground text-sm font-normal">
+        <span className="text-muted-foreground hover:text-foreground group-hover:text-muted-foreground text-sm font-normal">
           Back to Organization
         </span>
       </Link>
-      {/* <p className="text-gray-500 dark:text-slate-400  text-sm font-normal">
+      {/* <p className="text-gray-500 text-sm font-normal">
         /
       </p>
-      <p className="text-gray-500 px-2 dark:text-slate-400  text-sm font-normal">
+      <p className="text-gray-500 px-2 text-sm font-normal">
         Settings
       </p>
-      <p className="text-gray-500 dark:text-slate-400  text-sm font-normal">
+      <p className="text-gray-500 text-sm font-normal">
         /
       </p>
-      <p className="text-gray-500 px-2 dark:text-slate-400  text-sm font-normal">
+      <p className="text-gray-500 px-2 text-sm font-normal">
         General
       </p> */}
     </div>

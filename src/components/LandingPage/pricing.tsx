@@ -88,7 +88,7 @@ const PricingCard = ({
       </CardHeader>
 
       <CardContent className="p-4">
-        <div className="h-[1px] bg-slate-200 dark:bg-slate-500 w-full "></div>
+        <div className="h-[1px] bg-slate-200 w-full "></div>
         <ul className="space-y-3 pt-10">
           {features.map((feature, i) => (
             <li key={i} className="flex items-center">

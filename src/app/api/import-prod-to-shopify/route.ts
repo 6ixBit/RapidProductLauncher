@@ -22,10 +22,17 @@ interface ProductPayload {
   images: ProductImage[];
 }
 
+interface ShopifyProductResponse {
+  id: string;
+  handle: string;
+  title: string;
+  url: string;
+}
+
 async function createProduct(
   { shopDomain, adminApiKey }: ShopifyConfig,
   product: ProductPayload,
-) {
+): Promise<ShopifyProductResponse> {
   try {
     const response = await fetch(
       `https://${shopDomain}/admin/api/2024-01/products.json`,
@@ -71,14 +78,16 @@ export async function POST(request: Request) {
       images: product.images?.map((url: string) => ({ src: url })) || [],
     };
 
-    console.log('productPayload Receivee On server:', productPayload);
+    console.log('productPayload Received On server:', productPayload);
 
     const createdProduct = await createProduct(
       { shopDomain: shopify_store_url, adminApiKey: admin_api_key },
       productPayload,
     );
 
-    return NextResponse.json(createdProduct);
+    return NextResponse.json({
+      ...createdProduct,
+    });
   } catch (error) {
     console.error('Error creating product:', error);
     return NextResponse.json(

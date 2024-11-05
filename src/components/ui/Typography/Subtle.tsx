@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 
 export function Subtle({ className, ...rest }: ComponentProps<'p'>) {
   const classNames = cn(
-    'text-sm text-slate-500 dark:text-slate-400',
+    'text-sm text-slate-500',
     className,
   );
   return <p className={classNames} {...rest}></p>;

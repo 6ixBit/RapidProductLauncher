@@ -10,7 +10,7 @@ export async function PendingInvitationCounter() {
   if (count) {
     return (
       <div className="flex items-center gap-2">
-        <div className="w-px h-5 mx-2 bg-gray-300 dark:bg-slate-700" />
+        <div className="w-px h-5 mx-2 bg-gray-300" />
         <Link href="/invitations">
           <Badge className="px-3 w-max h-fit rounded-md py-2" variant="default">
             <Mail className="h-4 w-4 mr-2" />
