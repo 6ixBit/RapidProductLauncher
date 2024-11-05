@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { NavigationTabs } from '../../tabs';
 
 interface AdCreative {
     ad_description: string;
@@ -248,7 +249,7 @@ const FacebookCreativesPage = () => {
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-2">
-            <TabsNavigation tabs={tabs} />
+            <TabsNavigation tabs={NavigationTabs(productID)} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 {adCreatives.map((ad, index) => (
                     <div key={ad.id} className="flex flex-col">

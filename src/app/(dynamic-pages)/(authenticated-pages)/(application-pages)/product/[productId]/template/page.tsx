@@ -1,14 +1,11 @@
 'use client';
 
 import { TabsNavigation } from '@/components/TabsNavigation/TabsNavigation';
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Liquid } from 'liquidjs';
-import { Code, ImageIcon, SquarePen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { NavigationTabs } from '../../tabs';
 import { liquidTemplate_1_edited } from './templates';
-
 const engine = new Liquid();
 
 const mockData = {
@@ -74,40 +71,6 @@ const TemplatePage = () => {
   const productID = params?.productId as string;
   const [renderedHtml, setRenderedHtml] = useState('');
 
-  const tabs = [
-    {
-      label: 'Product Info',
-      href: `/product/${productID}/info`,
-      icon: <SquarePen />,
-    },
-    {
-      label: 'Page Template',
-      href: `/product/${productID}/template`,
-      icon: <Code />,
-    },
-    {
-      label: 'Facebook Creatives',
-      href: `/product/${productID}/facebook-creatives`,
-      icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
-    },
-    {
-      label: 'Instagram Creatives',
-      href: `/product/${productID}/instagram-creatives`,
-      icon: (
-        <FontAwesomeIcon
-          icon={faInstagram}
-          size="lg"
-          style={{ color: '#E1306C' }}
-        />
-      ),
-    },
-    {
-      label: "Media Center",
-      href: `/product/${productID}/media-center`,
-      icon: <ImageIcon style={{ color: '#4B5563' }} />
-    }
-  ];
-
   useEffect(() => {
     engine
       .parseAndRender(liquidTemplate_1_edited, mockData)
@@ -116,7 +79,7 @@ const TemplatePage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-2">
-      <TabsNavigation tabs={tabs} />
+      <TabsNavigation tabs={NavigationTabs(productID)} />
       <ClientSideRenderer html={renderedHtml} />
     </div>
   );

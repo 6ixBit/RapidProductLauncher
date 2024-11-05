@@ -2,18 +2,11 @@
 
 import { TabsNavigation } from '@/components/TabsNavigation';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
-import { Eye, ImageIcon, SquarePen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { NavigationTabs } from '../../tabs';
 import { Carousel } from './Carousel';
-
-interface ImageVariant {
-  text: string;
-  imageUrl: string;
-}
 
 const ProductPreviewPage = () => {
   const params = useParams();
@@ -21,45 +14,6 @@ const ProductPreviewPage = () => {
   const supabase = supabaseUserClientComponentClient;
   const descriptionRef = useRef<HTMLDivElement>(null);
   const [selectedVariant, setSelectedVariant] = useState<string>('');
-
-  const tabs = [
-    {
-      label: 'Product Info',
-      href: `/product/${productID}/info`,
-      icon: <SquarePen />,
-    },
-    // {
-    //     label: 'Page Template',
-    //     href: `/product/${productID}/template`,
-    //     icon: <Code />,
-    // },
-    {
-      label: 'Preview',
-      href: `/product/${productID}/preview`,
-      icon: <Eye />,
-    },
-    {
-      label: 'Facebook Creatives',
-      href: `/product/${productID}/facebook-creatives`,
-      icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
-    },
-    {
-      label: 'Instagram Creatives',
-      href: `/product/${productID}/instagram-creatives`,
-      icon: (
-        <FontAwesomeIcon
-          icon={faInstagram}
-          size="lg"
-          style={{ color: '#E1306C' }}
-        />
-      ),
-    },
-    {
-      label: "Media Center",
-      href: `/product/${productID}/media-center`,
-      icon: <ImageIcon style={{ color: '#4B5563' }} />
-    }
-  ];
 
   const { data: productData, isLoading, error } = useQuery({
     queryKey: ['product-preview', productID],
@@ -148,7 +102,7 @@ const ProductPreviewPage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-2">
-      <TabsNavigation tabs={tabs} />
+      <TabsNavigation tabs={NavigationTabs(productID)} />
       <div className="flex flex-col w-full">
         {productData?.images && productData.images.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">

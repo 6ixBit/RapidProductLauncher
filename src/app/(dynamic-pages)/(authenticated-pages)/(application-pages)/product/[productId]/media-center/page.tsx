@@ -2,12 +2,11 @@
 
 import { TabsNavigation } from '@/components/TabsNavigation';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Code, ExternalLink, ImageIcon, SquarePen } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { NavigationTabs } from '../../tabs';
 
 const MediaCenterPage = () => {
   const params = useParams();
@@ -33,40 +32,6 @@ const MediaCenterPage = () => {
 
     fetchData();
   }, [productID]);
-
-  const tabs = [
-    {
-      label: 'Product Info',
-      href: `/product/${productID}/info`,
-      icon: <SquarePen />,
-    },
-    {
-      label: 'Page Template',
-      href: `/product/${productID}/template`,
-      icon: <Code />,
-    },
-    {
-      label: 'Facebook Creatives',
-      href: `/product/${productID}/facebook-creatives`,
-      icon: <FontAwesomeIcon icon={faFacebook} size="lg" color="#1877F2" />,
-    },
-    {
-      label: 'Instagram Creatives',
-      href: `/product/${productID}/instagram-creatives`,
-      icon: (
-        <FontAwesomeIcon
-          icon={faInstagram}
-          size="lg"
-          style={{ color: '#E1306C' }}
-        />
-      ),
-    },
-    {
-      label: "Media Center",
-      href: `/product/${productID}/media-center`,
-      icon: <ImageIcon style={{ color: '#4B5563' }} />
-    }
-  ];
 
   const openImageInNewTab = (imageUrl: string) => {
     window.open(imageUrl, '_blank');
@@ -99,7 +64,7 @@ const MediaCenterPage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-2">
-      <TabsNavigation tabs={tabs} />
+      <TabsNavigation tabs={NavigationTabs(productID)} />
 
       <div className="mt-6 mb-4">
         <h2 className="text-2xl font-semibold text-gray-900">Media Library</h2>
