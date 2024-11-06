@@ -23,7 +23,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@public/*": ["public/*"],
-      "@animations/*": ["src/animations/*"]
+      "@animations/*": ["src/animations/*"],
+      "@emails/*": ["emails/*"]
     },
     "strictNullChecks": true
   },

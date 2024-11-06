@@ -12,7 +12,7 @@ const HelpPage = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const user = useLoggedInUser();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const payload = {
             type: requestType,
@@ -20,14 +20,34 @@ const HelpPage = () => {
             email: user.email,
             timestamp: new Date().toISOString()
         };
-        console.log(payload);
-        // Here you would typically send the payload to your backend
-        // For now, we'll just simulate a successful submission
-        toast({
-            title: "Request Submitted",
-            description: "We've received your request and will get back to you soon.",
-        });
-        setIsSubmitted(true);
+
+        console.log('payload', payload);
+
+        try {
+            const response = await fetch('/api/help', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit request');
+            }
+
+            toast({
+                title: "Request Submitted",
+                description: "We've received your request and will get back to you soon.",
+            });
+            setIsSubmitted(true);
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to submit your request. Please try again.",
+                variant: "destructive",
+            });
+        }
     };
 
     if (isSubmitted) {
