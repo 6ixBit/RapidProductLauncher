@@ -1,3 +1,4 @@
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useQuery } from '@tanstack/react-query';
 import HeatMap from '@uiw/react-heat-map';
@@ -6,28 +7,40 @@ import { H2 } from './ui/Typography/H2';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 const UserActivityCalendar = () => {
+  const user = useLoggedInUser();
   const supabase = supabaseUserClientComponentClient;
+
+  const toLocalDateString = (utcDate: string) => {
+    const date = new Date(utcDate);
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      .toISOString()
+      .split('T')[0]
+      .replace(/-/g, '/');
+  };
 
   const { data: activityData, isLoading, isFetched } = useQuery({
     queryKey: ['userProductActivity'],
     queryFn: async () => {
       const oneYearAgo = new Date();
       oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      oneYearAgo.setHours(0, 0, 0, 0);
+
+      const oneYearAgoUTC = new Date(
+        oneYearAgo.getTime() + (oneYearAgo.getTimezoneOffset() * 60000)
+      ).toISOString();
 
       const { data, error } = await supabase
         .from('html_templates')
         .select('created_at')
-        .gte('created_at', oneYearAgo.toISOString());
+        .eq('user_id', user?.id)
+        .gte('created_at', oneYearAgoUTC);
 
       if (error) throw error;
 
       const activityMap = data.reduce(
         (acc: { [key: string]: number }, item) => {
-          const date = new Date(item.created_at)
-            .toISOString()
-            .split('T')[0]
-            .replace(/-/g, '/');
-          acc[date] = (acc[date] || 0) + 1;
+          const localDate = toLocalDateString(item.created_at);
+          acc[localDate] = (acc[localDate] || 0) + 1;
           return acc;
         },
         {},
@@ -42,19 +55,16 @@ const UserActivityCalendar = () => {
 
   const isToday = (dateStr: string) => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const date = new Date(dateStr.replace(/\//g, '-'));
-
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
+    date.setHours(0, 0, 0, 0);
+    return today.getTime() === date.getTime();
   };
 
   const formatDate = (date: string) => {
-    const d = new Date(date);
+    const d = new Date(date.replace(/\//g, '-'));
     const day = d.getDate();
-    const month = d.toLocaleString('default', { month: 'short' });
+    const month = d.toLocaleString(undefined, { month: 'short' });
 
     const suffix = (day: number) => {
       if (day > 3 && day < 21) return 'th';
@@ -69,8 +79,11 @@ const UserActivityCalendar = () => {
     return `${day}${suffix(day)} ${month}`;
   };
 
-  const todayDate = new Date().toISOString().split('T')[0].replace(/-/g, '/');
+  const todayDate = toLocalDateString(new Date().toISOString());
   const todayContributions = activityData?.find(item => item.date === todayDate)?.count;
+
+  console.log('activityData', activityData);
+  console.log('todayContributions', todayContributions);
 
   return (
     <div className="space-y-4">
@@ -103,7 +116,12 @@ const UserActivityCalendar = () => {
               '--rhm-rect-active': '#000000',
             } as React.CSSProperties
           }
-          startDate={new Date(new Date().getFullYear(), 0, 1)}
+          startDate={(() => {
+            const date = new Date();
+            date.setMonth(0, 1);
+            date.setHours(0, 0, 0, 0);
+            return date;
+          })()}
           panelColors={{
             0: '#e0f7fa',
             2: '#b2ebf2',
