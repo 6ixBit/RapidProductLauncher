@@ -1,6 +1,4 @@
 'use client';
-import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
-import { Email } from '@/components/Auth/Email';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
 import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
@@ -12,105 +10,50 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  signInWithMagicLink,
   signInWithProvider,
   signUp,
 } from '@/data/auth/auth';
 import { useSAToastMutation } from '@/hooks/useSAToastMutation';
 import type { AuthProvider } from '@/types';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export function SignUp({
-  next,
-  nextActionType,
-}: {
-  next?: string;
-  nextActionType?: string;
-}) {
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [resendData, setResendData] = useState<{
-    email: string;
-    password: string;
-  } | null>(null);
+export function SignUp() {
+  const router = useRouter();
 
-  const resendMutation = useSAToastMutation(
-    async () => {
-      if (!resendData) {
-        throw new Error('No resend data');
-      }
-      return await signUp(resendData.email, resendData.password);
-    },
-    {
-      onSuccess: () => {
-        setSuccessMessage('A confirmation link has been sent to your email!');
-      },
-      loadingMessage: 'Resending confirmation link...',
-      errorMessage: 'Failed to resend confirmation link',
-      successMessage: 'Confirmation link sent!',
-    },
-  );
-
-  const magicLinkMutation = useSAToastMutation(
-    async (email: string) => {
-      // since we can't use the onSuccess callback here to redirect from here
-      // we pass on the `next` to the signInWithMagicLink function
-      // the user gets redirected from their email message
-      return await signInWithMagicLink(email, next);
-    },
-    {
-      loadingMessage: 'Sending magic link...',
-      errorMessage(error) {
-        try {
-          if (error instanceof Error) {
-            return String(error.message);
-          }
-          return `Send magic link failed ${String(error)}`;
-        } catch (_err) {
-          console.warn(_err);
-          return 'Send magic link failed ';
-        }
-      },
-      successMessage: 'A magic link has been sent to your email!',
-      onSuccess: () => {
-        setSuccessMessage('A magic link has been sent to your email!');
-      },
-    },
-  );
   const passwordMutation = useSAToastMutation(
     async ({ email, password }: { email: string; password: string }) => {
-      setResendData({ email, password });
-      return await signUp(email, password);
+      const response = await signUp(email, password);
+      if (response.status === 'success') {
+        // Redirect to onboarding flow
+        router.push('/onboarding');
+      }
+      return response;
     },
     {
-      onSuccess: () => {
-        setSuccessMessage('A confirmation link has been sent to your email!');
-      },
-      loadingMessage: 'Creating account...',
+      loadingMessage: 'Creating your account...',
       errorMessage(error) {
         try {
           if (error instanceof Error) {
             return String(error.message);
           }
-          return `Create account failed ${String(error)}`;
+          return `Sign up failed ${String(error)}`;
         } catch (_err) {
           console.warn(_err);
-          return 'Create account failed ';
+          return 'Sign up failed';
         }
       },
-      successMessage: 'Account created!',
+      successMessage: 'Welcome to Rapid Product Launcher!',
     },
   );
+
   const providerMutation = useSAToastMutation(
     async (provider: AuthProvider) => {
-      // since we can't use the onSuccess callback here to redirect from here
-      // we pass on the `next` to the signInWithProvider function
-      // the user gets redirected from the provider redirect callback
-      return signInWithProvider(provider, next);
+      return signInWithProvider(provider, '/onboarding'); // Pass onboarding as next path
     },
     {
-      loadingMessage: 'Requesting login...',
+      loadingMessage: 'Creating your account...',
       successMessage: 'Redirecting...',
-      errorMessage: 'Failed to login',
+      errorMessage: 'Failed to create account',
       onSuccess: (payload) => {
         window.location.href = payload.data.url;
       },
@@ -118,85 +61,53 @@ export function SignUp({
   );
 
   return (
-    <div
-      data-success={successMessage}
-      className="container data-[success]:flex items-center data-[success]:justify-center text-left max-w-lg mx-auto overflow-auto data-[success]:h-full min-h-[470px]"
-    >
-      {successMessage ? (
-        <ConfirmationPendingCard
-          type={'sign-up'}
-          heading={`Confirmation Link Sent`}
-          message={successMessage}
-          resetSuccessMessage={setSuccessMessage}
-          resendEmail={() => {
-            resendMutation.mutate();
-          }}
-        />
-      ) : (
-        <div className="space-y-8 bg-background p-6 rounded-lg shadow">
-          <Tabs defaultValue="password" className="md:min-w-[400px]">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="password">Password</TabsTrigger>
-              <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
-              <TabsTrigger value="social-login">Social Login</TabsTrigger>
-            </TabsList>
+    <div className="container text-left max-w-lg mx-auto overflow-auto min-h-[470px]">
+      <div className="space-y-8 bg-background p-6 rounded-lg shadow">
+        <Tabs defaultValue="password" className="md:min-w-[400px]">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="password">Password</TabsTrigger>
+            <TabsTrigger value="social-login">Social Login</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="password">
-              <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>Register to Rapid Product Launcher</CardTitle>
-                  <CardDescription>
-                    Create an account with your email and password
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2 p-0">
-                  <EmailAndPassword
-                    isLoading={passwordMutation.isLoading}
-                    onSubmit={(data) => {
-                      passwordMutation.mutate(data);
-                    }}
-                    view="sign-up"
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="magic-link">
-              <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>Register to Rapid Product Launcher</CardTitle>
-                  <CardDescription>
-                    Create an account with magic link we will send to your email
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2 p-0">
-                  <Email
-                    onSubmit={(email) => magicLinkMutation.mutate(email)}
-                    isLoading={magicLinkMutation.isLoading}
-                    view="sign-up"
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="social-login">
-              <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>Register to Rapid Product Launcher</CardTitle>
-                  <CardDescription>
-                    Register with your social account
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2 p-0">
-                  <RenderProviders
-                    providers={['google', 'github', 'twitter']}
-                    isLoading={providerMutation.isLoading}
-                    onProviderLoginRequested={providerMutation.mutate}
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      )}
+          <TabsContent value="password">
+            <Card className="border-none shadow-none">
+              <CardHeader className="py-6 px-0">
+                <CardTitle>Get Started with Rapid Product Launcher</CardTitle>
+                <CardDescription>
+                  Create your account to start launching products
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 p-0">
+                <EmailAndPassword
+                  isLoading={passwordMutation.isLoading}
+                  onSubmit={(data) => {
+                    passwordMutation.mutate(data);
+                  }}
+                  view="sign-up"
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="social-login">
+            <Card className="border-none shadow-none">
+              <CardHeader className="py-6 px-0">
+                <CardTitle>Get Started with Rapid Product Launcher</CardTitle>
+                <CardDescription>
+                  Create your account using your Google account
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 p-0">
+                <RenderProviders
+                  providers={['google']}
+                  isLoading={providerMutation.isLoading}
+                  onProviderLoginRequested={providerMutation.mutate}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
