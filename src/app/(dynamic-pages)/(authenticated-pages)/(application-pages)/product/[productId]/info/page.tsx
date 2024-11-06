@@ -404,38 +404,63 @@ export default function ProductPage() {
                                     <DropdownMenuContent className="w-[250px]">
                                         <div className="p-4">
                                             <div className="flex flex-col w-full gap-2">
-                                                <div className="flex items-center text-[#96bf47]">
-                                                    <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                    Import to Shopify
-                                                </div>
+                                                {stores?.length === 0 ? (
+                                                    <>
+                                                        <div className="flex items-center text-[#96bf47]">
+                                                            <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                            Import to Shopify
+                                                        </div>
+                                                        <div className="text-sm text-gray-600 mb-2">
+                                                            Connect a store to start importing products.
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                router.push('/integrations');
+                                                                setDropdownOpen(false);
+                                                            }}
+                                                            className="w-full p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors"
+                                                        >
+                                                            <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                            Connect Store
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="flex items-center text-[#96bf47]">
+                                                            <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                            Import to Shopify
+                                                        </div>
+                                                        <select
+                                                            className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
+                                                            value={selectedStoreId}
+                                                            onChange={(e) => setSelectedStoreId(e.target.value)}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <option value="">Select a store...</option>
+                                                            {stores?.map(store => (
+                                                                <option key={store.id} value={store.id}>
+                                                                    {cleanStoreUrl(store.shopify_store_url)}
+                                                                </option>
+                                                            ))}
+                                                        </select>
 
-                                                <select
-                                                    className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
-                                                    value={selectedStoreId}
-                                                    onChange={(e) => setSelectedStoreId(e.target.value)}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    <option value="">Select a store...</option>
-                                                    {stores?.map(store => (
-                                                        <option key={store.id} value={store.id}>
-                                                            {cleanStoreUrl(store.shopify_store_url)}
-                                                        </option>
-                                                    ))}
-                                                </select>
-
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        const selectedStore = stores?.find(store => store.id === Number(selectedStoreId));
-                                                        importToShopifyMutation.mutate({ selectedStore });
-                                                        setDropdownOpen(false);
-                                                    }}
-                                                    className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                                    disabled={!selectedStoreId || selectedStoreId === ''}
-                                                >
-                                                    Import
-                                                </button>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                const selectedStore = stores?.find(store => store.id === Number(selectedStoreId));
+                                                                importToShopifyMutation.mutate({ selectedStore });
+                                                                setDropdownOpen(false);
+                                                            }}
+                                                            className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                            disabled={!selectedStoreId || selectedStoreId === ''}
+                                                        >
+                                                            Import
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
 
