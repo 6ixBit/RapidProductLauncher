@@ -24,18 +24,7 @@ export default function OrganizationSettingsNavbar({
           Back to Organization
         </span>
       </Link>
-      {/* <p className="text-gray-500 dark:text-slate-400  text-sm font-normal">
-        /
-      </p>
-      <p className="text-gray-500 px-2 dark:text-slate-400  text-sm font-normal">
-        Settings
-      </p>
-      <p className="text-gray-500 dark:text-slate-400  text-sm font-normal">
-        /
-      </p>
-      <p className="text-gray-500 px-2 dark:text-slate-400  text-sm font-normal">
-        Members
-      </p> */}
+
     </div>
   );
 }

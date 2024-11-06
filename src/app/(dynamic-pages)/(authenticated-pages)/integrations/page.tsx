@@ -131,6 +131,28 @@ const StoreCard = ({
   );
 };
 
+const EmptyState = ({ onAddStore }: { onAddStore: () => void }) => (
+  <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-md border-2 border-dashed border-gray-300 min-h-[300px]">
+    <FontAwesomeIcon
+      icon={faShopify}
+      className="w-16 h-16 text-red-500 mb-4"
+    />
+    <h3 className="text-xl font-semibold text-gray-700 mb-2">
+      No Stores Connected
+    </h3>
+    <p className="text-gray-500 text-center mb-6 max-w-md">
+      Connect your Shopify store to start importing AI-generated products and manage them seamlessly.
+    </p>
+    <button
+      onClick={onAddStore}
+      className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full flex items-center transition-colors duration-300"
+    >
+      <FontAwesomeIcon icon={faShopify} className="mr-2" />
+      Add Your First Store
+    </button>
+  </div>
+);
+
 const IntegrationsPage = () => {
   const queryClient = useQueryClient();
   const supabaseClient = supabaseUserClientComponentClient;
@@ -195,11 +217,20 @@ const IntegrationsPage = () => {
         onClose={() => setIsAddShopifyStoreModalOpen(false)}
         onSuccess={handleAddStoreSuccess}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {storeIntegrations.map((store) => (
-          <StoreCard store={store} onDisconnect={handleDisconnect} />
-        ))}
-      </div>
+
+      {storeIntegrations.length === 0 ? (
+        <EmptyState onAddStore={() => setIsAddShopifyStoreModalOpen(true)} />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {storeIntegrations.map((store) => (
+            <StoreCard
+              key={store.id}
+              store={store}
+              onDisconnect={handleDisconnect}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

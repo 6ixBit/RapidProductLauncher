@@ -10,7 +10,7 @@ export default function HeroSection() {
       <div className="flex flex-col  gap-10 w-full">
         <div className="space-y-4 flex flex-col  lg:items-center  flex-1">
           <Link href={'#'}>
-            <div className="flex items-center  gap-2 py-1 px-3 w-fit rounded-full border border-border dark:border-none bg-secondary">
+            <div className="flex items-center  gap-2 py-1 px-3 w-fit rounded-full border border-border bg-secondary">
               <Sparkles size={16} />
               <span className="text-md font-medium lg:text-base">
                 Import, Publish, Profit.

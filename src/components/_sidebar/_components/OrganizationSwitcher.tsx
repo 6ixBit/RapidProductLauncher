@@ -122,7 +122,7 @@ export function OrganizationSwitcher({
                   isLoading={isLoading}
                   onConfirm={onConfirm}
                   variant="ghost"
-                  className="p-0 py-0 focus:ring-0 dark:focus:ring-0 hover:bg-transparent w-full"
+                  className="p-0 py-0 focus:ring-0 hover:bg-transparent w-full"
                   isDialogOpen={isDialogOpen}
                   setIsDialogOpen={(isCurrentOpen) => {
                     setIsDialogOpen(isCurrentOpen);

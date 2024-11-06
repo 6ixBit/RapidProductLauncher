@@ -18,7 +18,7 @@ export function SidebarLogoAndToggle() {
           src={lightLogo}
           alt="Nextbase Logo"
           className={cn(
-            'rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0',
+            'rotate-0 scale-100 transition-all',
             '-ml-2 ',
           )}
         />
@@ -27,7 +27,7 @@ export function SidebarLogoAndToggle() {
           src={darkLogo}
           alt="Nextbase Logo"
           className={cn(
-            ' absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100',
+            ' absolute rotate-90 scale-0 transition-all',
             '-ml-2 ',
           )}
         />
