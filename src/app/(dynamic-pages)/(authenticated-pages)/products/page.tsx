@@ -222,7 +222,19 @@ export default function ProductsPage() {
                         <p className="text-center text-gray-500">End Of Products</p>
                     )}
                     {!hasNextPage && allProducts.length === 0 && !isError && (
-                        <p className="text-center text-gray-500">No products found</p>
+                        <div className="text-center space-y-4">
+                            <h3 className="text-xl font-semibold text-red-500">No Products Yet</h3>
+                            <p className="text-gray-500 max-w-md mx-auto">
+                                Get ahead by generating your first product using our AI-powered product generator.
+                            </p>
+                            <button
+                                onClick={() => setIsModalOpen(true)}
+                                className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 inline-flex items-center"
+                            >
+                                <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                                Generate Your First Product
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>
