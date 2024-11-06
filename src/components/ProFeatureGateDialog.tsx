@@ -24,17 +24,39 @@ export function ProFeatureGateDialog({
       <DialogTrigger asChild className="w-full mb-0">
         <Button
           variant="ghost"
-          className="justify-between items-center px-0 pr-2 -mb-2 hover:bg-accent text-muted-foreground font-normal hover:text-foreground"
+          className="justify-between items-center px-0 pr-2 -mb-2 hover:bg-accent/5 group relative overflow-hidden transition-all duration-300"
         >
-          <div className="flex gap-2 items-center ">
-            <div className="p-2 group-hover:text-foreground">{icon}</div>
-            <T.P className=" w-full text-sm group-hover:text-foreground ">
-              {label}
-            </T.P>
+          {/* Shimmer effect overlay */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
-          <T.P className="text-xs rounded-md px-2 py-1 uppercase font-medium bg-tremor-brand-subtle text-primary-foreground ">
-            Pro
-          </T.P>
+
+          <div className="flex gap-2 items-center relative z-10">
+            <div className="p-2 transition-transform duration-300 group-hover:scale-110">
+              {icon}
+            </div>
+            <div className="flex flex-col items-start">
+              <T.P className="text-sm font-medium group-hover:text-primary transition-colors">
+                {label}
+              </T.P>
+              <T.P className="text-xs text-muted-foreground hidden group-hover:block transition-all">
+                Unlock this feature →
+              </T.P>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <T.P className="text-xs rounded-md px-2 py-1 uppercase font-medium bg-gradient-to-r from-primary/80 to-primary text-primary-foreground shadow-sm group-hover:shadow-primary/25 transition-all duration-300 group-hover:scale-105">
+              Pro
+            </T.P>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            >
+              ✨
+            </motion.div>
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-2 items-center hide-dialog-close">

@@ -1,16 +1,41 @@
 import { Stripe } from 'stripe';
 
+export type SubscriptionTier =
+  | 'free'
+  | 'solo_scaler'
+  | 'mega_scaler'
+  | 'super_scaler';
+
+// Define price IDs in a constant for better maintainability
+const PRICE_IDS = {
+  SOLO_SCALER: 'price_1QDe19Lh3oF1u37cBCbcleRf',
+  MEGA_SCALER: 'price_1QDdwILh3oF1u37cGggCxLYC',
+  SUPER_SCALER: 'price_1QDe0QLh3oF1u37cWjIelL64',
+} as const;
+
+export const STORE_LIMITS: Record<SubscriptionTier, number> = {
+  free: 1,
+  solo_scaler: 1,
+  mega_scaler: 3,
+  super_scaler: 5,
+};
+
 export async function isCustomerInFreeTrial(
   stripe: Stripe,
   customerId: string,
 ): Promise<boolean> {
-  const customer = await stripe.customers.retrieve(customerId);
-  const subscription = await stripe.subscriptions.list({
-    customer: customer.id,
-    status: 'trialing',
-  });
+  try {
+    const customer = await stripe.customers.retrieve(customerId);
+    const subscription = await stripe.subscriptions.list({
+      customer: customer.id,
+      status: 'trialing',
+    });
 
-  return subscription.data.length > 0;
+    return subscription.data.length > 0;
+  } catch (error) {
+    console.error('Error checking trial status:', error);
+    return false;
+  }
 }
 
 export async function hasCustomerSubscription(
@@ -25,25 +50,37 @@ export async function hasCustomerSubscription(
   return subscriptions.data.length > 0;
 }
 
-export async function daysLeftInTrial(
+export async function getCustomerSubscriptionTier(
   stripe: Stripe,
   customerId: string,
-): Promise<number | null> {
-  const subscriptions = await stripe.subscriptions.list({
-    customer: customerId,
-    status: 'trialing',
-  });
+): Promise<SubscriptionTier> {
+  try {
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: 'active',
+      expand: ['data.plan'],
+    });
 
-  if (subscriptions.data.length === 0) {
-    return null;
+    if (subscriptions.data.length === 0) {
+      return 'free'; // Changed from 'solo_scaler' to 'free' as default
+    }
+
+    const planId = subscriptions.data[0].items.data[0].plan?.id;
+
+    switch (planId) {
+      case PRICE_IDS.SOLO_SCALER:
+        return 'solo_scaler';
+      case PRICE_IDS.MEGA_SCALER:
+        return 'mega_scaler';
+      case PRICE_IDS.SUPER_SCALER:
+        return 'super_scaler';
+      default:
+        return 'free';
+    }
+  } catch (error) {
+    console.error('Error fetching subscription tier:', error);
+    return 'free'; // Fallback to free tier on error
   }
-
-  const trialEnd = subscriptions.data[0].trial_end;
-  const currentTime = Math.floor(Date.now() / 1000);
-
-  return trialEnd
-    ? Math.max(Math.ceil((trialEnd - currentTime) / 86400), 0)
-    : null;
 }
 
 export async function startFreeTrial(
@@ -65,4 +102,12 @@ export async function startFreeTrial(
   });
 
   return subscription;
+}
+
+// Helper function to check if user can add more stores
+export function canAddMoreStores(
+  currentTier: SubscriptionTier,
+  currentStoreCount: number,
+): boolean {
+  return currentStoreCount < STORE_LIMITS[currentTier];
 }

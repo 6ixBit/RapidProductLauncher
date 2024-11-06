@@ -33,7 +33,14 @@ export async function UserSidebar() {
         />
       </div>
 
+
+
       <div className="flex flex-col space-y-1 mt-auto">
+        {/* <ProFeatureGateDialog
+          organizationId={organizationId}
+          label="Feature Pro"
+        /> */}
+
         <SidebarLink
           label="Billing"
           href={`/organization/${organizationId}/settings/billing`}

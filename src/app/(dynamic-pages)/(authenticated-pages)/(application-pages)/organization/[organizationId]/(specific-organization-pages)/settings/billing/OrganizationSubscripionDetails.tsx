@@ -8,8 +8,7 @@ import { formatNormalizedSubscription } from '@/utils/formatNormalizedSubscripti
 import { Check, X } from 'lucide-react';
 import {
   CreateSubscriptionButton,
-  ManageSubscriptionButton,
-  StartFreeTrialButton,
+  ManageSubscriptionButton
 } from './ActionButtons';
 
 function getProductsSortedByPrice(
@@ -150,10 +149,10 @@ async function ChoosePricingTable({
                 <div className="rounded-xl py-1 mb-5 mx-5 mt-4 text-center text-foreground text-xl space-y-2">
                   {isOrganizationAdmin ? (
                     <>
-                      <StartFreeTrialButton
+                      {/* <StartFreeTrialButton
                         organizationId={organizationId}
                         priceId={priceId}
-                      />
+                      /> */}
                       <CreateSubscriptionButton
                         organizationId={organizationId}
                         priceId={priceId}
