@@ -21,8 +21,6 @@ const HelpPage = () => {
             timestamp: new Date().toISOString()
         };
 
-        console.log('payload', payload);
-
         try {
             const response = await fetch('/api/help', {
                 method: 'POST',

@@ -1,4 +1,5 @@
 import HelpTicketEmail from '@emails/HelpEmail';
+import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
@@ -18,11 +19,12 @@ export async function POST(req: NextRequest) {
   try {
     const payload = await req.json();
     const { type, message, email, timestamp } = ticketSchema.parse(payload);
+    const ticketId = `RPL-${nanoid(8)}`.toUpperCase();
 
     await resend.emails.send({
       from: 'help@rapidproductlauncher.ai',
       to: 'hamzacarew@gmail.com',
-      subject: `New ${type} request from ${email}`,
+      subject: `[${ticketId}] - ${type} request`,
       react: HelpTicketEmail({
         userEmail: email,
         requestType: type,
@@ -31,7 +33,10 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      ticketId,
+    });
   } catch (error) {
     console.error('Ticket submission error:', error);
     return NextResponse.json(
