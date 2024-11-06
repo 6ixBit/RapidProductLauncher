@@ -12,5 +12,5 @@ export default function SignupPage({
   searchParams: unknown;
 }) {
   const { next, nextActionType } = SearchParamsSchema.parse(searchParams);
-  return <SignUp next={next} nextActionType={nextActionType} />;
+  return <SignUp />;
 }
