@@ -1,9 +1,8 @@
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useQuery } from '@tanstack/react-query';
-import { useBrandmagicSupabaseClient } from './useAppSupabaseClient';
 
 export function useOrganization() {
-  const supabase = useBrandmagicSupabaseClient();
   const user = useLoggedInUser();
 
   return useQuery({
@@ -11,7 +10,7 @@ export function useOrganization() {
     queryFn: async () => {
       if (!user?.id) throw new Error('No user found');
 
-      const { data: orgMember, error } = await supabase
+      const { data: orgMember, error } = await supabaseUserClientComponentClient
         .from('organization_members')
         .select('organization_id')
         .eq('member_id', user.id)

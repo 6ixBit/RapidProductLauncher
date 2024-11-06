@@ -112,6 +112,19 @@ export const getPendingTeamInvitationsInOrganization = async (
   return data || [];
 };
 
+export const getUserOrganization = async (supabase: any, userId: string) => {
+  const { data: orgMember, error } = await supabase
+    .from('organization_members')
+    .select('organization_id')
+    .eq('member_id', userId)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .single();
+
+  if (error) throw error;
+  return orgMember.organization_id;
+};
+
 export const getOrganizationSubscription = async (
   supabase: AppSupabaseClient,
   organizationId: string,

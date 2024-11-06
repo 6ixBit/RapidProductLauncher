@@ -1,4 +1,9 @@
-import { Stripe } from 'stripe';
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { stripe } from '@/utils/stripe';
+import { getUserOrganization } from '@/utils/supabase-queries';
+import { useQuery } from '@tanstack/react-query';
+import Stripe from 'stripe';
 
 export type SubscriptionTier =
   | 'free'
@@ -17,7 +22,7 @@ export const STORE_LIMITS: Record<SubscriptionTier, number> = {
   free: 1,
   solo_scaler: 1,
   mega_scaler: 3,
-  super_scaler: 5,
+  super_scaler: 6,
 };
 
 export async function isCustomerInFreeTrial(
@@ -111,3 +116,61 @@ export function canAddMoreStores(
 ): boolean {
   return currentStoreCount < STORE_LIMITS[currentTier];
 }
+
+const getStripeCustomerId = async (supabase: any, organizationId: string) => {
+  const { data, error } = await supabase
+    .from('customers')
+    .select('stripe_customer_id')
+    .eq('organization_id', organizationId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching stripe customer id:', error);
+    return null;
+  }
+
+  return data?.stripe_customer_id;
+};
+
+// Usage in a React Query hook
+export const useStripeCustomerId = (
+  supabase: any,
+  organizationId: string | undefined,
+) => {
+  return useQuery({
+    queryKey: ['stripeCustomerId', organizationId],
+    queryFn: async () => {
+      if (!organizationId) return null;
+      return getStripeCustomerId(supabase, organizationId);
+    },
+    enabled: !!organizationId,
+  });
+};
+
+export const useStripeData = () => {
+  const supabaseClient = supabaseUserClientComponentClient;
+  const user = useLoggedInUser();
+
+  const { data: organizationId } = useQuery({
+    queryKey: ['userOrganization', user?.id],
+    queryFn: () => getUserOrganization(supabaseClient, user?.id),
+    enabled: !!user,
+  });
+
+  const { data: stripeCustomerId } = useStripeCustomerId(
+    supabaseClient,
+    organizationId,
+  );
+
+  const { data: subscriptionTier } = useQuery({
+    queryKey: ['subscriptionTier', stripeCustomerId],
+    queryFn: () => getCustomerSubscriptionTier(stripe, stripeCustomerId),
+    enabled: !!stripeCustomerId,
+  });
+
+  return {
+    stripeCustomerId,
+    subscriptionTier,
+    isLoading: !stripeCustomerId || !subscriptionTier,
+  };
+};
