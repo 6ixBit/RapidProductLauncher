@@ -20,8 +20,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { useStripeData } from '@/utils/stripe-queries';
 import { faAmazon, faEtsy } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -102,6 +104,32 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     },
   });
 
+  const { subscriptionTier, isLoading: isStripeLoading } = useStripeData();
+
+  const { data: productsGeneratedCount = 0 } = useQuery({
+    queryKey: ['productsGeneratedCount', organizationId],
+    queryFn: async () => {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const { count, error } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true })
+        .eq('organization_id', organizationId as string)
+        .gte('created_at', thirtyDaysAgo.toISOString());
+
+      if (error) throw error;
+      return count || 0;
+    },
+    enabled: !!organizationId,
+  });
+
+  const permissions = useFeaturePermissions(
+    subscriptionTier,
+    0,
+    productsGeneratedCount
+  );
+
   const validateAliExpressUrl = (url: string) => {
     const aliExpressRegex =
       /^https?:\/\/([\w-]+\.)?aliexpress\.(com|us)(\/.*)?$/i;
@@ -156,6 +184,33 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
   };
 
   const handleGenerate = async () => {
+    if (!permissions.products.canAccess) {
+      toast.error('Product Generation Limit Reached', {
+        description: permissions.products.reason,
+        action: {
+          label: 'Upgrade',
+          onClick: () => router.push('/billing')
+        },
+      });
+      return;
+    }
+
+    if (activeTab === 'multi') {
+      const validProducts = multiUrls.filter(entry => entry.url.trim());
+      const remainingSlots = (permissions.products.limit || 0) - productsGeneratedCount;
+
+      if (validProducts.length > remainingSlots) {
+        toast.error('Exceeds Generation Limit', {
+          description: `You can only generate ${remainingSlots} more product${remainingSlots === 1 ? '' : 's'} with your current plan.`,
+          action: {
+            label: 'Upgrade',
+            onClick: () => router.push('/billing')
+          },
+        });
+        return;
+      }
+    }
+
     setLoadingMessage(LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]);
     setIsLoading(true);
 
@@ -246,6 +301,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
         setIsMultiComplete(true);
         queryClient.invalidateQueries({ queryKey: ['userProductActivity'] });
         queryClient.invalidateQueries({ queryKey: ['products', user.id] });
+        queryClient.invalidateQueries({ queryKey: ['productsGeneratedCount', organizationId] });
       }
       return;
     }

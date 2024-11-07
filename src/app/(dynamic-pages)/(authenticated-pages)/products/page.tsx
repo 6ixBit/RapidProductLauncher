@@ -6,18 +6,20 @@ import { ProductCard } from '@/components/ProductCard';
 import {
     TooltipProvider
 } from '@/components/ui/tooltip';
-import { fetchSlimOrganizations } from '@/data/user/organizations';
+import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { useOrganization } from '@/hooks/useOrganization';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { useStripeData } from '@/utils/stripe-queries';
 import {
     faArrowsRotate,
     faMagicWandSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
 export interface Product {
     id: string;
     user_id: string;
@@ -39,7 +41,6 @@ const ITEMS_PER_PAGE = 8;
 export default function ProductsPage() {
     const user = useLoggedInUser();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [organizationId, setOrganizationId] = useState<string | null>(null);
     const queryClient = useQueryClient();
     const loadMoreRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
@@ -101,21 +102,47 @@ export default function ProductsPage() {
         return () => observer.disconnect();
     }, [hasNextPage, isFetchingNextPage]);
 
-    // Fetch organization data
-    useEffect(() => {
-        async function fetchOrganization() {
-            try {
-                const organizations = await fetchSlimOrganizations();
-                setOrganizationId(organizations[0]?.id || null);
-            } catch (error) {
-                console.error('Error fetching organization:', error);
-            }
-        }
+    const { data: orgMember, isLoading: isLoadingOrg } = useOrganization();
+    console.log('orgID', orgMember);
 
-        if (user) {
-            fetchOrganization();
-        }
-    }, [user]);
+
+    const { subscriptionTier } = useStripeData();
+
+    // Get count of products generated in last 30 days
+    const { data: productsGeneratedCount, isLoading: isLoadingProductsGeneratedCount, error: productsGeneratedCountError } = useQuery({
+        queryKey: ['productsGeneratedCount', orgMember],
+        queryFn: async () => {
+            if (!orgMember) return 0;
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            //TODO: Fix this.
+            let query = supabaseUserClientComponentClient
+                .from('html_templates')
+                .select('*', { count: 'exact', head: true })
+                .eq('organization_id', orgMember)
+                .gte('created_at', thirtyDaysAgo.toISOString());
+
+            const { data, count, error } = await query;
+            if (error) {
+                console.error('Supabase error:', error);
+                throw error;
+            }
+
+            console.log('Query response:', { data, count, error });
+            return count || 0;
+        },
+        enabled: !!orgMember,
+        staleTime: 1000 * 60, // Match the staleTime from the first query
+        cacheTime: 1000 * 60 * 5, // Match the cacheTime from the first query
+    });
+
+    console.log('productsGeneratedCount', productsGeneratedCount, isLoadingProductsGeneratedCount, productsGeneratedCountError);
+
+    const permissions = useFeaturePermissions(
+        subscriptionTier,
+        0,
+        productsGeneratedCount || 0
+    );
 
     const handleGenerateProduct = async (
         source: string,
@@ -168,25 +195,61 @@ export default function ProductsPage() {
     return (
         <TooltipProvider>
             <div className="container mx-auto px-4 py-8">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold">Your Products</h1>
-                    <div className="flex gap-4">
-                        <button
-                            className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-                            Generate
-                        </button>
-                        <button
-                            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
-                            onClick={handleRefresh}
-                        >
-                            <FontAwesomeIcon
-                                icon={faArrowsRotate}
-                                className="transition-transform duration-200 hover:rotate-180"
-                            />
-                        </button>
+                <div className="flex flex-col gap-4 mb-8">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h1 className="text-3xl font-bold">Your Products</h1>
+                            <div className="mt-6 flex items-center gap-4">
+                                <div className="flex items-center">
+                                    <span className="text-sm text-gray-600 font-medium">
+                                        {permissions.products.current} / {permissions.products.limit}
+                                    </span>
+                                    <div className="h-2 ml-3 w-32 bg-gray-100 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-red-500 transition-all duration-300"
+
+                                            style={{
+                                                width: permissions.products?.current && permissions.products?.limit
+                                                    ? `${(permissions.products.current / permissions.products.limit) * 100}%`
+                                                    : '0%'
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                {subscriptionTier !== 'mega_scaler' &&
+                                    (
+                                        <Link
+                                            href={`/organization/${orgMember}/settings/billing`}
+                                            className="text-sm text-blue-500 hover:text-blue-600 hover:underline"
+                                        >
+                                            Upgrade to generate more products →
+                                        </Link>
+                                    )}
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <button
+                                className={`px-6 py-2 bg-blue-500 text-white rounded-full transition-colors duration-200 
+                                    ${!permissions.products.canAccess
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : 'hover:bg-blue-600'}`}
+                                onClick={() => setIsModalOpen(true)}
+                                disabled={!permissions.products.canAccess}
+                                title={permissions.products.reason}
+                            >
+                                <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                                Generate
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
+                                onClick={handleRefresh}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faArrowsRotate}
+                                    className="transition-transform duration-200 hover:rotate-180"
+                                />
+                            </button>
+                        </div>
                     </div>
                 </div>
 

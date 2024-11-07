@@ -1,8 +1,8 @@
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import HeatMap from '@uiw/react-heat-map';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { H2 } from './ui/Typography/H2';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
@@ -10,16 +10,19 @@ const UserActivityCalendar = () => {
   const user = useLoggedInUser();
   const supabase = supabaseUserClientComponentClient;
 
-  const toLocalDateString = (utcDate: string) => {
+  const toLocalDateString = React.useCallback((utcDate: string) => {
     const date = new Date(utcDate);
-    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
-      .toISOString()
-      .split('T')[0]
-      .replace(/-/g, '/');
-  };
+    const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+    const year = localDate.getFullYear();
+    const month = localDate.getMonth() + 1;
+    const day = localDate.getDate();
+    return `${year}/${month}/${day}`;
+  }, []);
 
-  const { data: activityData, isLoading, isFetched } = useQuery({
-    queryKey: ['userProductActivity'],
+  const queryClient = useQueryClient();
+
+  const { data: activityData, isLoading } = useQuery({
+    queryKey: ['userProductActivity', user?.id],
     queryFn: async () => {
       const oneYearAgo = new Date();
       oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
@@ -51,7 +54,28 @@ const UserActivityCalendar = () => {
         count,
       }));
     },
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    enabled: !!user?.id,
+    initialData: () => queryClient.getQueryData(['userProductActivity', user?.id])
   });
+
+  const [todayContributions, setTodayContributions] = useState(0);
+
+  // Update today's contributions whenever activityData changes
+  useEffect(() => {
+    if (!activityData) return;
+
+    const todayDate = toLocalDateString(new Date().toISOString());
+    const today = activityData.find(item => item.date === todayDate);
+    console.log("use effect:", activityData, 'todayDate', todayDate, 'today', today);
+    setTodayContributions(today?.count || 0);
+  }, [activityData]);
+
+  console.log('activityData', activityData);
+  console.log('todayContributions', todayContributions);
 
   const isToday = (dateStr: string) => {
     const today = new Date();
@@ -79,31 +103,15 @@ const UserActivityCalendar = () => {
     return `${day}${suffix(day)} ${month}`;
   };
 
-  const todayDate = toLocalDateString(new Date().toISOString());
-  const todayContributions = activityData?.find(item => item.date === todayDate)?.count;
-
-  console.log('activityData', activityData);
-  console.log('todayContributions', todayContributions);
-
   return (
     <div className="space-y-4">
       <div>
         <H2>Product Launch Calendar</H2>
 
-        {isLoading ? (
-          <p className="text-gray-600 mb-2">Loading your activity...</p>
-        ) : isFetched && activityData ? (
+        {activityData && (
           <p className="text-gray-600 mb-2">
-            {!todayContributions ? (
-              <>You've only launched <strong>0</strong> products today. 😢</>
-            ) : todayContributions <= 3 ? (
-              <>You've launched <strong>{todayContributions}</strong> products today. Not bad! 🙂</>
-            ) : (
-              <>Great job! You've launched <strong>{todayContributions}</strong> products today! 🎉</>
-            )}
+            You've launched {todayContributions} product{todayContributions !== 1 ? 's' : ''} today
           </p>
-        ) : (
-          <p className="text-gray-600 mb-2">No activity data available</p>
         )}
       </div>
       <TooltipProvider>

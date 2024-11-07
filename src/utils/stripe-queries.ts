@@ -25,6 +25,13 @@ export const STORE_LIMITS: Record<SubscriptionTier, number> = {
   super_scaler: 6,
 };
 
+export const PRODUCT_GENERATION_LIMITS: Record<SubscriptionTier, number> = {
+  free: 2,
+  solo_scaler: 50,
+  mega_scaler: 125,
+  super_scaler: 250,
+};
+
 export async function isCustomerInFreeTrial(
   stripe: Stripe,
   customerId: string,

@@ -145,9 +145,9 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
         <div className="flex justify-between items-center mb-12">
           <div>
             <H1 className="text-xl md:text-2xl font-extrabold lg:text-3xl">
-              ⚡️ Launch Faster
+              Launch Faster
               <span className="hidden sm:inline text-lg md:text-2xl lg:text-3xl">
-                , Profit Sooner.
+                , Profit Sooner  ⚡️
               </span>
             </H1>
             {userEmail && (
@@ -169,7 +169,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
             onGenerate={handleGenerateProduct}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
           <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-blue-500 text-white">
             <div className="bg-blue-400 p-3 rounded-full">
               <svg
@@ -211,7 +211,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               </svg>
             </div>
             <div>
-              <H3 className="text-lg font-semibold text-white">Time Saved</H3>
+              <H3 className="text-lg font-semibold text-white">Estimated Time Saved</H3>
               <p className="text-2xl font-bold text-white">
                 {(() => {
                   const { hours, minutes } = calculateTimeSaved(productsCount);
@@ -221,7 +221,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-yellow-500 text-white">
+          {/* <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-yellow-500 text-white">
             <div className="bg-yellow-400 p-3 rounded-full">
               <svg
                 className="w-6 h-6 text-white"
@@ -242,7 +242,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               <H3 className="text-lg font-semibold text-white">Credits Left</H3>
               <p className="text-2xl font-bold text-white">{userCredits}</p>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="pt-6 w-full">
           <div className="overflow-x-auto">

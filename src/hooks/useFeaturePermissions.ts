@@ -1,4 +1,8 @@
-import { STORE_LIMITS, SubscriptionTier } from '@/utils/stripe-queries';
+import {
+  PRODUCT_GENERATION_LIMITS,
+  STORE_LIMITS,
+  SubscriptionTier,
+} from '@/utils/stripe-queries';
 
 type FeaturePermission = {
   canAccess: boolean;
@@ -11,6 +15,7 @@ type FeaturePermission = {
 export const useFeaturePermissions = (
   subscriptionTier: SubscriptionTier | undefined,
   currentStoreCount: number,
+  productsGeneratedCount: number,
 ) => {
   const getStorePermissions = (): FeaturePermission => {
     if (!subscriptionTier) {
@@ -36,8 +41,32 @@ export const useFeaturePermissions = (
     };
   };
 
+  const getProductGenerationPermissions = (): FeaturePermission => {
+    if (!subscriptionTier) {
+      return {
+        canAccess: false,
+        canRemove: false,
+        reason: 'Loading subscription information...',
+      };
+    }
+
+    const generationLimit = PRODUCT_GENERATION_LIMITS[subscriptionTier];
+    const canGenerate = productsGeneratedCount <= generationLimit;
+
+    return {
+      canAccess: canGenerate,
+      canRemove: false,
+      limit: generationLimit,
+      current: productsGeneratedCount,
+      reason: canGenerate
+        ? undefined
+        : `You've reached the maximum product generation limit (${generationLimit}) for your ${subscriptionTier} plan`,
+    };
+  };
+
   return {
     stores: getStorePermissions(),
+    products: getProductGenerationPermissions(),
     // Add more feature permissions here as needed
     // example: products: getProductPermissions(),
     // example: analytics: getAnalyticsPermissions(),

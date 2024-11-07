@@ -11,6 +11,7 @@ import {
 } from '@/components/Modal';
 import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { useOrganization } from '@/hooks/useOrganization';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useStripeData } from '@/utils/stripe-queries';
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
@@ -170,6 +171,7 @@ const IntegrationsPage = () => {
     useState<boolean>(false);
 
   const { subscriptionTier } = useStripeData();
+  const { data: orgMember } = useOrganization();
 
   console.log('Subscription Tier:', subscriptionTier);
 
@@ -207,7 +209,7 @@ const IntegrationsPage = () => {
     toast.success('Store added successfully');
   };
 
-  const permissions = useFeaturePermissions(subscriptionTier, storeIntegrations.length);
+  const permissions = useFeaturePermissions(subscriptionTier, storeIntegrations.length, 0);
 
   const handleAddStoreClick = () => {
     if (!permissions.stores.canAccess) {
@@ -245,7 +247,7 @@ const IntegrationsPage = () => {
             </div>
             {subscriptionTier !== 'mega_scaler' && (
               <Link
-                href="/organization/60f6526a-0eb5-4822-9800-46ab4cfaeaf9/settings/billing"
+                href={`/organization/${orgMember?.organization_id}/settings/billing`}
                 className="text-sm text-blue-500 hover:text-blue-600 font-medium transition-colors duration-300 flex items-center group"
               >
                 Upgrade for more stores
