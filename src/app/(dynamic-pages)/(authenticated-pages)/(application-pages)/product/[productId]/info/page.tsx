@@ -24,7 +24,7 @@ import { useProductGenerationCount } from '@/hooks/useProductGenerationCount';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useStripeData } from '@/utils/stripe-queries';
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faCircleCheck, faCircleInfo, faEye, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faCircleCheck, faCircleInfo, faEye, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, ExternalLink, Link as LinkIcon } from 'lucide-react';
@@ -46,6 +46,8 @@ import {
     getUserOrganization,
     productHasBeenImportedToShopify,
 } from './utils';
+
+const DEFAULT_PRODUCT_IMAGE = 'https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/product_placeholder_image.png';
 
 export default function ProductPage() {
     const params = useParams();
@@ -376,18 +378,28 @@ export default function ProductPage() {
                 {productData ? (
                     <div className="mt-1 bg-white shadow-lg rounded-lg overflow-hidden">
                         <div className="p-6 flex flex-col md:flex-row">
-                            {productData.thumbnail_url && (
-                                <div className="mb-4 md:mb-0 md:mr-6">
+                            <div className="mb-4 md:mb-0 md:mr-6">
+                                {productData.thumbnail_url ? (
                                     <Image
-                                        src={productData?.thumbnail_url || ''}
-                                        alt={productData?.product_title || ''}
-                                        width={400} // Adjust width as needed
-                                        height={300} // Adjust height as needed
+                                        src={productData.thumbnail_url}
+                                        alt={productData?.product_title || 'Product Image'}
+                                        width={400}
+                                        height={300}
                                         className="object-cover rounded"
                                         priority
                                     />
-                                </div>
-                            )}
+                                ) : (
+                                    <Image
+                                        src={DEFAULT_PRODUCT_IMAGE}
+                                        alt="Default Product Image"
+                                        width={400}
+                                        height={300}
+                                        className="object-cover rounded"
+                                        priority
+                                    />
+                                )}
+                            </div>
+
                             <div className="flex-1 flex flex-col justify-between">
                                 <div>
                                     <H1 className="text-3xl font-bold mb-4 text-gray-900 ">
@@ -464,7 +476,16 @@ export default function ProductPage() {
                                 <div className="mt-4 md:mt-0">
                                     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="outline">Actions</Button>
+                                            <Button
+                                                className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 font-medium px-6 py-2 rounded-full flex items-center gap-2"
+                                                variant="default"
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faBolt}
+                                                    className="h-4 w-4"
+                                                />
+                                                Actions
+                                            </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent className="w-56">
                                             <div className="p-4">
@@ -473,7 +494,7 @@ export default function ProductPage() {
                                                         <>
                                                             <div className="flex items-center text-[#96bf47]">
                                                                 <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                                Connect Shopify Store
+                                                                Import Your Store
                                                             </div>
                                                             <button
                                                                 onClick={() => {

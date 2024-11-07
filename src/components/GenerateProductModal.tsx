@@ -25,6 +25,7 @@ import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useStripeData } from '@/utils/stripe-queries';
 import { faAmazon, faEtsy } from '@fortawesome/free-brands-svg-icons';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Lottie from 'lottie-react';
@@ -34,7 +35,6 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from 'react';
 import { toast } from "sonner";
-
 interface GenerateProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -372,6 +372,36 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
     onClose();
   };
 
+  const getRemainingSlots = () => {
+    if (!permissions.products.limit) return 0;
+    return Math.max(0, permissions.products.limit - (productsGeneratedCount || 0));
+  };
+
+  const MultiGenerateWarning = () => {
+    const validUrls = multiUrls.filter(entry => entry.url.trim());
+    const remainingSlots = getRemainingSlots();
+
+    if (validUrls.length > remainingSlots) {
+      return (
+        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md mb-4">
+          <p className="text-sm text-yellow-800 flex items-center">
+            <FontAwesomeIcon icon={faCircleInfo} className="mr-2" />
+            You can only generate {remainingSlots} more product{remainingSlots === 1 ? '' : 's'} with your current plan.
+          </p>
+          {subscriptionTier !== 'super_scaler' && (
+            <Link
+              href={`/organization/${organizationId}/settings/billing`}
+              className="text-blue-500 hover:text-blue-600 hover:underline text-sm mt-2 inline-block"
+            >
+              Upgrade your plan →
+            </Link>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Modal isOpen={isOpen} className="w-full max-w-md">
       <ModalHeader>
@@ -544,56 +574,55 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
               </TabsContent>
 
               <TabsContent value="multi">
-                <div className="space-y-8 pt-4">
-                  <div className="space-y-4">
-                    {multiUrls.map((entry, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex gap-2">
-                          <Select
-                            value={entry.marketplace}
-                            onValueChange={(value) => {
-                              const newUrls = [...multiUrls];
-                              newUrls[index].marketplace = value;
-                              setMultiUrls(newUrls);
-                            }}
+                <MultiGenerateWarning />
+                <div className="space-y-4">
+                  {multiUrls.map((entry, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex gap-2">
+                        <Select
+                          value={entry.marketplace}
+                          onValueChange={(value) => {
+                            const newUrls = [...multiUrls];
+                            newUrls[index].marketplace = value;
+                            setMultiUrls(newUrls);
+                          }}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="AliExpress">AliExpress</SelectItem>
+                            <SelectItem value="Temu" disabled>Temu</SelectItem>
+                            <SelectItem value="Etsy" disabled>Etsy</SelectItem>
+                            <SelectItem value="Amazon" disabled>Amazon</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          type="text"
+                          value={entry.url}
+                          onChange={(e) => {
+                            const newUrls = [...multiUrls];
+                            newUrls[index].url = e.target.value;
+                            setMultiUrls(newUrls);
+                          }}
+                          placeholder={`Product URL ${index + 1}`}
+                          className={`${multiUrlErrors[index] ? 'border-red-500' : ''}`}
+                        />
+                        {index === multiUrls.length - 1 && multiUrls.length < 5 && (
+                          <Button
+                            variant="outline"
+                            onClick={() => setMultiUrls([...multiUrls, { url: '', marketplace: 'AliExpress' }])}
+                            disabled={!entry.url}
                           >
-                            <SelectTrigger className="w-[140px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="AliExpress">AliExpress</SelectItem>
-                              <SelectItem value="Temu" disabled>Temu</SelectItem>
-                              <SelectItem value="Etsy" disabled>Etsy</SelectItem>
-                              <SelectItem value="Amazon" disabled>Amazon</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <Input
-                            type="text"
-                            value={entry.url}
-                            onChange={(e) => {
-                              const newUrls = [...multiUrls];
-                              newUrls[index].url = e.target.value;
-                              setMultiUrls(newUrls);
-                            }}
-                            placeholder={`Product URL ${index + 1}`}
-                            className={`${multiUrlErrors[index] ? 'border-red-500' : ''}`}
-                          />
-                          {index === multiUrls.length - 1 && multiUrls.length < 5 && (
-                            <Button
-                              variant="outline"
-                              onClick={() => setMultiUrls([...multiUrls, { url: '', marketplace: 'AliExpress' }])}
-                              disabled={!entry.url}
-                            >
-                              +
-                            </Button>
-                          )}
-                        </div>
-                        {multiUrlErrors[index] && (
-                          <p className="text-sm text-red-500">{multiUrlErrors[index]}</p>
+                            +
+                          </Button>
                         )}
                       </div>
-                    ))}
-                  </div>
+                      {multiUrlErrors[index] && (
+                        <p className="text-sm text-red-500">{multiUrlErrors[index]}</p>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </TabsContent>
             </Tabs>
@@ -625,10 +654,13 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
         {!isLoading && !isMultiComplete && (
           <ModalSuccessButton
             onClick={handleGenerate}
-            disabled={isGenerateDisabled}
+            disabled={!permissions.products.canAccess ||
+              (activeTab === 'multi' && multiUrls.filter(entry => entry.url.trim()).length > getRemainingSlots())}
             className={`bg-green-500 hover:bg-green-600 text-white ${isGenerateDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            Generate
+            Generate {activeTab === 'multi'
+              ? `(${multiUrls.filter(entry => entry.url.trim()).length} products)`
+              : ''}
           </ModalSuccessButton>
         )}
         {isMultiComplete && (
