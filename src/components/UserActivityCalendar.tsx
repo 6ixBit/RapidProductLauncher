@@ -95,176 +95,269 @@ const UserActivityCalendar = () => {
     return `${day}${suffix(day)} ${month}`;
   };
 
+  const productQuotes = [
+    {
+      text: "If you are not embarrassed by the first version of your product, you've launched too late.",
+      author: "Reid Hoffman, LinkedIn Co-founder"
+    },
+    {
+      text: "The biggest risk is not taking any risk. In a world that's changing quickly, the only strategy that is guaranteed to fail is not taking risks.",
+      author: "Mark Zuckerberg, Meta CEO"
+    },
+    {
+      text: "Move fast and break things. Unless you are breaking stuff, you are not moving fast enough.",
+      author: "Mark Zuckerberg, Meta CEO"
+    },
+    {
+      text: "Ideas are easy. Implementation is hard.",
+      author: "Guy Kawasaki, Apple's Former Chief Evangelist"
+    },
+    {
+      text: "The way to get started is to quit talking and begin doing.",
+      author: "Walt Disney"
+    },
+    {
+      text: "Don't worry about failure; you only have to be right once.",
+      author: "Drew Houston, Dropbox Co-founder"
+    },
+    {
+      text: "The fastest way to find out if something works is to ship it.",
+      author: "Sam Altman, OpenAI CEO"
+    },
+    {
+      text: "If you're not launching products and testing the market, you're just having coffee and talking.",
+      author: "Gary Vaynerchuk"
+    },
+    {
+      text: "The best way to predict the future is to create it.",
+      author: "Peter Drucker"
+    },
+    {
+      text: "Done is better than perfect.",
+      author: "Sheryl Sandberg, Meta COO"
+    },
+    {
+      text: "Make something people want.",
+      author: "Paul Graham, Y Combinator Co-founder"
+    },
+    {
+      text: "Your most unhappy customers are your greatest source of learning.",
+      author: "Bill Gates, Microsoft Co-founder"
+    },
+    {
+      text: "If you never want to be criticized, for goodness' sake don't do anything new.",
+      author: "Jeff Bezos, Amazon Founder"
+    },
+    {
+      text: "The only way to win is to learn faster than anyone else.",
+      author: "Eric Ries, Lean Startup"
+    },
+    {
+      text: "Launch early. Launch often. Listen to customers.",
+      author: "Steve Blank, Lean Startup Pioneer"
+    }
+  ];
+
+  const randomQuote = React.useMemo(() =>
+    productQuotes[Math.floor(Math.random() * productQuotes.length)],
+    []  // Empty deps array means it'll stay stable during re-renders
+  );
+
   return (
     <div className="space-y-4">
       <div>
         <H2>Product Launch Calendar</H2>
+        <p className="text-sm text-gray-500">
+          Track your progress and stay motivated to test  products every day.
+        </p>
 
         {activityData && (
-          <div className="space-y-3 mt-8">
-            {(() => {
-              if (todayContributions === 0) {
-                return (
-                  <div className="space-y-2">
-                    <p className="text-sm text-gray-500">Today's Progress</p>
-                    <div className="bg-gray-100 rounded-full h-2 w-full">
-                      <div className="bg-gray-300 h-2 rounded-full w-0 transition-all duration-500"></div>
-                    </div>
-                    <p className="text-gray-600">Time to start launching! Let's hit that first product today 🚀</p>
-                  </div>
-                );
-              }
+          <div className="mt-8 grid gap-6">
 
-              const levels = {
-                starter: { min: 1, max: 3, next: 7, color: 'bg-blue-600', emoji: '🚀' },
-                scaler: { min: 4, max: 10, next: 10, color: 'bg-purple-600', emoji: '⚡' },
-                automator: { min: 11, max: Infinity, color: 'bg-orange-600', emoji: '🤖' }
-              };
 
-              const getCurrentLevel = () => {
-                if (todayContributions <= levels.starter.max) return 'starter';
-                if (todayContributions <= levels.scaler.max) return 'scaler';
-                return 'automator';
-              };
+            {/* Progress Card - Bento style */}
+            <div className="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)]">
+              <div className="space-y-3">
+                {(() => {
+                  if (todayContributions === 0) {
+                    return (
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-500">Today's Progress</p>
+                        <div className="bg-gray-100 rounded-full h-2 w-full">
+                          <div className="bg-gray-300 h-2 rounded-full w-0 transition-all duration-500"></div>
+                        </div>
+                        <p className="text-gray-600">Time to start launching! Let's hit that first product today 🚀</p>
+                      </div>
+                    );
+                  }
 
-              const level = getCurrentLevel();
-              const currentLevelData = levels[level];
+                  const levels = {
+                    starter: { min: 1, max: 3, next: 7, color: 'bg-blue-600', emoji: '🚀' },
+                    scaler: { min: 4, max: 10, next: 10, color: 'bg-purple-600', emoji: '⚡' },
+                    automator: { min: 11, max: Infinity, color: 'bg-orange-600', emoji: '🤖' }
+                  };
 
-              // Calculate progress percentage for current level
-              const getProgress = () => {
-                if (level === 'automator') return 100;
-                const targetCount = level === 'starter' ? levels.starter.next : levels.scaler.next;
-                return Math.min((todayContributions / targetCount) * 100, 100);
-              };
+                  const getCurrentLevel = () => {
+                    if (todayContributions <= levels.starter.max) return 'starter';
+                    if (todayContributions <= levels.scaler.max) return 'scaler';
+                    return 'automator';
+                  };
 
-              return (
-                <>
-                  <p className="text-sm text-gray-500">Today's Progress</p>
+                  const level = getCurrentLevel();
+                  const currentLevelData = levels[level];
 
-                  <div className="space-y-2">
-                    {/* Level and Products Count */}
-                    <div className="flex justify-between items-center">
-                      <span className={`text-sm font-medium ${currentLevelData.color.replace('bg-', 'text-')}`}>
-                        {level === 'starter' ? `Starter ${levels.starter.emoji}` :
-                          level === 'scaler' ? `Scaler ${levels.scaler.emoji}` :
-                            `Automator ${levels.automator.emoji}`}
-                      </span>
-                      <p className="text-sm font-medium">
-                        {todayContributions} product{todayContributions !== 1 ? 's' : ''} launched today
-                      </p>
-                    </div>
+                  // Calculate progress percentage for current level
+                  const getProgress = () => {
+                    if (level === 'automator') return 100;
+                    const targetCount = level === 'starter' ? levels.starter.next : levels.scaler.next;
+                    return Math.min((todayContributions / targetCount) * 100, 100);
+                  };
 
-                    {/* Progress Bar */}
-                    <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
-                      <div
-                        className={`${currentLevelData.color} h-2 rounded-full transition-all duration-500 ease-out`}
-                        style={{ width: `${getProgress()}%` }}
-                      ></div>
-                    </div>
+                  return (
+                    <>
+                      <p className="text-sm text-gray-500">Today's Progress</p>
 
-                    {/* Progress Info */}
-                    <div className="flex items-center justify-between">
-                      {level !== 'automator' && (
-                        <>
-                          <span className="text-xs text-gray-500">
-                            {Math.round(getProgress())}% to next level
+                      <div className="space-y-2">
+                        {/* Level and Products Count */}
+                        <div className="flex justify-between items-center">
+                          <span className={`text-sm font-medium ${currentLevelData.color.replace('bg-', 'text-')}`}>
+                            {level === 'starter' ? `Starter ${levels.starter.emoji}` :
+                              level === 'scaler' ? `Scaler ${levels.scaler.emoji}` :
+                                `Automator ${levels.automator.emoji}`}
                           </span>
-                          <span className="text-xs text-emerald-500">
-                            {level === 'starter' ?
-                              `${levels.starter.next - todayContributions} more until `
-                              : `${levels.scaler.next - todayContributions} more until `
+                          <p className="text-sm font-medium">
+                            {todayContributions} product{todayContributions !== 1 ? 's' : ''} launched today
+                          </p>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
+                          <div
+                            className={`${currentLevelData.color} h-2 rounded-full transition-all duration-500 ease-out`}
+                            style={{ width: `${getProgress()}%` }}
+                          ></div>
+                        </div>
+
+                        {/* Progress Info */}
+                        <div className="flex items-center justify-between">
+                          {level !== 'automator' && (
+                            <>
+                              <span className="text-xs text-gray-500">
+                                {Math.round(getProgress())}% to next level
+                              </span>
+                              <span className="text-xs text-emerald-500">
+                                {level === 'starter' ?
+                                  `${levels.starter.next - todayContributions} more until `
+                                  : `${levels.scaler.next - todayContributions} more until `
+                                }
+                                <span className="font-bold">
+                                  {level === 'starter' ?
+                                    `Scaler ⚡` :
+                                    `Automator 🤖`
+                                  }
+                                </span>
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+
+            {/* Heatmap Card */}
+            <div className="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)]">
+              {/* Heatmap */}
+              <TooltipProvider>
+                <HeatMap
+                  value={activityData || []}
+                  width={700}
+                  style={
+                    {
+                      color: '#000000',
+                      '--rhm-rect-active': '#000000',
+                    } as React.CSSProperties
+                  }
+                  startDate={(() => {
+                    const date = new Date();
+                    date.setMonth(0, 1);
+                    date.setHours(0, 0, 0, 0);
+                    return date;
+                  })()}
+                  panelColors={{
+                    0: '#e0f7fa',
+                    2: '#b2ebf2',
+                    4: '#80deea',
+                    10: '#4dd0e1',
+                    20: '#26c6da',
+                    30: '#00acc1',
+                  }}
+                  legendRender={(props) => (
+                    <g>
+                      <rect {...props} y={Number(props.y) + 10} rx={5} />
+
+                    </g>
+                  )}
+                  rectProps={{
+                    rx: 5,
+                  }}
+                  rectRender={(props, data) => {
+                    if (!data) return <rect {...props} />;
+
+                    return (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <g>
+                            <rect {...props} />
+                            {isToday(data.date) && (
+                              <>
+                                <rect
+                                  {...props}
+                                  stroke="#000000"
+                                  strokeWidth="2"
+                                  fill="none"
+                                  rx={5}
+                                />
+                                <rect
+                                  {...props}
+                                  className="animate-ping"
+                                  fill="#000000"
+                                  opacity="0.1"
+                                  rx={5}
+                                />
+                              </>
+                            )}
+                          </g>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="text-sm font-medium">
+                            {data.count > 0
+                              ? `${data.count} generated on ${formatDate(data.date)}${isToday(data.date) ? ' (Today)' : ''}`
+                              : `No activity on ${formatDate(data.date)}${isToday(data.date) ? ' (Today)' : ''}`
                             }
-                            <span className="font-bold">
-                              {level === 'starter' ?
-                                `Scaler ⚡` :
-                                `Automator 🤖`
-                              }
-                            </span>
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </>
-              );
-            })()}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  }}
+                />
+              </TooltipProvider>
+
+              {/* Quote Section */}
+              <figure className="text-gray-500 mt-2 pt-4 border-t border-gray-100">
+                <blockquote className="text-sm italic">
+                  "{randomQuote.text}"
+                </blockquote>
+                <figcaption className="text-xs mt-2">
+                  — {randomQuote.author}
+                </figcaption>
+              </figure>
+            </div>
           </div>
         )}
       </div>
-      <TooltipProvider>
-        <HeatMap
-          value={activityData || []}
-          width={700}
-          style={
-            {
-              color: '#000000',
-              '--rhm-rect-active': '#000000',
-            } as React.CSSProperties
-          }
-          startDate={(() => {
-            const date = new Date();
-            date.setMonth(0, 1);
-            date.setHours(0, 0, 0, 0);
-            return date;
-          })()}
-          panelColors={{
-            0: '#e0f7fa',
-            2: '#b2ebf2',
-            4: '#80deea',
-            10: '#4dd0e1',
-            20: '#26c6da',
-            30: '#00acc1',
-          }}
-          legendRender={(props) => (
-            <g>
-              <rect {...props} y={Number(props.y) + 10} rx={5} />
-
-            </g>
-          )}
-          rectProps={{
-            rx: 5,
-          }}
-          rectRender={(props, data) => {
-            if (!data) return <rect {...props} />;
-
-            return (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <g>
-                    <rect {...props} />
-                    {isToday(data.date) && (
-                      <>
-                        <rect
-                          {...props}
-                          stroke="#000000"
-                          strokeWidth="2"
-                          fill="none"
-                          rx={5}
-                        />
-                        <rect
-                          {...props}
-                          className="animate-ping"
-                          fill="#000000"
-                          opacity="0.1"
-                          rx={5}
-                        />
-                      </>
-                    )}
-                  </g>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="text-sm font-medium">
-                    {data.count > 0
-                      ? `${data.count} generated on ${formatDate(data.date)}${isToday(data.date) ? ' (Today)' : ''}`
-                      : `No activity on ${formatDate(data.date)}${isToday(data.date) ? ' (Today)' : ''}`
-                    }
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            );
-          }}
-        />
-      </TooltipProvider>
     </div>
   );
 };
