@@ -11,7 +11,7 @@ import {
 } from '@/components/Modal';
 import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
-import { useOrganization } from '@/hooks/useOrganization';
+import { useOrganizationID } from '@/hooks/useOrganization';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useStripeData } from '@/utils/stripe-queries';
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
@@ -171,7 +171,7 @@ const IntegrationsPage = () => {
     useState<boolean>(false);
 
   const { subscriptionTier } = useStripeData();
-  const { data: orgMember } = useOrganization();
+  const { data: organizationId } = useOrganizationID();
 
   console.log('Subscription Tier:', subscriptionTier);
 
@@ -247,7 +247,7 @@ const IntegrationsPage = () => {
             </div>
             {subscriptionTier !== 'mega_scaler' && (
               <Link
-                href={`/organization/${orgMember?.organization_id}/settings/billing`}
+                href={`/organization/${organizationId}/settings/billing`}
                 className="text-sm text-blue-500 hover:text-blue-600 font-medium transition-colors duration-300 flex items-center group"
               >
                 Upgrade for more stores
