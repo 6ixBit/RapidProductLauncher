@@ -104,6 +104,7 @@ export default function ProductsPage() {
 
     const { data: orgMember, isLoading: isLoadingOrg } = useOrganization();
     console.log('orgID', orgMember);
+    const organizationId = orgMember;
 
 
     const { subscriptionTier } = useStripeData();
@@ -116,7 +117,7 @@ export default function ProductsPage() {
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
             //TODO: Fix this.
-            let query = supabaseUserClientComponentClient
+            const query = supabaseUserClientComponentClient
                 .from('html_templates')
                 .select('*', { count: 'exact', head: true })
                 .eq('organization_id', orgMember)
