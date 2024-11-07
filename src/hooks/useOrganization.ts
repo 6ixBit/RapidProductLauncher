@@ -2,7 +2,7 @@ import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useQuery } from '@tanstack/react-query';
 
-export function useOrganization() {
+export function useOrganizationID() {
   const user = useLoggedInUser();
 
   return useQuery({
@@ -10,9 +10,9 @@ export function useOrganization() {
     queryFn: async () => {
       if (!user?.id) throw new Error('No user found');
 
-      const { data: orgMember, error } = await supabaseUserClientComponentClient
+      const { data, error } = await supabaseUserClientComponentClient
         .from('organization_members')
-        .select('organization_id')
+        .select('*')
         .eq('member_id', user.id)
         .order('created_at', { ascending: true })
         .limit(1)
@@ -22,7 +22,7 @@ export function useOrganization() {
         throw error;
       }
 
-      return orgMember;
+      return data.organization_id;
     },
     enabled: !!user?.id,
   });

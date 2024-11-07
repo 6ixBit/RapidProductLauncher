@@ -60,7 +60,9 @@ export const useFeaturePermissions = (
       current: productsGeneratedCount,
       reason: canGenerate
         ? undefined
-        : `You've reached the maximum product generation limit (${generationLimit}) for your ${subscriptionTier} plan`,
+        : subscriptionTier === 'free'
+          ? `You've reached the free tier limit (${generationLimit} products). Upgrade to Solo Scaler to generate up to 50 products!`
+          : `You've reached the maximum product generation limit (${generationLimit}) for your ${subscriptionTier} plan`,
     };
   };
 

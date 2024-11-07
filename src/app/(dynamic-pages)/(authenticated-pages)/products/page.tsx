@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/tooltip';
 import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
-import { useOrganization } from '@/hooks/useOrganization';
+import { useOrganizationID } from '@/hooks/useOrganization';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import { useStripeData } from '@/utils/stripe-queries';
 import {
@@ -102,48 +102,59 @@ export default function ProductsPage() {
         return () => observer.disconnect();
     }, [hasNextPage, isFetchingNextPage]);
 
-    const { data: orgMember, isLoading: isLoadingOrg } = useOrganization();
-    console.log('orgID', orgMember);
-    const organizationId = orgMember;
-
-
+    const { data: organizationId } = useOrganizationID();
     const { subscriptionTier } = useStripeData();
+    console.log('organizationId', organizationId);
+    console.log('subscriptionTier', subscriptionTier);
 
     // Get count of products generated in last 30 days
-    const { data: productsGeneratedCount, isLoading: isLoadingProductsGeneratedCount, error: productsGeneratedCountError } = useQuery({
-        queryKey: ['productsGeneratedCount', orgMember],
+    const { data: productsGeneratedCount, isLoading: isLoadingProductsGeneratedCount } = useQuery({
+        queryKey: ['productsGeneratedCount', organizationId, subscriptionTier],
         queryFn: async () => {
-            if (!orgMember) return 0;
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            //TODO: Fix this.
-            const query = supabaseUserClientComponentClient
-                .from('html_templates')
-                .select('*', { count: 'exact', head: true })
-                .eq('organization_id', orgMember)
-                .gte('created_at', thirtyDaysAgo.toISOString());
+            if (!organizationId) return 0;
 
-            const { data, count, error } = await query;
-            if (error) {
-                console.error('Supabase error:', error);
-                throw error;
+            let startDate = new Date();
+
+            if (subscriptionTier === 'free') {
+                // For free users, use rolling 30-day window
+                startDate.setDate(startDate.getDate() - 30);
+            } else {
+                // For paid users, get their billing cycle start date
+                const { data: subscription } = await supabaseUserClientComponentClient
+                    .from('subscriptions')
+                    .select('current_period_start')
+                    .eq('organization_id', organizationId)
+                    .eq('status', 'active')
+                    .single();
+
+                if (subscription?.current_period_start) {
+                    startDate = new Date(subscription.current_period_start);
+                } else {
+                    // Fallback to 30-day window if no subscription found
+                    startDate.setDate(startDate.getDate() - 30);
+                }
             }
 
-            console.log('Query response:', { data, count, error });
-            return count || 0;
-        },
-        enabled: !!orgMember,
-        staleTime: 1000 * 60, // Match the staleTime from the first query
-        cacheTime: 1000 * 60 * 5, // Match the cacheTime from the first query
-    });
+            const { count, error } = await supabaseUserClientComponentClient
+                .from('html_templates')
+                .select('*', { count: 'exact', head: true })
+                .eq('organization_id', organizationId)
+                .gte('created_at', startDate.toISOString());
 
-    console.log('productsGeneratedCount', productsGeneratedCount, isLoadingProductsGeneratedCount, productsGeneratedCountError);
+            if (error) throw error;
+
+            return count ?? 0;
+        },
+        enabled: !!organizationId,
+    });
 
     const permissions = useFeaturePermissions(
         subscriptionTier,
         0,
         productsGeneratedCount || 0
     );
+    console.log('permissions', permissions);
+    console.log('productsGeneratedCount', productsGeneratedCount, isLoadingProductsGeneratedCount);
 
     const handleGenerateProduct = async (
         source: string,
@@ -220,7 +231,7 @@ export default function ProductsPage() {
                                 {subscriptionTier !== 'mega_scaler' &&
                                     (
                                         <Link
-                                            href={`/organization/${orgMember}/settings/billing`}
+                                            href={`/organization/${organizationId}/settings/billing`}
                                             className="text-sm text-blue-500 hover:text-blue-600 hover:underline"
                                         >
                                             Upgrade to generate more products →
