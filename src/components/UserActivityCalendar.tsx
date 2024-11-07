@@ -21,7 +21,7 @@ const UserActivityCalendar = () => {
 
   const queryClient = useQueryClient();
 
-  const { data: activityData, isLoading } = useQuery({
+  const { data: activityData } = useQuery({
     queryKey: ['userProductActivity', user?.id],
     queryFn: async () => {
       const oneYearAgo = new Date();
@@ -54,10 +54,6 @@ const UserActivityCalendar = () => {
         count,
       }));
     },
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
     enabled: !!user?.id,
     initialData: () => queryClient.getQueryData(['userProductActivity', user?.id])
   });
@@ -70,12 +66,8 @@ const UserActivityCalendar = () => {
 
     const todayDate = toLocalDateString(new Date().toISOString());
     const today = activityData.find(item => item.date === todayDate);
-    console.log("use effect:", activityData, 'todayDate', todayDate, 'today', today);
     setTodayContributions(today?.count || 0);
   }, [activityData]);
-
-  console.log('activityData', activityData);
-  console.log('todayContributions', todayContributions);
 
   const isToday = (dateStr: string) => {
     const today = new Date();
@@ -109,9 +101,94 @@ const UserActivityCalendar = () => {
         <H2>Product Launch Calendar</H2>
 
         {activityData && (
-          <p className="text-gray-600 mb-2">
-            You've launched {todayContributions} product{todayContributions !== 1 ? 's' : ''} today
-          </p>
+          <div className="space-y-3 mt-8">
+            {(() => {
+              if (todayContributions === 0) {
+                return (
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">Today's Progress</p>
+                    <div className="bg-gray-100 rounded-full h-2 w-full">
+                      <div className="bg-gray-300 h-2 rounded-full w-0 transition-all duration-500"></div>
+                    </div>
+                    <p className="text-gray-600">Time to start launching! Let's hit that first product today 🚀</p>
+                  </div>
+                );
+              }
+
+              const levels = {
+                starter: { min: 1, max: 3, next: 7, color: 'bg-blue-600', emoji: '🚀' },
+                scaler: { min: 4, max: 10, next: 10, color: 'bg-purple-600', emoji: '⚡' },
+                automator: { min: 11, max: Infinity, color: 'bg-orange-600', emoji: '🤖' }
+              };
+
+              const getCurrentLevel = () => {
+                if (todayContributions <= levels.starter.max) return 'starter';
+                if (todayContributions <= levels.scaler.max) return 'scaler';
+                return 'automator';
+              };
+
+              const level = getCurrentLevel();
+              const currentLevelData = levels[level];
+
+              // Calculate progress percentage for current level
+              const getProgress = () => {
+                if (level === 'automator') return 100;
+                const targetCount = level === 'starter' ? levels.starter.next : levels.scaler.next;
+                return Math.min((todayContributions / targetCount) * 100, 100);
+              };
+
+              return (
+                <>
+                  <p className="text-sm text-gray-500">Today's Progress</p>
+
+                  <div className="space-y-2">
+                    {/* Level and Products Count */}
+                    <div className="flex justify-between items-center">
+                      <span className={`text-sm font-medium ${currentLevelData.color.replace('bg-', 'text-')}`}>
+                        {level === 'starter' ? `Starter ${levels.starter.emoji}` :
+                          level === 'scaler' ? `Scaler ${levels.scaler.emoji}` :
+                            `Automator ${levels.automator.emoji}`}
+                      </span>
+                      <p className="text-sm font-medium">
+                        {todayContributions} product{todayContributions !== 1 ? 's' : ''} launched today
+                      </p>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
+                      <div
+                        className={`${currentLevelData.color} h-2 rounded-full transition-all duration-500 ease-out`}
+                        style={{ width: `${getProgress()}%` }}
+                      ></div>
+                    </div>
+
+                    {/* Progress Info */}
+                    <div className="flex items-center justify-between">
+                      {level !== 'automator' && (
+                        <>
+                          <span className="text-xs text-gray-500">
+                            {Math.round(getProgress())}% to next level
+                          </span>
+                          <span className="text-xs text-emerald-500">
+                            {level === 'starter' ?
+                              `${levels.starter.next - todayContributions} more until `
+                              : `${levels.scaler.next - todayContributions} more until `
+                            }
+                            <span className="font-bold">
+                              {level === 'starter' ?
+                                `Scaler ⚡` :
+                                `Automator 🤖`
+                              }
+                            </span>
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
+          </div>
         )}
       </div>
       <TooltipProvider>
