@@ -4,22 +4,27 @@ import GenerateProductModal from '@/components/GenerateProductModal';
 import { LoadingSpinner } from '@/components/LoadingSpinner/LoadingSpinner';
 import { ProductCard } from '@/components/ProductCard';
 import {
-    TooltipProvider
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
 } from '@/components/ui/tooltip';
 import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { useOrganizationID } from '@/hooks/useOrganization';
+import { useProductGenerationCount } from '@/hooks/useProductGenerationCount';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
-import { useStripeData } from '@/utils/stripe-queries';
+import { PRODUCT_GENERATION_LIMITS, useStripeData } from '@/utils/stripe-queries';
 import {
     faArrowsRotate,
     faMagicWandSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
 export interface Product {
     id: string;
     user_id: string;
@@ -104,49 +109,9 @@ export default function ProductsPage() {
 
     const { data: organizationId } = useOrganizationID();
     const { subscriptionTier } = useStripeData();
+    const { data: productsGeneratedCount } = useProductGenerationCount(organizationId, subscriptionTier);
     console.log('organizationId', organizationId);
     console.log('subscriptionTier', subscriptionTier);
-
-    // Get count of products generated in last 30 days
-    const { data: productsGeneratedCount, isLoading: isLoadingProductsGeneratedCount } = useQuery({
-        queryKey: ['productsGeneratedCount', organizationId, subscriptionTier],
-        queryFn: async () => {
-            if (!organizationId) return 0;
-
-            let startDate = new Date();
-
-            if (subscriptionTier === 'free') {
-                // For free users, use rolling 30-day window
-                startDate.setDate(startDate.getDate() - 30);
-            } else {
-                // For paid users, get their billing cycle start date
-                const { data: subscription } = await supabaseUserClientComponentClient
-                    .from('subscriptions')
-                    .select('current_period_start')
-                    .eq('organization_id', organizationId)
-                    .eq('status', 'active')
-                    .single();
-
-                if (subscription?.current_period_start) {
-                    startDate = new Date(subscription.current_period_start);
-                } else {
-                    // Fallback to 30-day window if no subscription found
-                    startDate.setDate(startDate.getDate() - 30);
-                }
-            }
-
-            const { count, error } = await supabaseUserClientComponentClient
-                .from('html_templates')
-                .select('*', { count: 'exact', head: true })
-                .eq('organization_id', organizationId)
-                .gte('created_at', startDate.toISOString());
-
-            if (error) throw error;
-
-            return count ?? 0;
-        },
-        enabled: !!organizationId,
-    });
 
     const permissions = useFeaturePermissions(
         subscriptionTier,
@@ -154,7 +119,6 @@ export default function ProductsPage() {
         productsGeneratedCount || 0
     );
     console.log('permissions', permissions);
-    console.log('productsGeneratedCount', productsGeneratedCount, isLoadingProductsGeneratedCount);
 
     const handleGenerateProduct = async (
         source: string,
@@ -204,6 +168,47 @@ export default function ProductsPage() {
 
     const allProducts = data?.pages.flat() ?? [];
 
+    const renderGenerateButton = (className?: string, text: string = 'Generate') => {
+        const button = (
+            <button
+                className={`${className ?? 'px-6 py-2 bg-blue-500 text-white rounded-full transition-colors duration-200'} 
+                    ${!permissions.products.canAccess
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:bg-blue-600'}`}
+                onClick={() => permissions.products.canAccess && setIsModalOpen(true)}
+                disabled={!permissions.products.canAccess}
+            >
+                <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                {text}
+            </button>
+        );
+
+        if (!permissions.products.canAccess) {
+            return (
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        {button}
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                        <div className="text-center p-2">
+                            <p className="mb-2">{permissions.products.reason}</p>
+                            {subscriptionTier !== 'super_scaler' && (
+                                <Link
+                                    href={`/organization/${organizationId}/settings/billing`}
+                                    className="text-blue-500 hover:text-blue-600 hover:underline text-sm"
+                                >
+                                    Upgrade your plan →
+                                </Link>
+                            )}
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
+            );
+        }
+
+        return button;
+    };
+
     return (
         <TooltipProvider>
             <div className="container mx-auto px-4 py-8">
@@ -214,16 +219,16 @@ export default function ProductsPage() {
                             <div className="mt-6 flex items-center gap-4">
                                 <div className="flex items-center">
                                     <span className="text-sm text-gray-600 font-medium">
-                                        {permissions.products.current} / {permissions.products.limit}
+                                        {productsGeneratedCount ?? 0} / {
+                                            PRODUCT_GENERATION_LIMITS[subscriptionTier ?? 'free']
+                                        }
                                     </span>
                                     <div className="h-2 ml-3 w-32 bg-gray-100 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-red-500 transition-all duration-300"
-
                                             style={{
-                                                width: permissions.products?.current && permissions.products?.limit
-                                                    ? `${(permissions.products.current / permissions.products.limit) * 100}%`
-                                                    : '0%'
+                                                width: `${((productsGeneratedCount ?? 0) /
+                                                    PRODUCT_GENERATION_LIMITS[subscriptionTier ?? 'free']) * 100}%`
                                             }}
                                         />
                                     </div>
@@ -240,18 +245,7 @@ export default function ProductsPage() {
                             </div>
                         </div>
                         <div className="flex gap-4">
-                            <button
-                                className={`px-6 py-2 bg-blue-500 text-white rounded-full transition-colors duration-200 
-                                    ${!permissions.products.canAccess
-                                        ? 'opacity-50 cursor-not-allowed'
-                                        : 'hover:bg-blue-600'}`}
-                                onClick={() => setIsModalOpen(true)}
-                                disabled={!permissions.products.canAccess}
-                                title={permissions.products.reason}
-                            >
-                                <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-                                Generate
-                            </button>
+                            {renderGenerateButton()}
                             <button
                                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200"
                                 onClick={handleRefresh}
@@ -302,13 +296,10 @@ export default function ProductsPage() {
                             <p className="text-gray-500 max-w-md mx-auto">
                                 Get ahead by generating your first product using our AI-powered product generator.
                             </p>
-                            <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 inline-flex items-center"
-                            >
-                                <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-                                Generate Your First Product
-                            </button>
+                            {renderGenerateButton(
+                                "px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 inline-flex items-center",
+                                "Generate Your First Product"
+                            )}
                         </div>
                     )}
                 </div>

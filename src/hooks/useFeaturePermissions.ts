@@ -51,7 +51,7 @@ export const useFeaturePermissions = (
     }
 
     const generationLimit = PRODUCT_GENERATION_LIMITS[subscriptionTier];
-    const canGenerate = productsGeneratedCount <= generationLimit;
+    const canGenerate = productsGeneratedCount < generationLimit;
 
     return {
       canAccess: canGenerate,
@@ -61,7 +61,7 @@ export const useFeaturePermissions = (
       reason: canGenerate
         ? undefined
         : subscriptionTier === 'free'
-          ? `You've reached the free tier limit (${generationLimit} products). Upgrade to Solo Scaler to generate up to 50 products!`
+          ? `Limit of ${generationLimit} reached. Upgrade to Solo Scaler to generate up to 50 products!`
           : `You've reached the maximum product generation limit (${generationLimit}) for your ${subscriptionTier} plan`,
     };
   };

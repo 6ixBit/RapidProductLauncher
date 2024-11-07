@@ -18,10 +18,13 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { useProductGenerationCount } from '@/hooks/useProductGenerationCount';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { useStripeData } from '@/utils/stripe-queries';
 import { faShopify } from '@fortawesome/free-brands-svg-icons';
-import { faBolt, faCircleCheck, faCircleInfo, faEye, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faCircleInfo, faEye, faMagicWandSparkles, faPencil, faStore, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, ExternalLink, Link as LinkIcon } from 'lucide-react';
@@ -239,6 +242,63 @@ export default function ProductPage() {
         },
     });
 
+    // Add these hooks
+    const { subscriptionTier } = useStripeData();
+    const { data: productsGeneratedCount } = useProductGenerationCount(organizationId, subscriptionTier);
+
+    const permissions = useFeaturePermissions(
+        subscriptionTier,
+        0,
+        productsGeneratedCount || 0
+    );
+
+    const renderImportButton = () => {
+        const button = (
+            <button
+                onClick={(e) => {
+                    if (!permissions.products.canAccess) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const selectedStore = stores?.find(store => store.id === Number(selectedStoreId));
+                    importToShopifyMutation.mutate({ selectedStore });
+                    setDropdownOpen(false);
+                }}
+                className={`w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm transition-colors
+                    ${!permissions.products.canAccess || !selectedStoreId || selectedStoreId === ''
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:bg-[#85aa3f]'}`}
+                disabled={!permissions.products.canAccess || !selectedStoreId || selectedStoreId === ''}
+            >
+                Import
+            </button>
+        );
+
+        if (!permissions.products.canAccess) {
+            return (
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        {button}
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                        <div className="text-center p-2">
+                            <p className="mb-2">{permissions.products.reason}</p>
+                            {subscriptionTier !== 'super_scaler' && (
+                                <Link
+                                    href={`/organization/${organizationId}/settings/billing`}
+                                    className="text-blue-500 hover:text-blue-600 hover:underline text-sm"
+                                >
+                                    Upgrade your plan →
+                                </Link>
+                            )}
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
+            );
+        }
+
+        return button;
+    };
+
     if (isLoading) {
         return <p>Loading...</p>;
     }
@@ -273,61 +333,71 @@ export default function ProductPage() {
 
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-2">
-            <div className="flex flex-col gap-4">
-                <button
-                    className="w-full lg:hidden px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-                    Generate New Product
-                </button>
-                <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0 w-full">
-                    <div className="w-full overflow-x-auto">
-                        <TabsNavigation tabs={NavigationTabs(productID)} />
-                    </div>
+        <TooltipProvider>
+            <div className="max-w-6xl mx-auto px-4 py-2">
+                <div className="flex flex-col gap-4">
                     <button
-                        className="hidden lg:flex items-center px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
+                        className={`w-full lg:hidden px-4 py-2 bg-blue-500 text-white rounded-full transition-colors duration-200 
+                            ${!permissions.products.canAccess
+                                ? 'opacity-50 cursor-not-allowed'
+                                : 'hover:bg-blue-600'}`}
                         onClick={() => setIsModalOpen(true)}
+                        disabled={!permissions.products.canAccess}
+                        title={permissions.products.reason}
                     >
                         <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-                        Generate
+                        Generate New Product
                     </button>
+                    <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0 w-full">
+                        <div className="w-full overflow-x-auto">
+                            <TabsNavigation tabs={NavigationTabs(productID)} />
+                        </div>
+                        <button
+                            className={`hidden lg:flex items-center px-4 py-2 bg-blue-500 text-white rounded-full transition-colors duration-200
+                                ${!permissions.products.canAccess
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : 'hover:bg-blue-600'}`}
+                            onClick={() => setIsModalOpen(true)}
+                            disabled={!permissions.products.canAccess}
+                            title={permissions.products.reason}
+                        >
+                            <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+                            Generate
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <GenerateProductModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onGenerate={handleGenerateProduct}
-            />
+                <GenerateProductModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onGenerate={handleGenerateProduct}
+                />
 
-            {productData ? (
-                <div className="mt-1 bg-white shadow-lg rounded-lg overflow-hidden">
-                    <div className="p-6 flex flex-col md:flex-row">
-                        {productData.thumbnail_url && (
-                            <div className="mb-4 md:mb-0 md:mr-6">
-                                <Image
-                                    src={productData?.thumbnail_url || ''}
-                                    alt={productData?.product_title || ''}
-                                    width={400} // Adjust width as needed
-                                    height={300} // Adjust height as needed
-                                    className="object-cover rounded"
-                                    priority
-                                />
-                            </div>
-                        )}
-                        <div className="flex-1 flex flex-col justify-between">
-                            <div>
-                                <H1 className="text-3xl font-bold mb-4 text-gray-900 ">
-                                    {productData.product_title}
-                                </H1>
-                                {/* <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p> */}
+                {productData ? (
+                    <div className="mt-1 bg-white shadow-lg rounded-lg overflow-hidden">
+                        <div className="p-6 flex flex-col md:flex-row">
+                            {productData.thumbnail_url && (
+                                <div className="mb-4 md:mb-0 md:mr-6">
+                                    <Image
+                                        src={productData?.thumbnail_url || ''}
+                                        alt={productData?.product_title || ''}
+                                        width={400} // Adjust width as needed
+                                        height={300} // Adjust height as needed
+                                        className="object-cover rounded"
+                                        priority
+                                    />
+                                </div>
+                            )}
+                            <div className="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <H1 className="text-3xl font-bold mb-4 text-gray-900 ">
+                                        {productData.product_title}
+                                    </H1>
+                                    {/* <p className="text-xl text-gray-600 mb-4">{productData.product_sub_heading}</p> */}
 
-                                <div className="mb-6">
-                                    <div className="mb-4">
-                                        <div className="flex items-center justify-between mt-6">
-                                            <TooltipProvider>
+                                    <div className="mb-6">
+                                        <div className="mb-4">
+                                            <div className="flex items-center justify-between mt-6">
                                                 <Tooltip>
                                                     <div className="flex items-center">
                                                         <p className="text-2xl font-semibold text-green-600">
@@ -350,272 +420,250 @@ export default function ProductPage() {
                                                         </div>
                                                     </TooltipContent>
                                                 </Tooltip>
-                                            </TooltipProvider>
 
-                                            {productData.is_imported_to_shopify ? (
-                                                <Link
-                                                    href={productData?.shopify_product_url || ''}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <Badge variant="shopify">
-                                                        <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                        Imported
-                                                    </Badge>
-                                                </Link>
-                                            ) : (
-                                                <Badge variant="default">
-                                                    <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                    Not Imported
-                                                </Badge>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center mb-2 text-sm text-gray-500">
-                                        <Calendar className="w-4 h-4 mr-2" />
-                                        <span>
-                                            Generated on {formatDate(productData.created_at)} in {productData.language}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center text-sm text-blue-600">
-                                        <LinkIcon className="w-4 h-4 mr-2" />
-                                        <a
-                                            href={productData.source_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="hover:underline"
-                                        >
-                                            Sourcing URL
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-4 md:mt-0">
-                                <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white">
-                                            <FontAwesomeIcon icon={faBolt} className='mr-2' />
-                                            Actions
-                                        </Button>
-                                    </DropdownMenuTrigger>
-
-                                    <DropdownMenuContent className="w-[250px]">
-                                        <div className="p-4">
-                                            <div className="flex flex-col w-full gap-2">
-                                                {stores?.length === 0 ? (
-                                                    <>
-                                                        <div className="flex items-center text-[#96bf47]">
+                                                {productData.is_imported_to_shopify ? (
+                                                    <Link
+                                                        href={productData?.shopify_product_url || ''}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <Badge variant="shopify">
                                                             <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                            Import to Shopify
-                                                        </div>
-                                                        <div className="text-sm text-gray-600 mb-2">
-                                                            Connect a store to start importing products.
-                                                        </div>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                router.push('/integrations');
-                                                                setDropdownOpen(false);
-                                                            }}
-                                                            className="w-full p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors"
-                                                        >
-                                                            <FontAwesomeIcon icon={faStore} className="mr-2" />
-                                                            Connect Store
-                                                        </button>
-                                                    </>
+                                                            Imported
+                                                        </Badge>
+                                                    </Link>
                                                 ) : (
-                                                    <>
-                                                        <div className="flex items-center text-[#96bf47]">
-                                                            <FontAwesomeIcon icon={faShopify} className="mr-2" />
-                                                            Import to Shopify
-                                                        </div>
-                                                        <select
-                                                            className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
-                                                            value={selectedStoreId}
-                                                            onChange={(e) => setSelectedStoreId(e.target.value)}
-                                                            onClick={(e) => e.stopPropagation()}
-                                                        >
-                                                            <option value="">Select a store...</option>
-                                                            {stores?.map(store => (
-                                                                <option key={store.id} value={store.id}>
-                                                                    {cleanStoreUrl(store.shopify_store_url)}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                const selectedStore = stores?.find(store => store.id === Number(selectedStoreId));
-                                                                importToShopifyMutation.mutate({ selectedStore });
-                                                                setDropdownOpen(false);
-                                                            }}
-                                                            className="w-full mt-2 p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                                            disabled={!selectedStoreId || selectedStoreId === ''}
-                                                        >
-                                                            Import
-                                                        </button>
-                                                    </>
+                                                    <Badge variant="default">
+                                                        <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                        Not Imported
+                                                    </Badge>
                                                 )}
                                             </div>
                                         </div>
 
-                                        {importedStores && importedStores.length > 0 && (
-                                            <>
-                                                <div className="p-4">
-                                                    <div className="flex flex-col w-full gap-2">
-                                                        <div className="flex items-center text-gray-700">
-                                                            <FontAwesomeIcon icon={faStore} className="mr-2" />
-                                                            Manage Product
-                                                        </div>
+                                        <div className="flex items-center mb-2 text-sm text-gray-500">
+                                            <Calendar className="w-4 h-4 mr-2" />
+                                            <span>
+                                                Generated on {formatDate(productData.created_at)} in {productData.language}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center text-sm text-blue-600">
+                                            <LinkIcon className="w-4 h-4 mr-2" />
+                                            <a
+                                                href={productData.source_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="hover:underline"
+                                            >
+                                                Sourcing URL
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                                        <select
-                                                            className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
-                                                            value={selectedViewStoreId}
-                                                            onChange={(e) => setSelectedViewStoreId(e.target.value)}
-                                                            onClick={(e) => e.stopPropagation()}
-                                                        >
-                                                            <option value="">Select a store...</option>
-                                                            {importedStores.map(store => (
-                                                                <option key={store.id} value={store.id}>
-                                                                    {cleanStoreUrl(store.shopify_store_url || '')}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-
-                                                        <div className="flex gap-2">
+                                <div className="mt-4 md:mt-0">
+                                    <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline">Actions</Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-56">
+                                            <div className="p-4">
+                                                <div className="flex flex-col w-full gap-2">
+                                                    {!stores || stores.length === 0 ? (
+                                                        <>
+                                                            <div className="flex items-center text-[#96bf47]">
+                                                                <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                                Connect Shopify Store
+                                                            </div>
                                                             <button
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
-                                                                    if (store) {
-                                                                        window.open(
-                                                                            store.product_url,
-                                                                            '_blank'
-                                                                        );
-                                                                    }
+                                                                onClick={() => {
+                                                                    router.push('/integrations');
                                                                     setDropdownOpen(false);
                                                                 }}
-                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                                                disabled={!selectedViewStoreId || selectedViewStoreId === ''}
+                                                                className="w-full p-2 bg-[#96bf47] text-white rounded text-sm hover:bg-[#85aa3f] transition-colors"
                                                             >
-                                                                <FontAwesomeIcon icon={faEye} className="mr-2" />
-                                                                View
+                                                                <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                                Connect Store
                                                             </button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className="flex items-center text-[#96bf47]">
+                                                                <FontAwesomeIcon icon={faShopify} className="mr-2" />
+                                                                Import to Shopify
+                                                            </div>
+                                                            <select
+                                                                className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
+                                                                value={selectedStoreId}
+                                                                onChange={(e) => setSelectedStoreId(e.target.value)}
+                                                                onClick={(e) => e.stopPropagation()}
+                                                            >
+                                                                <option value="">Select a store...</option>
+                                                                {stores?.map(store => (
+                                                                    <option key={store.id} value={store.id}>
+                                                                        {cleanStoreUrl(store.shopify_store_url)}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
 
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
-                                                                    console.log('store', store);
-                                                                    if (store) {
-                                                                        window.open(
-                                                                            `https://admin.shopify.com/store/${store.myshopify_domain?.replace('.myshopify.com', '')}/products/${store?.shopify_product_id}`,
-                                                                            '_blank'
-                                                                        );
-                                                                    }
-                                                                    setDropdownOpen(false);
-                                                                }}
-                                                                className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                                                disabled={!selectedViewStoreId || selectedViewStoreId === ''}
+                                                            {renderImportButton()}
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {importedStores && importedStores.length > 0 && (
+                                                <>
+                                                    <div className="p-4">
+                                                        <div className="flex flex-col w-full gap-2">
+                                                            <div className="flex items-center text-gray-700">
+                                                                <FontAwesomeIcon icon={faStore} className="mr-2" />
+                                                                Manage Product
+                                                            </div>
+
+                                                            <select
+                                                                className="w-full p-2 border border-gray-200 rounded text-sm text-gray-600"
+                                                                value={selectedViewStoreId}
+                                                                onChange={(e) => setSelectedViewStoreId(e.target.value)}
+                                                                onClick={(e) => e.stopPropagation()}
                                                             >
-                                                                <FontAwesomeIcon icon={faPencil} className="mr-2" />
-                                                                Edit
-                                                            </button>
+                                                                <option value="">Select a store...</option>
+                                                                {importedStores.map(store => (
+                                                                    <option key={store.id} value={store.id}>
+                                                                        {cleanStoreUrl(store.shopify_store_url || '')}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+
+                                                            <div className="flex gap-2">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        e.stopPropagation();
+                                                                        const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
+                                                                        if (store) {
+                                                                            window.open(
+                                                                                store.product_url,
+                                                                                '_blank'
+                                                                            );
+                                                                        }
+                                                                        setDropdownOpen(false);
+                                                                    }}
+                                                                    className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                    disabled={!selectedViewStoreId || selectedViewStoreId === ''}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faEye} className="mr-2" />
+                                                                    View
+                                                                </button>
+
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        e.stopPropagation();
+                                                                        const store = importedStores.find(s => s?.id === Number(selectedViewStoreId));
+                                                                        console.log('store', store);
+                                                                        if (store) {
+                                                                            window.open(
+                                                                                `https://admin.shopify.com/store/${store.myshopify_domain?.replace('.myshopify.com', '')}/products/${store?.shopify_product_id}`,
+                                                                                '_blank'
+                                                                            );
+                                                                        }
+                                                                        setDropdownOpen(false);
+                                                                    }}
+                                                                    className="flex-1 p-2 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                    disabled={!selectedViewStoreId || selectedViewStoreId === ''}
+                                                                >
+                                                                    <FontAwesomeIcon icon={faPencil} className="mr-2" />
+                                                                    Edit
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </>
-                                        )}
+                                                </>
+                                            )}
 
-                                        <DropdownMenuItem
-                                            onClick={() => setShowDeleteModal(true)}
-                                            className="p-4 text-red-600"
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} className="mr-2" />
-                                            Delete Product
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                            <DropdownMenuItem
+                                                onClick={() => setShowDeleteModal(true)}
+                                                className="p-4 text-red-600"
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} className="mr-2" />
+                                                Delete Product
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
 
-                                <DeleteModal
-                                    isOpen={showDeleteModal}
-                                    onClose={() => setShowDeleteModal(false)}
-                                    onDelete={async () => await deleteProductMutation.mutate(productData.id)}
-                                    title="Delete Product"
-                                    description={`Are you sure you want to delete "${productData.product_title}"? This action cannot be undone.`}
-                                />
+                                    <DeleteModal
+                                        isOpen={showDeleteModal}
+                                        onClose={() => setShowDeleteModal(false)}
+                                        onDelete={async () => await deleteProductMutation.mutate(productData.id)}
+                                        title="Delete Product"
+                                        description={`Are you sure you want to delete "${productData.product_title}"? This action cannot be undone.`}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {productData.target_audience && (
-                        <div className="border-t border-gray-200 p-6">
-                            <h2 className="text-xl font-semibold mb-3 text-gray-900">
-                                Your Ideal Customer Profile
-                            </h2>
-                            <div className="text-gray-700 leading-relaxed">
-                                <p className="mb-2 font-semibold">
-                                    <span className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-md border-l-4 border-blue-500">
-                                        {productData.target_audience}
-                                    </span>
-                                </p>
-                                <p className="text-sm text-gray-500 mt-2">
-                                    Understanding your target audience helps optimize your marketing and sales strategies.
-                                </p>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="border-t border-gray-200 p-6">
-                        <h2 className="text-xl font-semibold mb-3 text-gray-900">
-                            Description
-                        </h2>
-                        <p className="text-gray-700 leading-relaxed">
-                            {productData.product_description}
-                        </p>
-                    </div>
-                    {productData.product_key_points &&
-                        productData.product_key_points.length > 0 && (
+                        {productData.target_audience && (
                             <div className="border-t border-gray-200 p-6">
                                 <h2 className="text-xl font-semibold mb-3 text-gray-900">
-                                    Key Points
+                                    Your Ideal Customer Profile
                                 </h2>
-                                <ul className="list-disc list-inside text-gray-700">
-                                    {productData.product_key_points &&
-                                        productData.product_key_points.map((point, index) => (
-                                            <li key={index} className="mb-2 text-black">
-                                                {point}
-                                            </li>
-                                        ))}
-                                </ul>
+                                <div className="text-gray-700 leading-relaxed">
+                                    <p className="mb-2 font-semibold">
+                                        <span className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-md border-l-4 border-blue-500">
+                                            {productData.target_audience}
+                                        </span>
+                                    </p>
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        Understanding your target audience helps optimize your marketing and sales strategies.
+                                    </p>
+                                </div>
                             </div>
                         )}
-                    <div className="mt-2 p-6">
-                        <h2 className="text-xl font-semibold mb-4 text-gray-900 ">
-                            Customer Reviews
-                        </h2>
-                        {productData?.product_reviews &&
-                            productData?.product_reviews.map((review, index) => (
-                                <div key={index} className="mb-4 p-4 bg-gray-100 rounded">
-                                    <p className="font-semibold text-gray-900">{review.name}</p>
-                                    <p className="text-gray-700">{review.content}</p>
+
+                        <div className="border-t border-gray-200 p-6">
+                            <h2 className="text-xl font-semibold mb-3 text-gray-900">
+                                Description
+                            </h2>
+                            <p className="text-gray-700 leading-relaxed">
+                                {productData.product_description}
+                            </p>
+                        </div>
+                        {productData.product_key_points &&
+                            productData.product_key_points.length > 0 && (
+                                <div className="border-t border-gray-200 p-6">
+                                    <h2 className="text-xl font-semibold mb-3 text-gray-900">
+                                        Key Points
+                                    </h2>
+                                    <ul className="list-disc list-inside text-gray-700">
+                                        {productData.product_key_points &&
+                                            productData.product_key_points.map((point, index) => (
+                                                <li key={index} className="mb-2 text-black">
+                                                    {point}
+                                                </li>
+                                            ))}
+                                    </ul>
                                 </div>
-                            ))}
+                            )}
+                        <div className="mt-2 p-6">
+                            <h2 className="text-xl font-semibold mb-4 text-gray-900 ">
+                                Customer Reviews
+                            </h2>
+                            {productData?.product_reviews &&
+                                productData?.product_reviews.map((review, index) => (
+                                    <div key={index} className="mb-4 p-4 bg-gray-100 rounded">
+                                        <p className="font-semibold text-gray-900">{review.name}</p>
+                                        <p className="text-gray-700">{review.content}</p>
+                                    </div>
+                                ))}
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div className="mt-8 text-center">
-                    <p className="text-xl text-gray-600">No product data found.</p>
-                </div>
-            )}
-        </div>
+                ) : (
+                    <div className="mt-8 text-center">
+                        <p className="text-xl text-gray-600">No product data found.</p>
+                    </div>
+                )}
+            </div>
+        </TooltipProvider>
     );
 }
-
 

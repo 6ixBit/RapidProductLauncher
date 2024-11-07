@@ -26,7 +26,7 @@ export const STORE_LIMITS: Record<SubscriptionTier, number> = {
 };
 
 export const PRODUCT_GENERATION_LIMITS: Record<SubscriptionTier, number> = {
-  free: 2,
+  free: 3,
   solo_scaler: 50,
   mega_scaler: 125,
   super_scaler: 250,
@@ -171,13 +171,17 @@ export const useStripeData = () => {
 
   const { data: subscriptionTier } = useQuery({
     queryKey: ['subscriptionTier', stripeCustomerId],
-    queryFn: () => getCustomerSubscriptionTier(stripe, stripeCustomerId),
-    enabled: !!stripeCustomerId,
+    queryFn: async () => {
+      // If there's no stripeCustomerId, the user is on free tier
+      if (!stripeCustomerId) return 'free';
+      return getCustomerSubscriptionTier(stripe, stripeCustomerId);
+    },
   });
 
   return {
     stripeCustomerId,
-    subscriptionTier,
-    isLoading: !stripeCustomerId || !subscriptionTier,
+    // Default to 'free' if subscriptionTier is undefined
+    subscriptionTier: subscriptionTier ?? 'free',
+    isLoading: false, // We can always determine the tier now
   };
 };

@@ -4,14 +4,19 @@ import GenerateProductModal from '@/components/GenerateProductModal';
 import { ProductCard } from '@/components/ProductCard';
 import H1 from '@/components/Text/H1';
 import H3 from '@/components/Text/H3';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UserActivityCalendar from '@/components/UserActivityCalendar';
+import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
+import { useProductGenerationCount } from '@/hooks/useProductGenerationCount';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
+import { useStripeData } from '@/utils/stripe-queries';
 import { faMagicWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 interface HomeProps {
   userName?: string;
   userEmail?: string;
@@ -139,6 +144,58 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
     }
   };
 
+  // Add these hooks
+  const { subscriptionTier } = useStripeData();
+  const { data: productsGeneratedCount } = useProductGenerationCount(organizationId, subscriptionTier);
+
+  const permissions = useFeaturePermissions(
+    subscriptionTier,
+    0,
+    productsGeneratedCount || 0
+  );
+
+  const renderGenerateButton = () => {
+    const button = (
+      <button
+        className={`flex items-center justify-center px-6 py-2 bg-blue-500 text-white rounded-full transition-colors
+          ${!permissions.products.canAccess
+            ? 'opacity-50 cursor-not-allowed'
+            : 'hover:bg-blue-600'}`}
+        onClick={() => permissions.products.canAccess && setIsModalOpen(true)}
+        disabled={!permissions.products.canAccess}
+      >
+        <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
+        <span className="hidden sm:inline">Generate Product</span>
+        <span className="inline sm:hidden">Generate</span>
+      </button>
+    );
+
+    if (!permissions.products.canAccess) {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {button}
+          </TooltipTrigger>
+          <TooltipContent className="max-w-xs">
+            <div className="text-center p-2">
+              <p className="mb-2">{permissions.products.reason}</p>
+              {subscriptionTier !== 'super_scaler' && (
+                <Link
+                  href={`/organization/${organizationId}/settings/billing`}
+                  className="text-blue-500 hover:text-blue-600 hover:underline text-sm"
+                >
+                  Upgrade your plan →
+                </Link>
+              )}
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return button;
+  };
+
   return (
     <TooltipProvider>
       <div className="space-y-6 py-4 px-4 container mx-auto">
@@ -154,15 +211,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
               <p className="text-xs md:text-sm text-gray-500">{userEmail}</p>
             )}
           </div>
-          <button
-            className="flex items-center justify-center px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 whitespace-nowrap transition-colors"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <FontAwesomeIcon icon={faMagicWandSparkles} className="mr-2" />
-            <span className="hidden sm:inline">Generate Product</span>
-            <span className="inline sm:hidden">Generate</span>
-          </button>
-
+          {renderGenerateButton()}
           <GenerateProductModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
