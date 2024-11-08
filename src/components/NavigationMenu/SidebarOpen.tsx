@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 import { useMutation } from '@tanstack/react-query';
 import { Menu, PanelLeftOpen } from 'lucide-react';
 import Image from 'next/image';
-import lightLogo from 'public/logos/nextbase-light-logo.png';
+import logo from 'public/logos/rpd-logo.png';
 import { useContext } from 'react';
 import { toast } from 'sonner';
 
@@ -43,7 +43,7 @@ export function SidebarOpen() {
           </div>
           <Image
             width={32}
-            src={lightLogo}
+            src={logo}
             alt="Logo Login"
             className={cn(
               'rotate-0 transition-all cursor-pointer',

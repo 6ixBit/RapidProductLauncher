@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   icons: {
-    icon: '/images/logo-black-main.ico',
+    icon: '/logos/rpd-logo.png',
   },
   title: 'Rapid Product Launcher',
   description: 'Launch ecom products faster than your competitors',

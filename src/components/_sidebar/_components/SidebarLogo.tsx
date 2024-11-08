@@ -2,8 +2,7 @@ import { T } from '@/components/ui/Typography';
 import { cn } from '@/utils/cn';
 import Image from 'next/image';
 import Link from 'next/link';
-import darkLogo from 'public/logos/nextbase-dark-logo.png';
-import lightLogo from 'public/logos/nextbase-light-logo.png';
+import logo from 'public/logos/rpd-logo.png';
 import { SidebarClose } from './SidebarClose';
 
 export function SidebarLogoAndToggle() {
@@ -15,8 +14,8 @@ export function SidebarLogoAndToggle() {
       >
         <Image
           width={36}
-          src={lightLogo}
-          alt="Nextbase Logo"
+          src={logo}
+          alt="RPL Logo"
           className={cn(
             'rotate-0 scale-100 transition-all',
             '-ml-2 ',
@@ -24,8 +23,8 @@ export function SidebarLogoAndToggle() {
         />
         <Image
           width={36}
-          src={darkLogo}
-          alt="Nextbase Logo"
+          src={logo}
+          alt="RPL Logo"
           className={cn(
             ' absolute rotate-90 scale-0 transition-all',
             '-ml-2 ',
