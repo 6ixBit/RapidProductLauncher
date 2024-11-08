@@ -8,6 +8,7 @@ import {
   ModalHeader,
 } from '@/components/Modal/Modal';
 import H3 from '@/components/Text/H3';
+import { Announcement } from '@/components/ui/Announcement';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { getDefaultOrganization } from '@/data/user/organizations';
@@ -126,11 +127,10 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 1: Connect your Shopify store.
+              Step 1: Go to your Shopify dashboard.
             </p>
             <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+              Then click on the "Apps" section in the left sidebar and then settings on the dropdown
             </p>
             <div className="relative w-full h-96">
               <Image
@@ -147,11 +147,10 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 2: Connect your Shopify store.
+              Step 2: Select develop apps
             </p>
             <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+              It should be on the right handside of apps and sales channels
             </p>
             <div className="relative w-full h-96">
               <Image
@@ -169,11 +168,10 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 3: Connect your Shopify store.
+              Step 3: Create an app to connect us to your store
             </p>
             <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+              Give it a name of Rapid Product Launcher
             </p>
             <div className="relative w-full h-96">
               <Image
@@ -191,11 +189,10 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 4: Connect your Shopify store.
+              Step 4: Select Configure Admin API Scoes
             </p>
             <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+              This should take you to the permissions page
             </p>
             <div className="relative w-full h-96">
               <Image
@@ -213,11 +210,10 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 5: Connect your Shopify store.
+              Step 5: Type product in the search bar
             </p>
             <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+              This allows us to automatically create products in your store
             </p>
             <div className="relative w-full h-96">
               <Image
@@ -236,11 +232,10 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 6: Connect your Shopify store.
+              Step 6: Install the app
             </p>
             <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+              Click install on the top right and then again on the modal that appears
             </p>
             <div className="relative w-full h-96">
               <Image
@@ -259,12 +254,12 @@ function AddShopifyStoreModal({
         return (
           <div className="space-y-2">
             <p className="text-lg font-semibold">
-              Step 7: Connect your Shopify store.
+              Step 7: Navigate to API Credentials
             </p>
-            <p className="text-sm text-gray-600">
-              Follow the instructions in the image above to connect your Shopify
-              store.
+            <p className="text-sm text-gray-600 mb-2">
+              Copy the API key and paste it in the Shopify API Key field above.
             </p>
+
             <div className="relative w-full h-96">
               <Image
                 src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_7.png"
@@ -274,6 +269,12 @@ function AddShopifyStoreModal({
                 className="py-4 rounded-md"
               />
             </div>
+
+            <Announcement
+              text="DO NOT DELETE THE APP AFTERWARDS OR YOU WILL HAVE TO RE-ADD IT AGAIN!"
+              variant="warning"
+              className="mb-4"
+            />
           </div>
         );
 
