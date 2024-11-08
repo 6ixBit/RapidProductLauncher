@@ -253,7 +253,7 @@ const productDescriptionTemplate = (data, images, getRandomAvatar) => `
             />
           </div>
           <div class="feature-content">
-            {/* <h2>Key Feature ${index + 1}</h2> */}
+      
             <p>${data.keyPoints[index]}</p>
           </div>
         </div>
