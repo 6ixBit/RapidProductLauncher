@@ -17,12 +17,10 @@ import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-// const adminApiKey = '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';
-
 interface AddShopifyStoreModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void; // Add this line
+  onSuccess: () => void;
 }
 
 function AddShopifyStoreModal({
@@ -40,7 +38,7 @@ function AddShopifyStoreModal({
   const [defaultOrganizationId, setDefaultOrganizationId] = useState<
     string | null
   >(null);
-  const totalSteps = 5;
+  const totalSteps = 7;
 
   useEffect(() => {
     const fetchDefaultOrganization = async () => {
@@ -147,14 +145,143 @@ function AddShopifyStoreModal({
         );
       case 1:
         return (
-          <p className="text-lg font-semibold">
-            Step 2: Configure your settings.
-          </p>
+          <div className="space-y-2">
+            <p className="text-lg font-semibold">
+              Step 2: Connect your Shopify store.
+            </p>
+            <p className="text-sm text-gray-600">
+              Follow the instructions in the image above to connect your Shopify
+              store.
+            </p>
+            <div className="relative w-full h-96">
+              <Image
+                src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_2.png"
+                alt="Shopify Onboarding Step 1"
+                layout="fill"
+                objectFit="contain"
+                className="py-4 rounded-md"
+              />
+            </div>
+          </div>
         );
+
+      case 2:
+        return (
+          <div className="space-y-2">
+            <p className="text-lg font-semibold">
+              Step 3: Connect your Shopify store.
+            </p>
+            <p className="text-sm text-gray-600">
+              Follow the instructions in the image above to connect your Shopify
+              store.
+            </p>
+            <div className="relative w-full h-96">
+              <Image
+                src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_3.png"
+                alt="Shopify Onboarding Step 1"
+                layout="fill"
+                objectFit="contain"
+                className="py-4 rounded-md"
+              />
+            </div>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="space-y-2">
+            <p className="text-lg font-semibold">
+              Step 4: Connect your Shopify store.
+            </p>
+            <p className="text-sm text-gray-600">
+              Follow the instructions in the image above to connect your Shopify
+              store.
+            </p>
+            <div className="relative w-full h-96">
+              <Image
+                src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_4.png"
+                alt="Shopify Onboarding Step 1"
+                layout="fill"
+                objectFit="contain"
+                className="py-4 rounded-md"
+              />
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-2">
+            <p className="text-lg font-semibold">
+              Step 5: Connect your Shopify store.
+            </p>
+            <p className="text-sm text-gray-600">
+              Follow the instructions in the image above to connect your Shopify
+              store.
+            </p>
+            <div className="relative w-full h-96">
+              <Image
+                src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_5.png"
+                alt="Shopify Onboarding Step 1"
+                layout="fill"
+                objectFit="contain"
+                className="py-4 rounded-md"
+              />
+            </div>
+          </div>
+        );
+
+
+      case 5:
+        return (
+          <div className="space-y-2">
+            <p className="text-lg font-semibold">
+              Step 6: Connect your Shopify store.
+            </p>
+            <p className="text-sm text-gray-600">
+              Follow the instructions in the image above to connect your Shopify
+              store.
+            </p>
+            <div className="relative w-full h-96">
+              <Image
+                src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_6.png"
+                alt="Shopify Onboarding Step 1"
+                layout="fill"
+                objectFit="contain"
+                className="py-4 rounded-md"
+              />
+            </div>
+          </div>
+        );
+
+
+      case 6:
+        return (
+          <div className="space-y-2">
+            <p className="text-lg font-semibold">
+              Step 7: Connect your Shopify store.
+            </p>
+            <p className="text-sm text-gray-600">
+              Follow the instructions in the image above to connect your Shopify
+              store.
+            </p>
+            <div className="relative w-full h-96">
+              <Image
+                src="https://s3.us-east-2.amazonaws.com/rapid-product-launcher.ai/shopify-onboarding/step_7.png"
+                alt="Shopify Onboarding Step 1"
+                layout="fill"
+                objectFit="contain"
+                className="py-4 rounded-md"
+              />
+            </div>
+          </div>
+        );
+
+
       default:
         return (
           <p className="text-lg font-semibold">
-            Thank you for completing the onboarding!
+            Once you have the admin API key, you can now add your store!
           </p>
         );
     }

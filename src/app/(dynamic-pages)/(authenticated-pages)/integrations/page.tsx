@@ -173,7 +173,6 @@ const IntegrationsPage = () => {
   const { subscriptionTier } = useStripeData();
   const { data: organizationId } = useOrganizationID();
 
-  console.log('Subscription Tier:', subscriptionTier);
 
   const { data: storeIntegrations = [], isLoading } = useQuery({
     queryKey: ['getStoreIntegrations', user?.id],
