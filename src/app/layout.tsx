@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { GeistSans } from 'geist/font/sans';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'server-only';
 import { AppProviders } from './AppProviders';
@@ -32,7 +33,20 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <head></head>
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=AW-16500501224`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-16500501224');
+          `}
+        </Script>
+      </head>
       <body className="bg-background">
         <AppProviders>{children}</AppProviders>
       </body>

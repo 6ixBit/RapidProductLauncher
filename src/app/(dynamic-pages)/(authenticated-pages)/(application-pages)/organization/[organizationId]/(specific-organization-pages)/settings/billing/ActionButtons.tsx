@@ -10,6 +10,28 @@ import { useToastMutation } from '@/hooks/useToastMutation';
 import { getStripe } from '@/utils/stripe-client';
 import { ExternalLink } from 'lucide-react';
 
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
+const reportConversion = (url?: string) => {
+  if (typeof window === 'undefined' || !window.gtag) return;
+
+  const callback = () => {
+    if (url) {
+      window.location.href = url;
+    }
+  };
+
+  window.gtag('event', 'conversion', {
+    'send_to': 'AW-16500501224/-0P4CIeY650ZEOjVhrw9',
+    'transaction_id': '',
+    'event_callback': callback
+  });
+};
+
 export function CreateSubscriptionButton({
   organizationId,
   priceId,
@@ -41,6 +63,7 @@ export function CreateSubscriptionButton({
       className="w-full"
       onClick={() => {
         mutate();
+        reportConversion();
       }}
     >
       {isLoading ? 'Loading...' : 'Choose'}
@@ -80,6 +103,7 @@ export function StartFreeTrialButton({
       className="w-full"
       onClick={() => {
         mutate();
+        reportConversion();
       }}
     >
       {isLoading ? 'Starting trial...' : 'Start Free Trial'}
@@ -113,6 +137,7 @@ export function ManageSubscriptionButton({
         type="button"
         onClick={() => {
           mutate();
+          reportConversion();
         }}
       >
         <span>{isLoading ? 'Loading...' : 'Manage Subscription'} </span>

@@ -8,7 +8,7 @@ import {
   ModalHeader,
 } from '@/components/Modal/Modal';
 import H3 from '@/components/Text/H3';
-import { Announcement } from '@/components/ui/Announcement';
+import { Announcement } from '@/components/ui/announcement';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { getDefaultOrganization } from '@/data/user/organizations';
