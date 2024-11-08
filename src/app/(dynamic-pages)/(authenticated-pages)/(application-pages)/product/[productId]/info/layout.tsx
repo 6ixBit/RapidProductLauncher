@@ -1,23 +1,20 @@
 import { UserSidebar } from '@/components/_sidebar/UserSidebar';
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/ApplicationLayoutShell';
 import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { type ReactNode } from 'react';
+import { Announcement } from '@/components/ui/announcement';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <ApplicationLayoutShell sidebar={<UserSidebar />}>
       <div>
         <InternalNavbar>
-          <div className="hidden lg:flex w-full justify-between items-center">
+          <div className="hidden lg:flex w-full justify-between items-center lg:ml-8">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center bg-amber-50 text-amber-700 px-4 py-2 rounded-full border border-amber-200 shadow-sm hover:bg-amber-100 transition-colors">
-                <FontAwesomeIcon icon={faBell} className="text-amber-600" />
-                <span className="text-sm font-medium px-4">
-                  Welcome Founders, the more you test the quicker you'll find winners, execution is everything ⚔️
-                </span>
-              </span>
+              <Announcement
+                text="Use unsaturated videos from TikTok/Reels/Amazon for better ad performance. Fresh, unique content tends to convert better."
+                variant="tip"
+                className="hover:bg-amber-100 transition-colors"
+              />
             </div>
           </div>
         </InternalNavbar>

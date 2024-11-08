@@ -1,7 +1,7 @@
 import { UserSidebar } from '@/components/_sidebar/UserSidebar';
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/ApplicationLayoutShell';
 import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
-import Link from 'next/link';
+import { Announcement } from '@/components/ui/announcement';
 import { type ReactNode } from 'react';
 import { z } from 'zod';
 
@@ -23,13 +23,14 @@ export default async function Layout({
     <ApplicationLayoutShell sidebar={<UserSidebar />}>
       <div>
         <InternalNavbar>
-          <div className="hidden lg:flex w-full justify-between items-center">
-            {/* <Suspense>{navbar}</Suspense> */}
-            <div className="flex items-center gap-1">
-              <Link
-                className="flex gap-1.5 py-1.5 px-3 cursor-pointer items-center group rounded-md transition hover:cursor-pointer hover:text-foreground"
-                href={`/organization/what../settings`}
-              ></Link>
+
+          <div className="hidden lg:flex w-full justify-between items-center lg:ml-3">
+            <div className="flex items-center gap-2">
+              <Announcement
+                text="Temu & Amazon imports are currently in beta. If you'd like to join the waitlist, please contact support."
+                variant="info"
+                className="hover:bg-amber-100 transition-colors"
+              />
             </div>
           </div>
         </InternalNavbar>

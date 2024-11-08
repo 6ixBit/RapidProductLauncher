@@ -177,10 +177,10 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
 
   const getWaitTimeMessage = (productCount: number) => {
     if (activeTab === 'single') {
-      return "Processing time: ~1 minute";
+      return "Processing time: ~2 minutes";
     }
 
-    return `Processing ${productCount === 1 ? 'product' : 'products'}: ~${productCount} ${productCount === 1 ? 'minute (Est.)' : 'minutes (Est.)'}`;
+    return `Processing ${productCount === 1 ? 'product' : 'products'}: ~${productCount + 1} ${productCount + 1 === 1 ? 'minute (Est.)' : 'minutes (Est.)'}`;
   };
 
   const handleGenerate = async () => {
