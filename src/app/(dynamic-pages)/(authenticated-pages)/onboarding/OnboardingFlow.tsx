@@ -61,27 +61,28 @@ function TermsAcceptance({ onSuccess }: TermsAcceptanceProps) {
   return (
     <Card className="max-w-[400px]" data-testid="view-terms-onboarding">
       <CardHeader>
-        <CardTitle>🎉 Welcome Aboard!</CardTitle>
+        <CardTitle>⚡ Welcome to Rapid Product Launcher!</CardTitle>
         <CardDescription>
-          Before diving into Rapid Product Launcher, please take a moment to go
-          through our updated Terms of Service.
+          Before you start automating your product launches, heres just a little reminder.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className=" space-y-2">
+        <div className="space-y-2">
           <T.Small>
-            These terms and conditions govern the use of Rapid Product
-            Launcher’s products and services. They're designed to ensure a
-            smooth and secure experience for you.
+            Rapid Product Launcher uses advanced AI to help automate your product research
+            and listings. While we continuously improve our AI technology, the success of your
+            products ultimately depends on market conditions, your strategy, and implementation.
+            Results may vary, and we're committed to enhancing our AI capabilities to serve you better.
           </T.Small>
 
           <T.Subtle>
-            Last updated : <strong>24th April 2024</strong>
+            Last updated: <strong>24th April 2024</strong>
           </T.Subtle>
         </div>
       </CardContent>
       <CardFooter>
-        <TermsDetailDialog isLoading={isLoading} onConfirm={acceptTerms} />
+        <Button onClick={() => acceptTerms()} className="w-full bg-blue-500 hover:bg-blue-600">Alright, let go!</Button>
+        {/* <TermsDetailDialog isLoading={isLoading} onConfirm={acceptTerms} /> */}
       </CardFooter>
     </Card>
   );
@@ -183,7 +184,7 @@ export function ProfileUpdate({
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label className="text-muted-foreground">Avatar</Label>
               <div className="mt-1 sm:col-span-2 sm:mt-0">
                 <div className="flex items-center space-x-2">
@@ -195,10 +196,10 @@ export function ProfileUpdate({
                       hasImageLoaded
                         ? undefined
                         : {
-                            duration: 0.5,
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatType: 'reverse',
-                          }
+                          duration: 0.5,
+                          repeat: Number.POSITIVE_INFINITY,
+                          repeatType: 'reverse',
+                        }
                     }
                     onLoad={() => {
                       setHasImageLoaded(true);
@@ -236,7 +237,7 @@ export function ProfileUpdate({
                   </Button>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="space-y-2">
               <Label className="text-muted-foreground">Name</Label>
               <Input
@@ -264,6 +265,7 @@ export function ProfileUpdate({
 
 type OrganizationCreationProps = {
   onSuccess: () => void;
+  userName?: string;
 };
 
 const createOrganizationSchema = z.object({
@@ -272,7 +274,9 @@ const createOrganizationSchema = z.object({
 
 type CreateOrganizationSchema = z.infer<typeof createOrganizationSchema>;
 
-export function OrganizationCreation({ onSuccess }: OrganizationCreationProps) {
+export function OrganizationCreation({ onSuccess, userName }: OrganizationCreationProps) {
+  const defaultOrgName = userName ? `${userName}'s Organization` : 'My Organization';
+
   const { mutate: createOrg, isLoading: isCreatingOrg } = useSAToastMutation(
     async (organizationTitle: string) => {
       const orgId = await createOrganization(organizationTitle, {
@@ -295,7 +299,7 @@ export function OrganizationCreation({ onSuccess }: OrganizationCreationProps) {
     useForm<CreateOrganizationSchema>({
       resolver: zodResolver(createOrganizationSchema),
       defaultValues: {
-        organizationTitle: '',
+        organizationTitle: defaultOrgName,
       },
     });
 
@@ -321,6 +325,8 @@ export function OrganizationCreation({ onSuccess }: OrganizationCreationProps) {
               placeholder="Organization Name"
               disabled={isCreatingOrg}
             />
+
+            <p className="text-muted-foreground text-sm">(You can change this at any time)</p>
           </div>
         </CardContent>
         <CardFooter>
@@ -430,7 +436,7 @@ export function UserOnboardingFlow({
         />
       )}
       {currentStep === 'ORGANIZATION' && (
-        <OrganizationCreation onSuccess={nextStep} />
+        <OrganizationCreation onSuccess={nextStep} userName={userProfile.full_name ?? undefined} />
       )}
     </>
   );
