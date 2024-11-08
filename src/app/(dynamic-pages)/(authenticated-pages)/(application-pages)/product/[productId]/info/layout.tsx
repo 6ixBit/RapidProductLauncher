@@ -2,6 +2,7 @@ import { UserSidebar } from '@/components/_sidebar/UserSidebar';
 import { ApplicationLayoutShell } from '@/components/ApplicationLayoutShell/ApplicationLayoutShell';
 import { InternalNavbar } from '@/components/NavigationMenu/InternalNavbar';
 import { Announcement } from '@/components/ui/announcement';
+import { ReactNode } from 'react';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
