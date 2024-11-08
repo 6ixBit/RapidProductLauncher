@@ -1,3 +1,4 @@
+import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
 import { NextRequest, NextResponse } from 'next/server';
 
 const getRandomStars = () => {
@@ -5,7 +6,40 @@ const getRandomStars = () => {
   return '★'.repeat(stars) + '☆'.repeat(5 - stars);
 };
 
-const productDescriptionTemplate = (data, images) => `
+// Function to get random subset of avatar URLs from S3
+async function getRandomAvatarUrls(count: number = 10) {
+  const s3Client = new S3Client({
+    region: process.env.AWS_REGION!,
+  });
+
+  try {
+    const response = await s3Client.send(
+      new ListObjectsV2Command({
+        Bucket: process.env.S3_BUCKET_NAME!,
+        Prefix: 'avatars/',
+      }),
+    );
+
+    // Filter out the folder itself and get all avatar URLs
+    const allAvatarUrls =
+      response.Contents?.filter((obj) => obj.Key !== 'avatars/')?.map(
+        (obj) =>
+          `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.S3_BUCKET_NAME}/${obj.Key}`,
+      ) ?? [];
+
+    // Randomly select 'count' number of avatars
+    const randomAvatars = allAvatarUrls
+      .sort(() => Math.random() - 0.5)
+      .slice(0, count);
+
+    return randomAvatars;
+  } catch (error) {
+    console.error('Error fetching avatar URLs:', error);
+    return [];
+  }
+}
+
+const productDescriptionTemplate = (data, images, getRandomAvatar) => `
   <html lang="en">
   <head>
     <title>${data.title} - Product Page</title>
@@ -261,13 +295,15 @@ const productDescriptionTemplate = (data, images) => `
       <h2>What Our Customers Say</h2>
       ${data.reviews
         .map(
-          (review, index) => `
+          (review) => `
         <div class="review">
           <div class="review-header">
             <div class="review-avatar">
               <img 
-                src="${images[index % images.length]}"
+                src="${getRandomAvatar()}"
                 alt="${review.name}'s avatar"
+                loading="lazy"
+                onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22 fill=%22%23ddd%22/></svg>';"
               />
             </div>
             <div class="review-info">
@@ -295,7 +331,26 @@ const productDescriptionTemplate = (data, images) => `
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const template = productDescriptionTemplate(data, data.images);
+    const avatarUrls = await getRandomAvatarUrls(10);
+
+    // Create a copy of avatarUrls that we'll use up as we assign avatars
+    let availableAvatars = [...avatarUrls];
+
+    // Function to get a unique avatar and remove it from available pool
+    const getUniqueAvatar = () => {
+      if (availableAvatars.length === 0) {
+        // If we run out of unique avatars, refill the pool
+        availableAvatars = [...avatarUrls];
+      }
+      const randomIndex = Math.floor(Math.random() * availableAvatars.length);
+      return availableAvatars.splice(randomIndex, 1)[0];
+    };
+
+    const template = productDescriptionTemplate(
+      data,
+      data.images,
+      getUniqueAvatar,
+    );
     return NextResponse.json({ template });
   } catch (error) {
     return NextResponse.json({ error: 'Invalid input data' }, { status: 400 });
