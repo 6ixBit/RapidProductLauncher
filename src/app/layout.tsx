@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import { Analytics } from "@vercel/analytics/react";
 import { GeistSans } from 'geist/font/sans';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
@@ -34,6 +35,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={GeistSans.className}>
       <head>
+        <Analytics />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=AW-16500501224`}
           strategy="afterInteractive"
