@@ -63,9 +63,9 @@ export function SignUp() {
     <div className="container text-left max-w-lg mx-auto overflow-auto min-h-[470px]">
       <div className="space-y-8 bg-background p-6 rounded-lg shadow">
         <Tabs defaultValue="password" className="md:min-w-[400px]">
-          <TabsList className="grid w-full grid-cols-1">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="password">Password</TabsTrigger>
-            {/* <TabsTrigger value="social-login">Social Login</TabsTrigger> */}
+            <TabsTrigger value="social-login">Social Login</TabsTrigger>
           </TabsList>
 
           <TabsContent value="password">
@@ -88,7 +88,7 @@ export function SignUp() {
             </Card>
           </TabsContent>
 
-          {/* <TabsContent value="social-login">
+          <TabsContent value="social-login">
             <Card className="border-none shadow-none">
               <CardHeader className="py-6 px-0">
                 <CardTitle>Get Started with Rapid Product Launcher</CardTitle>
@@ -104,7 +104,7 @@ export function SignUp() {
                 />
               </CardContent>
             </Card>
-          </TabsContent> */}
+          </TabsContent>
         </Tabs>
       </div>
     </div>
