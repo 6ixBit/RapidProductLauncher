@@ -1,6 +1,8 @@
 'use server';
-import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
+
 import type { AuthProvider, SAPayload } from '@/types';
+
+import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { toSiteURL } from '@/utils/helpers';
 
 export const signUp = async (
@@ -85,6 +87,7 @@ export const signInWithProvider = async (
 ): Promise<
   SAPayload<{
     url: string;
+    providerData: any;
   }>
 > => {
   const supabase = createSupabaseUserServerActionClient();
@@ -97,11 +100,11 @@ export const signInWithProvider = async (
     provider,
     options: {
       redirectTo: redirectToURL.toString(),
+      scopes:
+        'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       queryParams: {
         access_type: 'offline',
         prompt: 'consent',
-        scope:
-          'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       },
     },
   });
@@ -111,12 +114,13 @@ export const signInWithProvider = async (
   }
 
   const providerUrl = data.url;
-  console.log('provider DATA: ', data);
+  console.log('provider DATA: ', data, error);
 
   return {
     status: 'success',
     data: {
       url: providerUrl,
+      providerData: data,
     },
   };
 };
