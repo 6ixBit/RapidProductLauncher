@@ -1,8 +1,6 @@
 'use server';
-
-import type { AuthProvider, SAPayload } from '@/types';
-
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
+import type { AuthProvider, SAPayload } from '@/types';
 import { toSiteURL } from '@/utils/helpers';
 
 export const signUp = async (
@@ -87,25 +85,17 @@ export const signInWithProvider = async (
 ): Promise<
   SAPayload<{
     url: string;
-    providerData: any;
   }>
 > => {
   const supabase = createSupabaseUserServerActionClient();
-  const redirectToURL = new URL('/auth/callback');
+  const redirectToURL = new URL(toSiteURL('/auth/callback'));
   if (next) {
     redirectToURL.searchParams.set('next', next);
   }
-  // provider token to access additonal services like gmail is returned here.
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
       redirectTo: redirectToURL.toString(),
-      scopes:
-        'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-      queryParams: {
-        access_type: 'offline',
-        prompt: 'consent',
-      },
     },
   });
 
@@ -114,13 +104,11 @@ export const signInWithProvider = async (
   }
 
   const providerUrl = data.url;
-  console.log('provider DATA: ', data, error);
 
   return {
     status: 'success',
     data: {
       url: providerUrl,
-      providerData: data,
     },
   };
 };

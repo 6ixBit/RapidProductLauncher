@@ -2,6 +2,7 @@
 import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
 import { Email } from '@/components/Auth/Email';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
+import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
   Card,
   CardContent,
@@ -133,10 +134,10 @@ export function Login({
         <div className="space-y-8 bg-background p-6 rounded-lg shadow">
           <h2 className="text-2xl font-bold mb-4 text-center">Rapid Product Launcher</h2>
           <Tabs defaultValue="password" className="md:min-w-[400px]">
-            <TabsList className="grid w-full grid-cols-1 mb-10">
+            <TabsList className="grid w-full grid-cols-2 mb-10">
               <TabsTrigger value="password">Password</TabsTrigger>
               {/* <TabsTrigger value="magic-link">Magic Link</TabsTrigger> */}
-              {/* <TabsTrigger value="social-login">Social Login</TabsTrigger> */}
+              <TabsTrigger value="social-login">Social Login</TabsTrigger>
             </TabsList>
             <TabsContent value="password">
               <Card className="border-none shadow-none">
@@ -168,7 +169,7 @@ export function Login({
                 </CardContent>
               </Card>
             </TabsContent>
-            {/* <TabsContent value="social-login">
+            <TabsContent value="social-login">
               <Card className="border-none shadow-none">
                 <CardHeader className="py-6 px-0">
                   <CardTitle>One Click Login</CardTitle>
@@ -184,7 +185,7 @@ export function Login({
                   />
                 </CardContent>
               </Card>
-            </TabsContent> */}
+            </TabsContent>
           </Tabs>
         </div>
       )}
