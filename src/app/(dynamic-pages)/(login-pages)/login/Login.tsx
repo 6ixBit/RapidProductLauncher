@@ -2,6 +2,7 @@
 import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
 import { Email } from '@/components/Auth/Email';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
+import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
   Card,
   CardContent,

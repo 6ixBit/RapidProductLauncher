@@ -1,5 +1,6 @@
 'use client';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
+import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
   Card,
   CardContent,
