@@ -91,7 +91,10 @@ export const signInWithProvider = async (
   }>
 > => {
   const supabase = createSupabaseUserServerActionClient();
-  const redirectToURL = new URL(toSiteURL('/auth/callback'));
+  const redirectToURL = new URL(
+    '/auth/callback',
+    'https://app.rapidproductlauncher.ai',
+  );
   if (next) {
     redirectToURL.searchParams.set('next', next);
   }
@@ -127,7 +130,10 @@ export const signInWithProvider = async (
 
 export const resetPassword = async (email: string): Promise<SAPayload> => {
   const supabase = createSupabaseUserServerActionClient();
-  const redirectToURL = new URL(toSiteURL('/auth/callback'));
+  const redirectToURL = new URL(
+    '/auth/callback',
+    'https://app.rapidproductlauncher.ai',
+  );
   redirectToURL.searchParams.set('next', `/update-password`);
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
