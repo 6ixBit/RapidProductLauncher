@@ -92,10 +92,17 @@ export const signInWithProvider = async (
   if (next) {
     redirectToURL.searchParams.set('next', next);
   }
+  // provider token to access additonal services like gmail is returned here.
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
       redirectTo: redirectToURL.toString(),
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+        scope:
+          'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+      },
     },
   });
 
@@ -104,6 +111,7 @@ export const signInWithProvider = async (
   }
 
   const providerUrl = data.url;
+  console.log('provider DATA: ', data);
 
   return {
     status: 'success',
