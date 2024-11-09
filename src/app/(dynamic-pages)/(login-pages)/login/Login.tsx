@@ -1,5 +1,7 @@
 'use client';
-
+import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
+import { Email } from '@/components/Auth/Email';
+import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
 import {
   Card,
   CardContent,
@@ -13,11 +15,6 @@ import {
   signInWithPassword,
   signInWithProvider,
 } from '@/data/auth/auth';
-
-import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
-import { Email } from '@/components/Auth/Email';
-import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
-import { RenderProviders } from '@/components/Auth/RenderProviders';
 import { useSAToastMutation } from '@/hooks/useSAToastMutation';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import type { AuthProvider } from '@/types';
@@ -133,21 +130,16 @@ export function Login({
           resetSuccessMessage={setSuccessMessage}
         />
       ) : (
-        <div className="space-y-8 bg-background p-6 rounded-lg shadow dark:border">
+        <div className="space-y-8 bg-background p-6 rounded-lg shadow">
+          <h2 className="text-2xl font-bold mb-4 text-center">Rapid Product Launcher</h2>
           <Tabs defaultValue="password" className="md:min-w-[400px]">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-1 mb-10">
               <TabsTrigger value="password">Password</TabsTrigger>
-              <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
-              <TabsTrigger value="social-login">Social Login</TabsTrigger>
+              {/* <TabsTrigger value="magic-link">Magic Link</TabsTrigger> */}
+              {/* <TabsTrigger value="social-login">Social Login</TabsTrigger> */}
             </TabsList>
             <TabsContent value="password">
               <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>Login to KanRoute</CardTitle>
-                  <CardDescription>
-                    Login with the account you used to signup.
-                  </CardDescription>
-                </CardHeader>
                 <CardContent className="space-y-2 p-0">
                   <EmailAndPassword
                     isLoading={passwordMutation.isLoading}
@@ -163,10 +155,9 @@ export function Login({
             <TabsContent value="magic-link">
               <Card className="border-none shadow-none">
                 <CardHeader className="py-6 px-0">
-                  <CardTitle>Login to KanRoute</CardTitle>
-                  <CardDescription>
-                    Login with magic link we will send to your email.
-                  </CardDescription>
+                  <CardTitle>One Click Login</CardTitle>
+
+                  <CardDescription>Check your email for a magic link.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2 p-0">
                   <Email
@@ -177,10 +168,10 @@ export function Login({
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="social-login">
+            {/* <TabsContent value="social-login">
               <Card className="border-none shadow-none">
                 <CardHeader className="py-6 px-0">
-                  <CardTitle>Login to KanRoute</CardTitle>
+                  <CardTitle>One Click Login</CardTitle>
                   <CardDescription>
                     Login with your social account.
                   </CardDescription>
@@ -193,7 +184,7 @@ export function Login({
                   />
                 </CardContent>
               </Card>
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </div>
       )}
