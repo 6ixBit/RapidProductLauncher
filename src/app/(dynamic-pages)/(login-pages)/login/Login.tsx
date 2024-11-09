@@ -136,7 +136,7 @@ export function Login({
             <TabsList className="grid w-full grid-cols-1 mb-10">
               <TabsTrigger value="password">Password</TabsTrigger>
               {/* <TabsTrigger value="magic-link">Magic Link</TabsTrigger> */}
-              {/* <TabsTrigger value="social-login">Social Login</TabsTrigger> */}
+              <TabsTrigger value="social-login">Social Login</TabsTrigger>
             </TabsList>
             <TabsContent value="password">
               <Card className="border-none shadow-none">
@@ -168,7 +168,7 @@ export function Login({
                 </CardContent>
               </Card>
             </TabsContent>
-            {/* <TabsContent value="social-login">
+            <TabsContent value="social-login">
               <Card className="border-none shadow-none">
                 <CardHeader className="py-6 px-0">
                   <CardTitle>One Click Login</CardTitle>
@@ -184,7 +184,7 @@ export function Login({
                   />
                 </CardContent>
               </Card>
-            </TabsContent> */}
+            </TabsContent>
           </Tabs>
         </div>
       )}
