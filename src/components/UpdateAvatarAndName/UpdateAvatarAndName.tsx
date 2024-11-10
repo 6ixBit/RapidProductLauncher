@@ -1,15 +1,12 @@
 import { useRef, useState } from 'react';
 
 import { T } from '@/components/ui/Typography';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
 import { getUserAvatarUrl } from '@/utils/helpers';
-import { motion } from 'framer-motion';
-import { Camera } from 'lucide-react';
-import Image from 'next/image';
 import { PageHeading } from '../PageHeading';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-const MotionImage = motion(Image);
 
 export function UpdateAvatarAndNameBody({
   onSubmit,
@@ -42,6 +39,14 @@ export function UpdateAvatarAndNameBody({
     profileAvatarUrl,
     email: userEmail,
   });
+
+  const initials = fullName
+    .split(' ')
+    .map(name => name[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
   return (
     <div className="space-y-6 max-w-sm">
       <PageHeading
@@ -64,35 +69,18 @@ export function UpdateAvatarAndNameBody({
                 className="inline p-0 m-0 cursor-pointer text-muted-foreground"
                 htmlFor="file-input"
               >
-                <MotionImage
-                  animate={{
-                    opacity: isNewAvatarImageLoading ? [0.5, 1, 0.5] : 1,
-                  }}
-                  transition={
-                    /* eslint-disable */
-                    isNewAvatarImageLoading
-                      ? {
-                          duration: 1,
-                          repeat: Infinity,
-                          repeatType: 'reverse',
-                        }
-                      : undefined
-                    /* eslint-enable */
-                  }
-                  onLoad={() => {
-                    setIsNewAvatarImageLoading(false);
-                  }}
-                  onError={() => {
-                    setIsNewAvatarImageLoading(false);
-                  }}
-                  loading="eager"
-                  width={64}
-                  height={64}
-                  className="h-16 object-center object-cover w-16 border-2 border-border rounded-full"
-                  src={avatarURL}
-                  alt="avatarUrl"
-                />
-                <input
+                <Avatar className="h-16 w-16 border-2 border-border">
+                  {profileAvatarUrl && (
+                    <AvatarImage
+                      src={profileAvatarUrl}
+                      alt={fullName}
+                      className="object-center object-cover"
+                    />
+                  )}
+                  <AvatarFallback>{initials}</AvatarFallback>
+                </Avatar>
+
+                {/* <input
                   disabled={isUploading}
                   onChange={(event) => {
                     const file = event.target.files?.[0];
@@ -106,10 +94,10 @@ export function UpdateAvatarAndNameBody({
                   id="file-input"
                   hidden
                   accept="image/*"
-                />
-                <div className="bg-background group-hover:bg-secondary absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)]  border border-muted-foreground rounded-full p-1">
+                /> */}
+                {/* <div className="bg-background group-hover:bg-secondary absolute -bottom-[calc(100%-64px)] right-[calc(100%-64px)] border border-muted-foreground rounded-full p-1">
                   <Camera className="h-4 w-4 group-hover:fill-foreground text-muted-foreground" />
-                </div>
+                </div> */}
               </Label>
             </div>
           </div>

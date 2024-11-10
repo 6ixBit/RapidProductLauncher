@@ -1,4 +1,6 @@
 'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { HelpCircle, Lock, LogOut, User } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { OnboardingModal } from './OnboardingModal';
 
@@ -69,61 +70,31 @@ const onboardingFeatures = [
   },
 ];
 
-export function UserNavDropDownMenu({
-  avatarUrl,
-  userFullname,
-  userEmail,
-  userId,
-}: {
-  avatarUrl: string;
+interface UserNavDropDownMenuProps {
+  avatarUrl?: string | null;
+  initials: string;
   userFullname: string;
   userEmail: string;
   userId: string;
-}) {
+}
+
+export function UserNavDropDownMenu({ avatarUrl, initials, userFullname, userEmail, userId }: UserNavDropDownMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div
-          data-testid="user-nav-avatar"
-          data-user-id={userId}
-          className="h-[24px] w-[24px] border rounded-full"
-        >
-          <Image
-            src={avatarUrl}
-            width={24}
-            height={24}
-            placeholder="blur"
-            blurDataURL={avatarUrl}
-            quality={100}
-            sizes="100vw"
-            alt="User avatar"
-            objectFit="cover"
-            className="h-full w-full"
-            style={{
-              borderRadius: '50%',
-            }}
-          />
-        </div>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar>
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={userFullname} />}
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-2" sideOffset={10}>
         <div className="w-full p-4 flex gap-2 items-center">
-          <div className="h-[28px] w-[28px]  rounded-full border">
-            <Image
-              src={avatarUrl}
-              width={28}
-              height={28}
-              placeholder="blur"
-              blurDataURL={avatarUrl}
-              quality={100}
-              sizes="100vw"
-              alt="User avatar"
-              className="h-full w-full"
-              objectFit="cover"
-              style={{
-                borderRadius: '50%',
-              }}
-            />
-          </div>
+          <Avatar className="h-[28px] w-[28px]">
+            {avatarUrl && <AvatarImage src={avatarUrl} alt={userFullname} />}
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
           <div className="flex flex-col">
             <span className="text-sm font-medium truncate text-foreground">
               {userFullname}

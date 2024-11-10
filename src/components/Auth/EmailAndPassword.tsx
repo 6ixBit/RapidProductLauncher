@@ -110,20 +110,20 @@ export const EmailAndPassword = ({
               type="submit"
               variant={'default'}
               className={classNames(
-                'flex w-full justify-center rounded-lg border border-transparent py-3 text-foreground px-4 text-sm font-medium  shadow-sm',
+                'flex w-full justify-center rounded-lg border border-transparent py-3 text-foreground px-4 text-sm font-bold shadow-sm bg-sky-300',
               )}
             >
-              Loading...
+              <strong>Loading...</strong>
             </Button>
           ) : (
             <Button
               type="submit"
               variant={'default'}
               className={classNames(
-                'flex w-full justify-center rounded-lg border border-transparent py-2 text-white px-4 text-sm font-medium shadow-sm mt-12',
+                'flex w-full justify-center rounded-lg border border-transparent py-2 text-white px-4 text-sm font-bold shadow-sm mt-12 bg-sky-300 hover:bg-sky-400',
               )}
             >
-              {view === 'sign-in' ? 'Login' : 'Sign up'}
+              <strong>{view === 'sign-in' ? 'Login' : 'Sign up'}</strong>
             </Button>
           )}
         </div>
