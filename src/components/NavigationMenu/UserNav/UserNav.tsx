@@ -1,4 +1,3 @@
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { getUserProfile } from '@/data/user/user';
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { UserNavDropDownMenu } from './UserNavDropDownMenu';
@@ -25,7 +24,7 @@ export async function UserNav() {
 
   return (
     <>
-      <ThemeToggle />
+      {/* <ThemeToggle /> */}
 
       <UserNavDropDownMenu
         avatarUrl={userProfile.avatar_url}
