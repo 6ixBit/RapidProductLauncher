@@ -19,6 +19,8 @@ export async function GET(request: Request) {
         return NextResponse.redirect(new URL('/login', requestUrl.origin));
       }
 
+      console.log('callback data: ', data);
+
       await updateGoogleAuthTokens({
         google_access_token: data?.session?.provider_token || undefined,
         google_refresh_token:
