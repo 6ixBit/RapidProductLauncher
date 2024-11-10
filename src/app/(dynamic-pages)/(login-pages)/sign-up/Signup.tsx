@@ -14,6 +14,8 @@ import {
 } from '@/data/auth/auth';
 import { useSAToastMutation } from '@/hooks/useSAToastMutation';
 import type { AuthProvider } from '@/types';
+import logo from '@public/logos/rpd-logo.png';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export function SignUp() {
@@ -62,6 +64,15 @@ export function SignUp() {
   return (
     <div className="container text-left max-w-lg mx-auto overflow-auto min-h-[470px]">
       <div className="space-y-8 bg-background p-6 rounded-lg shadow">
+        <div className="flex justify-center mb-4">
+          <Image
+            src={logo}
+            alt="Rapid Product Launcher Logo"
+            width={100}
+            height={100}
+            className="object-contain"
+          />
+        </div>
         <Tabs defaultValue="password" className="md:min-w-[400px]">
           <TabsList className="grid w-full grid-cols-1">
             <TabsTrigger value="password">Password</TabsTrigger>
@@ -71,7 +82,7 @@ export function SignUp() {
           <TabsContent value="password">
             <Card className="border-none shadow-none">
               <CardHeader className="py-6 px-0">
-                <CardTitle>Get Started with Rapid Product Launcher</CardTitle>
+                <CardTitle>Sign Up</CardTitle>
                 <CardDescription>
                   Create your account to start launching products
                 </CardDescription>

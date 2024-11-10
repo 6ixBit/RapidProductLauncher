@@ -19,7 +19,9 @@ import {
 import { useSAToastMutation } from '@/hooks/useSAToastMutation';
 import { supabaseUserClientComponentClient } from '@/supabase-clients/user/supabaseUserClientComponentClient';
 import type { AuthProvider } from '@/types';
+import logo from '@public/logos/rpd-logo.png';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -132,6 +134,15 @@ export function Login({
         />
       ) : (
         <div className="space-y-8 bg-background p-6 rounded-lg shadow">
+          <div className="flex justify-center mb-4">
+            <Image
+              src={logo}
+              alt="Rapid Product Launcher Logo"
+              width={100}
+              height={100}
+              className="object-contain"
+            />
+          </div>
           <h2 className="text-2xl font-bold mb-4 text-center">Rapid Product Launcher</h2>
           <Tabs defaultValue="password" className="md:min-w-[400px]">
             <TabsList className="grid w-full grid-cols-1 mb-10">
