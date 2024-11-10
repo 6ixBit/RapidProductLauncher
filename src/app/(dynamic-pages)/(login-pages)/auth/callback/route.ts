@@ -1,3 +1,4 @@
+import { updateGoogleAuthTokens } from '@/data/user/user';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -11,20 +12,26 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = createRouteHandlerClient({ cookies });
     try {
-      // Exchange the code for a session
-      await supabase.auth.exchangeCodeForSession(code);
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+      if (error) {
+        console.error('Failed to exchange code for session!: ', error);
+        return NextResponse.redirect(new URL('/login', requestUrl.origin));
+      }
+
+      await updateGoogleAuthTokens({
+        google_access_token: data?.session?.provider_token || undefined,
+        google_refresh_token:
+          data?.session?.provider_refresh_token || undefined,
+      });
     } catch (error) {
-      // Handle error
       console.error('Failed to exchange code for session: ', error);
-      // Potentially return an error response here
     }
   }
   revalidatePath('/');
   let redirectTo = new URL('/dashboard', requestUrl.origin);
   if (next) {
-    // decode next param
     const decodedNext = decodeURIComponent(next);
-    // validate next param
     redirectTo = new URL(decodedNext, requestUrl.origin);
   }
   return NextResponse.redirect(redirectTo);

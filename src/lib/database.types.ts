@@ -564,6 +564,8 @@ export type Database = {
           credits: number | null
           full_name: string | null
           id: string
+          google_refresh_token: string | null
+          google_access_token: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -571,6 +573,8 @@ export type Database = {
           credits?: number | null
           full_name?: string | null
           id: string
+          google_refresh_token?: string | null
+          google_access_token?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -578,6 +582,8 @@ export type Database = {
           credits?: number | null
           full_name?: string | null
           id?: string
+          google_refresh_token?: string | null
+          google_access_token?: string | null
         }
         Relationships: []
       }

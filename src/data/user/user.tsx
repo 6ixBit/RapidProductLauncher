@@ -102,6 +102,35 @@ export const getUserPendingInvitationsById = async (userId: string) => {
   return data || [];
 };
 
+export const updateGoogleAuthTokens = async ({
+  google_access_token,
+  google_refresh_token,
+}: {
+  google_access_token?: string;
+  google_refresh_token?: string;
+}) => {
+  const supabaseClient = createSupabaseUserServerActionClient();
+  const user = await serverGetLoggedInUser();
+  const userId = user.id;
+
+  const { data, error } = await supabaseClient
+    .from('user_profiles')
+    .update({
+      google_access_token,
+      google_refresh_token,
+    })
+    .eq('id', userId) // Ensure you are updating the correct user
+    .select() // Optional: return the updated row
+    .single(); // Optional: return a single row
+
+  if (error) {
+    console.error('Error updating Google auth tokens: ', error); // Handle error
+    throw new Error('Failed to update tokens'); // You can customize this error message
+  }
+
+  return { status: 'success', data }; // Return the updated data if needed
+}
+
 export const uploadPublicUserAvatar = async (
   formData: FormData,
   fileName: string,
