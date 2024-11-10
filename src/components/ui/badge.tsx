@@ -17,6 +17,8 @@ const badgeVariants = cva(
         primary: 'border-transparent bg-blue-500 text-white hover:bg-blue-600',
         shopify:
           'border-transparent bg-green-500 text-white hover:bg-green-600',
+        soon:
+          'border-transparent bg-indigo-100 text-indigo-700 border border-indigo-200 hover:bg-indigo-200',
       },
     },
     defaultVariants: {
@@ -27,7 +29,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+  VariantProps<typeof badgeVariants> { }
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (

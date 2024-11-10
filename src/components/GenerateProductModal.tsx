@@ -10,6 +10,7 @@ import {
   ModalSuccessButton,
 } from '@/components/Modal/Modal';
 import H3 from '@/components/Text/H3';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -35,6 +36,7 @@ import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from 'react';
 import { toast } from "sonner";
+
 interface GenerateProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -527,7 +529,7 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full opacity-50 cursor-not-allowed"
+                      className="w-full opacity-50 cursor-not-allowed relative"
                       disabled
                     >
                       <Image
@@ -538,22 +540,40 @@ const GenerateProductModal: React.FC<GenerateProductModalProps> = ({
                         className="mr-2"
                       />
                       Temu
+                      <Badge
+                        variant="soon"
+                        className="absolute -top-2 -right-2 text-[10px] px-1.5"
+                      >
+                        Soon
+                      </Badge>
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full opacity-50 cursor-not-allowed"
+                      className="w-full opacity-50 cursor-not-allowed relative"
                       disabled
                     >
                       <FontAwesomeIcon icon={faEtsy} className="mr-2" />
                       <span>Etsy</span>
+                      <Badge
+                        variant="shopify"
+                        className="absolute -top-2 -right-2 text-[10px] px-1.5"
+                      >
+                        Maintenance
+                      </Badge>
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full opacity-50 cursor-not-allowed"
+                      className="w-full opacity-50 cursor-not-allowed relative"
                       disabled
                     >
                       <FontAwesomeIcon icon={faAmazon} className="mr-2" />
                       Amazon
+                      <Badge
+                        variant="soon"
+                        className="absolute -top-2 -right-2 text-[10px] px-1.5"
+                      >
+                        Soon
+                      </Badge>
                     </Button>
                   </div>
                   <div className="space-y-3">
