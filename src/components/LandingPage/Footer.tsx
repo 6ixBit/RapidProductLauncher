@@ -1,4 +1,4 @@
-import darkLogo from '@public/logos/acme-logo-dark.png';
+import logo from '@public/logos/rpd-logo.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { footerItems, footerSocialItems } from './footer-items';
@@ -13,7 +13,7 @@ export function Footer() {
               <Link href="/">
                 <div className="relative flex gap-2 items-center text-black">
                   <Image
-                    src={darkLogo}
+                    src={logo}
                     alt="logo"
                     className="h-8 w-8"
                   />

@@ -1,6 +1,5 @@
 'use client';
 
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import logo from '@public/logos/rpd-logo.png';
 import { Menu } from 'lucide-react';
@@ -39,16 +38,18 @@ export function ExternalNavigation() {
                 alt="logo"
                 className="hidden h-8 w-8"
               />
-              <span className="hidden font-bold lg:inline-block">acme</span>
+              <span className="hidden font-bold lg:inline-block">
+                Rapid Product Launcher
+              </span>
             </div>
           </Link>
         </div>
         <div className="flex space-x-10 items-center lg:-mr-2">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           {isHome && (
             <div className="ml-6 hidden lg:block">
               <Link href="/login">
-                <Button variant="default" size="default" className="group">
+                <Button variant="default" size="default" className="group bg-sky-500 text-white">
                   Log In
                   <svg
                     className="ml-2 -mr-1 w-5 h-5 group-hover:translate-x-1 transition"
@@ -76,7 +77,7 @@ export function ExternalNavigation() {
         <ul className="md:hidden w-full shadow-2xl py-2 flex flex-col items-start font-medium pb-2">
           <hr className="w-full h-2" />
           <Link href="/login" className="px-4 w-full">
-            <Button variant="default" size="default" className="group w-full">
+            <Button variant="default" size="default" className="group w-full bg-sky-500 text-white">
               Log In
               <svg
                 className="ml-2 -mr-1 w-5 h-5 group-hover:translate-x-1 transition"

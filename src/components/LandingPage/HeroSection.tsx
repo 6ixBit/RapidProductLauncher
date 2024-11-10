@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import HeroImage from '/public/images/hero.jpeg';
 
 export default function HeroSection() {
   return (
@@ -24,19 +23,22 @@ export default function HeroSection() {
           <p className="text-slate-500 leading-loose lg:text-lg lg:leading-relaxed max-w-4xl">
             Test Ecom products 10x faster than your competition with AI.
           </p>
-          <div className="flex flex-col md:flex-row items-center justify-center max-w-md w-full  gap-3 pt-2 ">
-            <Button className="w-1/2">
-              Get started for free
-              <ArrowRight size={16} className="ml-2" />
+          <div className="flex flex-col md:flex-row items-center justify-center max-w-md w-full gap-3 pt-2">
+            <Button className="w-1/2 bg-sky-500 text-white rounded-full" asChild>
+              <Link href="/login">
+                Get started for free
+                <ArrowRight size={16} className="ml-2" />
+              </Link>
             </Button>
-
           </div>
         </div>
         <div className="rounded-md border-2 flex-1 overflow-hidden border-border shadow-sm">
           <Image
             alt="Hero Image"
-            src={HeroImage}
-            className="overflow-hidden h-[500px] max-h-[500px]  object-cover"
+            src="/images/no2.png"
+            width={1950}
+            height={1200}
+            className="overflow-hidden h-[500px] max-h-[500px] object-cover object-top"
           />
         </div>
       </div>
