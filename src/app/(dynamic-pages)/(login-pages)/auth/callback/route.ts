@@ -29,10 +29,14 @@ export async function GET(request: Request) {
     }
   }
   revalidatePath('/');
-  let redirectTo = new URL('/dashboard', requestUrl.origin);
+  const productionDomain = 'https://app.rapidproductlauncher.ai';
+  let redirectTo = new URL('/dashboard', productionDomain);
   if (next) {
     const decodedNext = decodeURIComponent(next);
-    redirectTo = new URL(decodedNext, requestUrl.origin);
+    redirectTo = new URL(
+      decodedNext.startsWith('http') ? decodedNext : decodedNext,
+      productionDomain,
+    );
   }
   return NextResponse.redirect(redirectTo);
 }
