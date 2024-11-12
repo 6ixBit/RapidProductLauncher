@@ -1,3 +1,4 @@
+import { purchase } from '@/lib/fpixel';
 import { errors } from '@/utils/errors';
 import { stripe } from '@/utils/stripe';
 import {
@@ -93,6 +94,12 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
                 subscriptionId as string,
                 checkoutSession.customer as string,
                 true,
+              );
+              purchase(
+                checkoutSession.amount_total,
+                checkoutSession.currency,
+                [subscriptionId as string],
+                'subscription',
               );
             }
             break;
