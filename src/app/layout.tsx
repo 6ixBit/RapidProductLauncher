@@ -6,6 +6,7 @@ import Script from 'next/script';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'server-only';
 import { AppProviders } from './AppProviders';
+import FacebookPixel from './FacebookPixel';
 
 // const satoshiFont = localFont({
 //   src: '../fonts/satoshi/Satoshi-Variable.woff2',
@@ -48,6 +49,7 @@ export default async function RootLayout({
             gtag('config', 'AW-16500501224');
           `}
         </Script>
+        <FacebookPixel />
       </head>
       <body className="bg-background">
         <AppProviders>{children}</AppProviders>
