@@ -94,6 +94,7 @@ export const signInWithProvider = async (
     redirectToURL.searchParams.set('next', next);
   }
   console.log('redirectToURL: ', redirectToURL.toString());
+  console.log('next: ', next);
   // provider token to access additonal services like gmail is returned here.
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider,
