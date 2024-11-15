@@ -82,20 +82,16 @@ export const signInWithMagicLink = async (
 export const signInWithProvider = async (
   provider: AuthProvider,
   next?: string,
-): Promise<
-  SAPayload<{
-    url: string;
-    providerData: any;
-  }>
-> => {
+): Promise<SAPayload<{ url: string; providerData: any }>> => {
   const supabase = createSupabaseUserServerActionClient();
-  const redirectToURL = new URL(toSiteURL('/auth/callback'));
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const redirectToURL = new URL('/auth/callback', baseUrl);
+
   if (next) {
     redirectToURL.searchParams.set('next', next);
   }
-  console.log('redirectToURL: ', redirectToURL.toString());
-  console.log('next: ', next);
-  // provider token to access additonal services like gmail is returned here.
+
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
