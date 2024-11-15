@@ -2,6 +2,7 @@
 import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
 import { Email } from '@/components/Auth/Email';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
+import { google as GoogleIcon } from '@/components/Auth/Icons';
 import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
   Card,
@@ -148,8 +149,10 @@ export function Login({
           <Tabs defaultValue="password" className="md:min-w-[400px]">
             <TabsList className="grid w-full grid-cols-2 mb-10">
               <TabsTrigger value="password">Password</TabsTrigger>
-              {/* <TabsTrigger value="magic-link">Magic Link</TabsTrigger> */}
-              <TabsTrigger value="social-login">Social Login</TabsTrigger>
+              <TabsTrigger value="social-login" className="flex items-center gap-2">
+                <GoogleIcon />
+                Social Login
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="password">
               <Card className="border-none shadow-none">

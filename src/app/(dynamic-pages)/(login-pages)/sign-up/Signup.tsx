@@ -1,5 +1,7 @@
 'use client';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
+import { google as GoogleIcon } from '@/components/Auth/Icons';
+import { RenderProviders } from '@/components/Auth/RenderProviders';
 import {
   Card,
   CardContent,
@@ -74,9 +76,13 @@ export function SignUp() {
           />
         </div>
         <Tabs defaultValue="password" className="md:min-w-[400px]">
-          <TabsList className="grid w-full grid-cols-1">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="password">Password</TabsTrigger>
-            {/* <TabsTrigger value="social-login">Social Login</TabsTrigger> */}
+
+            <TabsTrigger value="social-login" className="flex items-center gap-2">
+              <GoogleIcon />
+              Social Login
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="password">
@@ -99,7 +105,7 @@ export function SignUp() {
             </Card>
           </TabsContent>
 
-          {/* <TabsContent value="social-login">
+          <TabsContent value="social-login">
             <Card className="border-none shadow-none">
               <CardHeader className="py-6 px-0">
                 <CardTitle>Get Started with Rapid Product Launcher</CardTitle>
@@ -115,7 +121,7 @@ export function SignUp() {
                 />
               </CardContent>
             </Card>
-          </TabsContent> */}
+          </TabsContent>
         </Tabs>
       </div>
     </div>
