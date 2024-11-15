@@ -20,6 +20,7 @@ export async function GET(request: Request) {
       }
 
       console.log('callback data: ', data);
+      console.log('callback code, next: ', code, next);
 
       await updateGoogleAuthTokens({
         google_access_token: data?.session?.provider_token || undefined,

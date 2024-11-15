@@ -97,6 +97,7 @@ export function Login({
       successMessage: 'Redirecting...',
       errorMessage: 'Failed to login',
       onSuccess: (payload) => {
+        console.log('providerMutation success: ', payload);
         window.location.href = payload.data.url;
       },
     },
@@ -145,10 +146,10 @@ export function Login({
           </div>
           <h2 className="text-2xl font-bold mb-4 text-center">Rapid Product Launcher</h2>
           <Tabs defaultValue="password" className="md:min-w-[400px]">
-            <TabsList className="grid w-full grid-cols-1 mb-10">
+            <TabsList className="grid w-full grid-cols-2 mb-10">
               <TabsTrigger value="password">Password</TabsTrigger>
               {/* <TabsTrigger value="magic-link">Magic Link</TabsTrigger> */}
-              {/* <TabsTrigger value="social-login">Social Login</TabsTrigger> */}
+              <TabsTrigger value="social-login">Social Login</TabsTrigger>
             </TabsList>
             <TabsContent value="password">
               <Card className="border-none shadow-none">
