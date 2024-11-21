@@ -49,7 +49,7 @@ export async function UserSidebar() {
           >
             <div className="flex flex-col items-center text-center">
               <div className="flex items-center gap-1.5 mb-2">
-                <div className="text-sm font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
+                <div className="text-md font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
                   Upgrade Your Subscription
                 </div>
 
