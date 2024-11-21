@@ -63,15 +63,14 @@ export function ProFeatureGateDialog({
           </span>
         </div>
         <Typography.P className="text-muted-foreground text-center mb-4">
-          Unlock advanced features, unlimited team members, collaborative
-          workspace and more.
+          Unlock more SHopify stores, product imports, and advanced features by upgrading.
         </Typography.P>
         <Link
           href={`/organization/${organizationId}/settings/billing`}
           className="w-full"
           onClick={onClose}
         >
-          <Button className="w-full">Upgrade to Pro</Button>
+          <Button className="w-full">Upgrade Now</Button>
         </Link>
       </DialogContent>
     </Dialog>
