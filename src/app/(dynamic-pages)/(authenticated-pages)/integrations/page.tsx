@@ -9,6 +9,7 @@ import {
   ModalHeader,
   ModalSuccessButton,
 } from '@/components/Modal';
+import { ProFeatureGateDialog } from '@/components/ProFeatureGateDialog';
 import { useFeaturePermissions } from '@/hooks/useFeaturePermissions';
 import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 import { useOrganizationID } from '@/hooks/useOrganization';
@@ -31,16 +32,17 @@ interface StoreIntegration {
 const StoreCard = ({
   store,
   onDisconnect,
-  canRemove
+  canRemove,
+  organizationId
 }: {
   store: StoreIntegration;
   onDisconnect: (id: string) => Promise<void>;
   canRemove: boolean;
+  organizationId: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedStore, setSelectedStore] = useState<StoreIntegration | null>(
-    null,
-  );
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+  const [selectedStore, setSelectedStore] = useState<StoreIntegration | null>(null);
   const queryClient = useQueryClient();
 
   const disconnectMutation = useMutation({
@@ -75,6 +77,7 @@ const StoreCard = ({
   const handleDisconnectClick = (store: StoreIntegration) => {
     if (!canRemove) {
       toast.error('Store removal is not available on the free plan');
+      setIsUpgradeModalOpen(true);
       return;
     }
     setSelectedStore(store);
@@ -82,62 +85,71 @@ const StoreCard = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center border-4 border-blue-100">
-      <div className="flex items-center mb-4">
-        <FontAwesomeIcon
-          icon={faShopify}
-          className="w-12 h-12 text-green-500 mr-2"
-        />
-      </div>
-      <div className="flex flex-col items-center mb-2">
-        <h2 className="text-xl font-semibold">{store.name}</h2>
-        <span className="text-sm text-gray-500 mt-1">{store.myshopify_domain}</span>
+    <>
+      <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center border-4 border-blue-100">
+        <div className="flex items-center mb-4">
+          <FontAwesomeIcon
+            icon={faShopify}
+            className="w-12 h-12 text-green-500 mr-2"
+          />
+        </div>
+        <div className="flex flex-col items-center mb-2">
+          <h2 className="text-xl font-semibold">{store.name}</h2>
+          <span className="text-sm text-gray-500 mt-1">{store.myshopify_domain}</span>
 
+        </div>
+        <button
+          className={`mt-4 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${store.isConnected
+            ? 'bg-red-500 hover:bg-red-600 text-white'
+            : 'bg-blue-500 hover:bg-blue-600 text-white'
+            }`}
+          onClick={
+            store.isConnected ? () => handleDisconnectClick(store) : undefined
+          }
+        >
+          {store.isConnected ? 'Disconnect' : 'Connect'}
+        </button>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          className="max-w-md"
+        >
+          <ModalHeader>
+            <h2 className="text-2xl font-bold text-gray-900">Remove Store</h2>
+          </ModalHeader>
+          <ModalBody>
+            <p className="text-gray-600 text-lg">
+              Are you sure you want to disconnect from{' '}
+              <span className="font-semibold">{selectedStore?.name}</span>?
+            </p>
+            <p className="text-gray-500 text-sm mt-2">
+              This action cannot be undone.
+            </p>
+          </ModalBody>
+          <ModalFooter className="flex justify-end space-x-4">
+            <ModalCancelButton
+              onClick={() => setIsModalOpen(false)}
+              className="px-6 py-2 rounded-full text-gray-600 hover:text-gray-900 transition-colors duration-300"
+            >
+              Cancel
+            </ModalCancelButton>
+            <ModalSuccessButton
+              onClick={handleConfirmDisconnect}
+              className="px-6 py-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
+            >
+              Disconnect
+            </ModalSuccessButton>
+          </ModalFooter>
+        </Modal>
       </div>
-      <button
-        className={`mt-4 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${store.isConnected
-          ? 'bg-red-500 hover:bg-red-600 text-white'
-          : 'bg-blue-500 hover:bg-blue-600 text-white'
-          }`}
-        onClick={
-          store.isConnected ? () => handleDisconnectClick(store) : undefined
-        }
-      >
-        {store.isConnected ? 'Disconnect' : 'Connect'}
-      </button>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        className="max-w-md"
-      >
-        <ModalHeader>
-          <h2 className="text-2xl font-bold text-gray-900">Remove Store</h2>
-        </ModalHeader>
-        <ModalBody>
-          <p className="text-gray-600 text-lg">
-            Are you sure you want to disconnect from{' '}
-            <span className="font-semibold">{selectedStore?.name}</span>?
-          </p>
-          <p className="text-gray-500 text-sm mt-2">
-            This action cannot be undone.
-          </p>
-        </ModalBody>
-        <ModalFooter className="flex justify-end space-x-4">
-          <ModalCancelButton
-            onClick={() => setIsModalOpen(false)}
-            className="px-6 py-2 rounded-full text-gray-600 hover:text-gray-900 transition-colors duration-300"
-          >
-            Cancel
-          </ModalCancelButton>
-          <ModalSuccessButton
-            onClick={handleConfirmDisconnect}
-            className="px-6 py-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors duration-300"
-          >
-            Disconnect
-          </ModalSuccessButton>
-        </ModalFooter>
-      </Modal>
-    </div>
+      <ProFeatureGateDialog
+        organizationId={organizationId}
+        label="Store Management"
+        icon={<FontAwesomeIcon icon={faShopify} className="w-5 h-5 text-blue-500" />}
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
+    </>
   );
 };
 
@@ -293,6 +305,7 @@ const IntegrationsPage = () => {
               store={store}
               onDisconnect={handleDisconnect}
               canRemove={permissions.stores.canRemove}
+              organizationId={organizationId || ''}
             />
           ))}
         </div>

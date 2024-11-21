@@ -3,62 +3,27 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
-import { T, Typography } from './ui/Typography';
+import { ReactNode } from 'react';
+import { Typography } from './ui/Typography';
 import { AspectRatio } from './ui/aspect-ratio';
 import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent } from './ui/dialog';
 
 export function ProFeatureGateDialog({
   organizationId,
   label,
   icon,
+  isOpen,
+  onClose,
 }: {
   organizationId: string;
   label: string;
   icon: ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
 }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild className="w-full mb-0">
-        <Button
-          variant="ghost"
-          className="justify-between items-center px-0 pr-2 -mb-2 hover:bg-accent/5 group relative overflow-hidden transition-all duration-300"
-        >
-          {/* Shimmer effect overlay */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100">
-            <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-          </div>
-
-          <div className="flex gap-2 items-center relative z-10">
-            <div className="p-2 transition-transform duration-300 group-hover:scale-110">
-              {icon}
-            </div>
-            <div className="flex flex-col items-start">
-              <T.P className="text-sm font-medium group-hover:text-primary transition-colors">
-                {label}
-              </T.P>
-              <T.P className="text-xs text-muted-foreground hidden group-hover:block transition-all">
-                Unlock this feature →
-              </T.P>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <T.P className="text-xs rounded-md px-2 py-1 uppercase font-medium bg-gradient-to-r from-primary/80 to-primary text-primary-foreground shadow-sm group-hover:shadow-primary/25 transition-all duration-300 group-hover:scale-105">
-              Pro
-            </T.P>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            >
-              ✨
-            </motion.div>
-          </div>
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="flex flex-col gap-2 items-center hide-dialog-close">
         <AspectRatio
           ratio={16 / 9}
@@ -104,7 +69,7 @@ export function ProFeatureGateDialog({
         <Link
           href={`/organization/${organizationId}/settings/billing`}
           className="w-full"
-          onClick={() => setIsDialogOpen(false)}
+          onClick={onClose}
         >
           <Button className="w-full">Upgrade to Pro</Button>
         </Link>
