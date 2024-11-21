@@ -57,7 +57,7 @@ export async function UserSidebar() {
               </div>
 
               <div className="px-1.5 py-0.5 bg-blue-600/10 rounded-full">
-                <span className="text-[10px] font-medium text-blue-600">RECOMMENDED</span>
+                <span className="text-[10px] font-medium text-blue-600 px-2">RECOMMENDED</span>
               </div>
 
               <div className="flex items-center space-x-0.5 mb-2 mt-2">
