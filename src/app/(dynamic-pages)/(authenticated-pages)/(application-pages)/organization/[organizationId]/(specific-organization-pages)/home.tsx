@@ -206,7 +206,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
                 , Profit Sooner  ⚡️
               </span>
             </H1>
-            <p className="text-sm text-gray-600 mt-1">Click "Generate Product" to get started →</p>
+            <p className="text-md font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">Click "Generate Product" to get started →</p>
             {userEmail && (
               <p className="text-xs md:text-sm text-gray-500">{userEmail}</p>
             )}

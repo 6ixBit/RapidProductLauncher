@@ -1,17 +1,7 @@
 'use client';
 import ConfirmationPendingCard from '@/components/Auth/ConfirmationPendingCard';
-import { Email } from '@/components/Auth/Email';
 import { EmailAndPassword } from '@/components/Auth/EmailAndPassword';
 import { google as GoogleIcon } from '@/components/Auth/Icons';
-import { RenderProviders } from '@/components/Auth/RenderProviders';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   signInWithMagicLink,
   signInWithPassword,
@@ -23,6 +13,7 @@ import type { AuthProvider } from '@/types';
 import logo from '@public/logos/rpd-logo.png';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -125,7 +116,7 @@ export function Login({
   return (
     <div
       data-success={successMessage}
-      className="container data-[success]:flex items-center data-[success]:justify-center text-left max-w-lg mx-auto overflow-auto data-[success]:h-full min-h-[470px]"
+      className="container data-[success]:flex items-center data-[success]:justify-center text-left max-w-md mx-auto overflow-auto data-[success]:h-full min-h-[470px]"
     >
       {successMessage ? (
         <ConfirmationPendingCard
@@ -135,73 +126,70 @@ export function Login({
           resetSuccessMessage={setSuccessMessage}
         />
       ) : (
-        <div className="space-y-8 bg-background p-6 rounded-lg shadow">
-          <div className="flex justify-center mb-4">
+        <div className="space-y-10 bg-background p-8 rounded-2xl shadow-sm border border-gray-100">
+          {/* Logo and Title */}
+          <div className="space-y-6 text-center">
             <Image
               src={logo}
               alt="Rapid Product Launcher Logo"
-              width={100}
-              height={100}
-              className="object-contain"
+              width={80}
+              height={80}
+              className="mx-auto object-contain"
             />
+            <h1 className="text-xl font-bold text-gray-900">
+              Welcome back
+            </h1>
           </div>
-          <h2 className="text-2xl font-bold mb-4 text-center">Rapid Product Launcher</h2>
-          <Tabs defaultValue="password" className="md:min-w-[400px]">
-            <TabsList className="grid w-full grid-cols-2 mb-10">
-              <TabsTrigger value="password">Password</TabsTrigger>
-              <TabsTrigger value="social-login" className="flex items-center gap-2">
-                <GoogleIcon />
-                Social Login
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="password">
-              <Card className="border-none shadow-none">
-                <CardContent className="space-y-2 p-0">
-                  <EmailAndPassword
-                    isLoading={passwordMutation.isLoading}
-                    onSubmit={(data) => {
-                      passwordMutation.mutate(data);
-                    }}
-                    view="sign-in"
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
 
-            <TabsContent value="magic-link">
-              <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>One Click Login</CardTitle>
+          <div className="space-y-8">
+            {/* Social Login Button */}
+            <button
+              onClick={() => providerMutation.mutate('google')}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors duration-200"
+              disabled={providerMutation.isLoading}
+            >
+              <GoogleIcon />
+              <span className="text-sm font-medium text-gray-700">
+                {providerMutation.isLoading ? 'Connecting...' : 'Sign in with Google'}
+              </span>
+            </button>
 
-                  <CardDescription>Check your email for a magic link.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2 p-0">
-                  <Email
-                    onSubmit={(email) => magicLinkMutation.mutate(email)}
-                    isLoading={magicLinkMutation.isLoading}
-                    view="sign-in"
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value="social-login">
-              <Card className="border-none shadow-none">
-                <CardHeader className="py-6 px-0">
-                  <CardTitle>One Click Login</CardTitle>
-                  <CardDescription>
-                    Login with your social account.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2 p-0">
-                  <RenderProviders
-                    providers={['google']}
-                    isLoading={providerMutation.isLoading}
-                    onProviderLoginRequested={providerMutation.mutate}
-                  />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-3 text-gray-500">or</span>
+              </div>
+            </div>
+
+            {/* Email/Password Login */}
+            <div className="space-y-6">
+              <EmailAndPassword
+                isLoading={passwordMutation.isLoading}
+                onSubmit={(data) => {
+                  passwordMutation.mutate(data);
+                }}
+                view="sign-in"
+              />
+
+
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="pt-4 text-center">
+            <p className="text-sm text-gray-600">
+              New to Rapid Product Launcher?{' '}
+              <Link
+                href="/sign-up"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              >
+                Create an account
+              </Link>
+            </p>
+          </div>
         </div>
       )}
     </div>
