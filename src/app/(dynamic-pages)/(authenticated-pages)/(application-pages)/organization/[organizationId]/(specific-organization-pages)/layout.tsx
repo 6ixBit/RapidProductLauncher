@@ -27,7 +27,7 @@ export default async function Layout({
           <div className="hidden lg:flex w-full justify-between items-center lg:ml-3">
             <div className="flex items-center gap-2">
               <Announcement
-                text="Temu & Amazon imports are currently in beta. If you'd like to join the waitlist, please contact support."
+                text="Temu & Amazon imports are currently in beta. If you'd like to join the waitlist, please contact support via the Help button on the sidebar."
                 variant="info"
                 className="hover:bg-amber-100 transition-colors"
               />
