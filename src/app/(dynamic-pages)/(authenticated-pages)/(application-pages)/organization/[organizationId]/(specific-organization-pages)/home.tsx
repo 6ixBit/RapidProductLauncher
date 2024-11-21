@@ -195,7 +195,6 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
 
     return button;
   };
-
   return (
     <TooltipProvider>
       <div className="space-y-6 py-4 px-4 container mx-auto">
@@ -207,6 +206,7 @@ export const Home: React.FC<HomeProps> = ({ userName, userEmail }) => {
                 , Profit Sooner  ⚡️
               </span>
             </H1>
+            <p className="text-sm text-gray-600 mt-1">Click "Generate Product" to get started →</p>
             {userEmail && (
               <p className="text-xs md:text-sm text-gray-500">{userEmail}</p>
             )}
